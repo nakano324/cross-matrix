@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ルール｜CardDex 公式サイト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .hero{padding:56px 0 24px;background:radial-gradient(1200px 400px at 50% -10%,rgba(122,162,255,.18),transparent 60%)}
+    .hero h1{font-size:2rem;margin:.2em 0}
+    .hero p{color:var(--muted);margin:0}
+    .rules-wrap{display:grid;grid-template-columns:260px 1fr;gap:24px}
+    .toc{position:sticky;top:74px;align-self:start;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:14px;max-height:calc(100vh - 100px);overflow:auto}
+    .toc h3{margin:4px 0 8px;font-size:1rem;color:var(--muted)}
+    .toc a{display:block;color:var(--muted);text-decoration:none;padding:6px 8px;border-radius:8px;font-size:.95rem}
+    .toc a.active, .toc a:hover{color:var(--ink);background:var(--chip)}
+    .section{border:1px solid var(--line);background:linear-gradient(180deg,#121523,#0f1322);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+    .section h2{display:flex;align-items:center;gap:8px;margin-top:0}
+    .section h2 .hash{opacity:.5;font-size:1rem}
+    .grid-diagram{background:#0b0e18;border:1px solid var(--line);border-radius:12px;display:flex;justify-content:center;align-items:center;padding:12px;margin:12px 0}
+    .callout{border:1px dashed var(--line);background:rgba(122,162,255,.08);padding:12px;border-radius:12px}
+    .kws{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .kw{border:1px solid var(--line);background:var(--chip2);border-radius:12px;padding:12px}
+    .kw h4{margin:0 0 4px}
+    details{border:1px solid var(--line);background:var(--chip2);padding:12px;border-radius:12px}
+    details[open]{background:var(--chip)}
+    .meta-line{display:flex;gap:12px;align-items:center;color:var(--muted);font-size:.9rem}
+    .meta-line .dot{width:4px;height:4px;background:var(--muted);border-radius:50%}
+    @media (max-width:960px){ .rules-wrap{grid-template-columns:1fr} .toc{position:static;max-height:none} .kws{grid-template-columns:1fr} }
+    @media print{ .site-header, .toc, .site-footer{display:none} body{background:#fff;color:#000} .section{break-inside:avoid} }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1 class="brand">CardDex</h1>
+      <nav class="nav">
+        <a href="index.html">カード図鑑</a>
+        <a class="active" href="rules.html">ルール</a>
+        <a href="#" title="後で追加可能">世界観</a>
+        <a href="#" title="後で追加可能">ニュース</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="meta-line">
+        <span id="gameName">（ゲームタイトル）</span>
+        <span class="dot"></span>
+        <span id="lastUpdated">最終更新 — </span>
+      </div>
+      <h1>ゲームルール</h1>
+      <p>このページは 4×4 のマスで戦うTCGの公式ルールをまとめたものです。数値や用語は運用に合わせて <code>rules-config.json</code> から変更できます。</p>
+    </section>
+
+    <div class="rules-wrap">
+      <aside class="toc" id="toc">
+        <h3>目次</h3>
+        <nav id="tocLinks"></nav>
+      </aside>
+
+      <div id="content">
+        <article class="section" id="goal">
+          <h2>目的 <span class="hash">#</span></h2>
+          <p>相手の<strong>拠点</strong>を破壊すること、または以下の勝利条件を満たすことを目指します。</p>
+          <ul id="winList"></ul>
+        </article>
+
+        <article class="section" id="zones">
+          <h2>フィールドと用語 <span class="hash">#</span></h2>
+          <div class="grid-diagram">
+            <svg width="520" height="360" viewBox="0 0 520 360" aria-label="ボード図">
+              <rect x="10" y="10" width="340" height="340" rx="10" fill="#0e1423" stroke="#2a3042"/>
+              <g stroke="#2a3042">
+                <line x1="10" y1="10" x2="10" y2="350"/>
+                <line x1="95" y1="10" x2="95" y2="350"/>
+                <line x1="180" y1="10" x2="180" y2="350"/>
+                <line x1="265" y1="10" x2="265" y2="350"/>
+                <line x1="350" y1="10" x2="350" y2="350"/>
+                <line x1="10" y1="10" x2="350" y2="10"/>
+                <line x1="10" y1="95" x2="350" y2="95"/>
+                <line x1="10" y1="180" x2="350" y2="180"/>
+                <line x1="10" y1="265" x2="350" y2="265"/>
+                <line x1="10" y1="350" x2="350" y2="350"/>
+              </g>
+              <text x="380" y="40" fill="#cfd3ff" font-size="12">バトルゾーン（4×4）</text>
+              <rect x="380" y="60" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="388" y="76" fill="#a7a8b3" font-size="12">山札 / 墓地</text>
+              <rect x="380" y="94" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="388" y="110" fill="#a7a8b3" font-size="12">手札</text>
+              <rect x="380" y="128" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="388" y="144" fill="#a7a8b3" font-size="12">リソース ゾーン</text>
+              <rect x="380" y="162" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="388" y="178" fill="#a7a8b3" font-size="12">拠点（前列）</text>
+              <rect x="10" y="10" width="85" height="85" fill="none" stroke="#7aa2ff" stroke-dasharray="4 4"/>
+              <text x="14" y="28" fill="#7aa2ff" font-size="12">拠点</text>
+            </svg>
+          </div>
+          <ul>
+            <li><strong>バトルゾーン：</strong> 4×4 のマスにエンティティ（ユニット）を配置し移動させます。</li>
+            <li><strong>リソースゾーン：</strong> コストを支払うためのカードを置く場所です。</li>
+            <li><strong>山札・墓地・手札：</strong> 一般的なTCGと同様の扱いです。</li>
+            <li><strong>拠点：</strong> 前列に配置する拠点カード。ライフを持つ場合があります。</li>
+          </ul>
+          <p class="callout">数値や用語は <code>rules-config.json</code> を編集すればサイト全体に反映されます。</p>
+        </article>
+
+        <article class="section" id="setup">
+          <h2>セットアップ <span class="hash">#</span></h2>
+          <ol>
+            <li>各プレイヤーは <strong>40</strong> 枚のデッキを用意し、シャッフルします。</li>
+            <li>先攻後攻を決めます（じゃんけん等）。</li>
+            <li>各自、手札を <strong>5</strong> 枚引きます。</li>
+            <li>各自、<strong>1</strong> 枚の拠点カードを選び、前列の好きなマスに表向きで配置します。</li>
+          </ol>
+          <details>
+            <summary>拠点の置き方の例</summary>
+            <p>前列（相手側から見て最も近い列）ならどのマスでもOK。重ね置きは不可。</p>
+          </details>
+        </article>
+
+        <article class="section" id="turn">
+          <h2>ターン進行 <span class="hash">#</span></h2>
+          <ol>
+            <li><strong>開始</strong>：アンタップ・ドローなど準備。</li>
+            <li><strong>リソースフェイズ</strong>：手札から1枚をリソースゾーンへ（任意）。</li>
+            <li><strong>メイン</strong>：コストを支払い、エンティティや呪文を使用。エンティティを移動／攻撃宣言。</li>
+            <li><strong>終了</strong>：ターン終了時の効果を解決。</li>
+          </ol>
+          <p class="callout">用語（マナ / リソース 等）は <code>rules-config.json</code> で統一できます。</p>
+        </article>
+
+        <article class="section" id="move">
+          <h2>移動と攻撃 <span class="hash">#</span></h2>
+          <ul>
+            <li>エンティティは自分のメイン中に、記載された方法（例：<strong>飛車</strong>・<strong>角</strong>）で移動できます。</li>
+            <li>移動は基本 1ターンに1回（効果で増加する場合あり）。</li>
+            <li>攻撃は隣接または指定範囲の敵ユニットへ行い、勝敗はパワーや効果で決定します。</li>
+            <li>相手ユニットがいない経路で前進し、相手の拠点に到達すると<strong>ダイレクトアタック</strong>できます。</li>
+          </ul>
+        </article>
+
+        <article class="section" id="win">
+          <h2>勝敗 <span class="hash">#</span></h2>
+          <ul id="winList2"></ul>
+          <p>その他の特殊勝利・敗北がある場合はカードテキストに従います。</p>
+        </article>
+
+        <article class="section" id="keywords">
+          <h2>キーワード能力 <span class="hash">#</span></h2>
+          <div class="kws" id="kwList"></div>
+          <details style="margin-top:12px">
+            <summary>例：多点（X点）</summary>
+            <p>「多点（3点）」のエンティティが相手拠点へ攻撃を通すと、相手のライフを3減らします。</p>
+          </details>
+        </article>
+
+        <article class="section" id="faq">
+          <h2>よくある質問 <span class="hash">#</span></h2>
+          <details>
+            <summary>拠点は複数置けますか？</summary>
+            <p>はい。基本ルールでは <strong>1</strong> 枚ですが、フォーマットにより変更可能です。</p>
+          </details>
+          <details>
+            <summary>先攻は初手ドローしますか？</summary>
+            <p>推奨ルールでは先攻もドローします。競技ルールで変更する場合はこのページを更新してください。</p>
+          </details>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <small>© CardDex Project</small>
+    </div>
+  </footer>
+
+  <script defer src="rules.js"></script>
+</body>
+</html>
