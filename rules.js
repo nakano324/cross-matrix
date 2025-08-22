@@ -105,3 +105,17 @@ async function main(){
 }
 
 main();
+
+function setupTOCToggle(){
+  const btn = document.getElementById('tocToggle');
+  const toc = document.getElementById('toc');
+  if(!btn || !toc) return;
+  btn.addEventListener('click', ()=>{
+    toc.classList.toggle('is-open');
+    btn.textContent = toc.classList.contains('is-open') ? '目次を閉じる' : '目次を開く';
+  });
+}
+
+// 既存 main() の末尾あたりで：
+buildTOC();
+setupTOCToggle();

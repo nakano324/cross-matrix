@@ -263,3 +263,53 @@ html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b0c10,#0a0d14 4
   content: "・";
   opacity: .6;
 }
+
+/* 汎用：画像やSVGがはみ出さない */
+img, svg { max-width: 100%; height: auto; }
+
+/* ナビの折返し＆ボタンのタップサイズ */
+.nav { flex-wrap: wrap; }
+.nav a { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* 入力フォームの可読性（iOSのズーム防止で16px以上） */
+.field input, .field select { font-size: 16px; }
+
+/* 複数選択のセレクトがデカすぎるときの高さ調整（任意） */
+@media (max-width: 768px){
+  #faction[size] { height: 6.5em; } /* 表示行をほどよく */
+}
+
+/* グリッドの詰まりを解消：フィルターは1列、カードは1列 */
+@media (max-width: 960px){
+  .filters .row { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px){
+  .grid { grid-template-columns: 1fr; }
+  .wrap { padding: 16px; }
+}
+
+/* TOC：デスクトップでは左サイド、スマホではデフォ非表示＋全画面ドロワーに */
+@media (max-width: 960px){
+  .rules-wrap { grid-template-columns: 1fr; }
+  .toc { display: none; }
+  .toc.is-open {
+    display: block;
+    position: fixed;
+    inset: 64px 12px 12px 12px;   /* ヘッダーの下に出す */
+    z-index: 50;
+    overflow: auto;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+  }
+  .toc-toggle { /* 「目次を開く」ボタンを固定気味に */
+    position: sticky;
+    top: 12px;
+    z-index: 51;
+  }
+}
+
+/* 目次のサブ項目（h3）インデント */
+.toc a.sub { padding-left: 16px; opacity: .9; }
