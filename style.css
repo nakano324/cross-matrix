@@ -1,0 +1,265 @@
+/* Minimal, modern aesthetic */
+:root{
+  --bg:#0b0c10;
+  --panel:#11131a;
+  --ink:#e6e6eb;
+  --muted:#a7a8b3;
+  --acc:#7aa2ff;
+  --chip:#1a1d27;
+  --chip2:#212635;
+  --line:#262b3a;
+  --shadow: 0 6px 24px rgba(0,0,0,.35);
+  --radius:18px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b0c10,#0a0d14 40%,#0b0c10);color:var(--ink);font-family:'Noto Sans JP',system-ui,-apple-system,Segoe UI,Roboto,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;}
+
+.wrap{max-width:1200px;margin:0 auto;padding:20px}
+
+.site-header{position:sticky;top:0;backdrop-filter:saturate(140%) blur(8px);z-index:10;border-bottom:1px solid var(--line);background:rgba(10,12,18,.7)}
+.site-header .brand{font-weight:800;letter-spacing:.02em;margin:0}
+.nav{display:flex;gap:14px;align-items:center}
+.nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:999px}
+.nav a.active,.nav a:hover{color:var(--ink);background:var(--chip)}
+
+.site-footer{border-top:1px solid var(--line);background:rgba(10,12,18,.6)}
+
+.filters{margin:20px 0;padding:18px;border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow)}
+.filters .row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.filters .row-actions{margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+.field{display:flex;flex-direction:column;gap:6px}
+.field span{font-size:.9rem;color:var(--muted)}
+.field input[type="search"], .field input[type="number"], .field select{
+  width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--chip2);color:var(--ink);
+}
+.range{display:flex;gap:8px;align-items:center}
+.btn{border:none;border-radius:12px;padding:10px 14px;background:var(--acc);color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.count{color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:18px;margin:24px 0}
+.card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#121523, #0f1322);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.thumb-wrap{position:relative;background:#0b0e18;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center}
+.thumb{width:100%;height:100%;object-fit:cover}
+.badge.rarity{position:absolute;left:10px;top:10px;background:#0008;padding:6px 10px;border-radius:999px;font-size:.8rem;border:1px solid var(--line)}
+.meta{padding:14px}
+.name{margin:0 0 6px;font-size:1.1rem}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.tag{background:var(--chip);border:1px solid var(--line);padding:4px 8px;border-radius:999px;color:var(--muted);font-size:.85rem}
+.text{color:#cfd3ff;line-height:1.6}
+
+@media (max-width:960px){ .filters .row{grid-template-columns:repeat(2,1fr)} .grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .grid{grid-template-columns:1fr} }
+
+/* ヘッダー全体の横並びレイアウト */
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+/* ブランドロゴ */
+.site-header .brand {
+  display: flex;
+  align-items: center;
+  margin-right: 40px; /* ナビとの間隔 */
+}
+
+/* ナビゲーション全体 */
+.site-header .nav {
+  display: flex;
+  gap: 24px; /* 各リンク間の余白 */
+  align-items: center;
+  margin-left: auto; /* ロゴ右寄せ */
+}
+
+/* 各リンク */
+.site-header .nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+/* ホバー時のエフェクト */
+.site-header .nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* アクティブページ強調 */
+.site-header .nav a.active {
+  color: #ffcd00;
+}
+
+/* ===== 注目カード ===== */
+.featured-cards .card-list {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.featured-cards .card img {
+  width: 150px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.featured-cards .card p {
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* ===== Heroセクション ===== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 460px; /* 高さは調整可能 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+/* ヒーロー画像 */
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(75%); /* 少し暗くして文字を見やすくする */
+}
+
+/* テキスト配置 */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  max-width: 700px;
+  padding: 0 16px;
+}
+
+.hero-content h2 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  margin-top: 12px;
+}
+
+.hero-buttons .btn {
+  display: inline-block;
+  padding: 12px 24px;
+  margin: 0 8px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.hero-buttons .btn.primary {
+  background-color: #ffcc00;
+  color: #111;
+}
+
+.hero-buttons .btn.secondary {
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.hero-buttons .btn.primary:hover {
+  background-color: #ffdb4d;
+}
+
+.hero-buttons .btn.secondary:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* --- ルールページ専用: 既存 .hero を上書き --- */
+/* ルールページ専用のヒーロー */
+.hero.hero--rules {
+  height: auto;
+  padding: 24px 0 12px;
+  background: none;
+  text-align: left; /* 左揃えにしたい場合。中央なら消す */
+}
+
+/* 見出し */
+.hero.hero--rules h1 {
+  margin: 0 0 4px;
+  font-size: clamp(26px, 3.2vw, 42px);
+  font-weight: 800;
+  color: #fff;
+}
+
+.hero.hero--rules .meta-sub {
+  display: block;         /* ← 縦並びに変更 */
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  line-height: 1.5;       /* 行間を少し空けると見やすい */
+}
+
+.hero.hero--rules .meta-sub .dot::before {
+  content: "・";
+  opacity: 0.6;
+}
+
+/* 説明文 */
+.hero.hero--rules p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* ---- ルールページ専用: 共通 .hero の flex を無効化して縦配置に ---- */
+.hero.hero--rules{
+  display: block !important;     /* ← 横並びの原因を根本から無効化 */
+  height: auto !important;       /* 共通の高さ固定を解除 */
+  min-height: 0 !important;
+  padding: 16px 0 10px !important;
+  background: none !important;
+  text-align: left;              /* 好みで center にしてもOK */
+  align-items: initial !important;
+  justify-content: initial !important;
+  animation: none !important;    /* 万一アニメ付いてても止める */
+  transform: none !important;
+}
+
+/* 見出し・説明まわり（余白を最小に） */
+.hero.hero--rules h1{
+  margin: 0 0 4px !important;
+  font-size: clamp(26px, 3.2vw, 42px);
+  font-weight: 800;
+}
+.hero.hero--rules p{
+  margin: 0 !important;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* h1の直下に出すメタ情報（小さく） */
+.hero.hero--rules .meta-sub{
+  display: block !important;     /* ← 横並びをやめる（必要なら block） */
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.hero.hero--rules .meta-sub .dot::before{
+  content: "・";
+  opacity: .6;
+}
