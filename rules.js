@@ -94,11 +94,18 @@ async function main(){
   wins.forEach(t=> document.getElementById('winList')?.appendChild(makeLi(t)));
   wins.forEach(t=> document.getElementById('winList2')?.appendChild(makeLi(t)));
   const kwList = document.getElementById('kwList');
-  if(kwList && conf.keywords){
-    Object.entries(conf.keywords).forEach(([k,v])=>{
-      kwList.appendChild(el('div',{class:'kw'},[ el('h4',{},[k]), el('p',{},[v]) ]));
-    });
+if (kwList && conf.keywords) {
+  kwList.innerHTML = '';
+  const order = ['瞬撃','飛車','角','多点']; // 表示順を固定
+  const exists = order.filter(k => k in conf.keywords);
+  for (const k of exists) {
+    kwList.appendChild(el('div', { class: 'kw' }, [
+      el('h4', {}, [k]),
+      el('p',  {}, [conf.keywords[k]]),
+    ]));
   }
+}
+
 
   // ③ コンフィグの成否に関わらず TOC を作る
   buildTOC();

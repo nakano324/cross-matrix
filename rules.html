@@ -73,7 +73,7 @@
         </article>
 
         <article class="section" id="zones">
-          <h2>フィールドと用語 <span class="hash">#</span></h2>
+          <h2>フィールドと用語 <span class="hash"></span></h2>
           <div class="grid-diagram">
             <svg width="520" height="360" viewBox="0 0 520 360" aria-label="ボード図">
               <rect x="10" y="10" width="340" height="340" rx="10" fill="#0e1423" stroke="#2a3042"/>
@@ -108,7 +108,6 @@
             <li><strong>山札・墓地・手札：</strong> 一般的なTCGと同様の扱いです。</li>
             <li><strong>拠点：</strong> 前列に配置する拠点カード。ライフを左側のスペースに置きましょう。</li>
           </ul>
-          <p class="callout">数値や用語は <code>rules-config.json</code> を編集すればサイト全体に反映されます。</p>
         </article>
 
         <article class="section" id="setup">
@@ -120,13 +119,13 @@
             <li>各自、手札を <strong>5</strong> 枚引きます。</li>
           </ol>
           <details>
-            <summary>拠点の置き方の例</summary>
+            <summary>拠点の置き方について</summary>
             <p>前列（自分側から見て最も近い列）ならどのマスでもOK。</p>
           </details>
         </article>
 
         <article class="section" id="turn">
-          <h2>ターン進行 <span class="hash">#</span></h2>
+          <h2>ターン進行 <span class="hash"></span></h2>
           <ol>
             <li><strong>ターン開始</strong>：アンタップ・ドローなど準備。</li>
             <li><strong>補給フェイズ</strong>：手札から1枚をリソースゾーンへ（任意）。</li>
@@ -134,7 +133,6 @@
             <li><strong>移動フェーズ</strong>：エンティティを移動。相手を攻撃します。</li>
             <li><strong>終了</strong>：ターン終了時の効果を解決。</li>
           </ol>
-          <p class="callout">用語（マナ / リソース 等）は <code>rules-config.json</code> で統一できます。</p>
         </article>
 
         <article class="section" id="move">
@@ -150,7 +148,7 @@
         </article>
 
         <article class="section" id="types">
-  <h2>カードの種類 <span class="hash">#</span></h2>
+  <h2>カードの種類 <span class="hash"></span></h2>
 
   <p>本ゲームのカードは大きく <strong>エンティティ</strong> / <strong>呪文</strong> / <strong>拠点</strong> の3種類に分類されます。拡張では派生タイプ（装備・罠など）を追加できます。</p>
 
@@ -179,22 +177,21 @@
     <li><strong>役割：</strong> 各プレイヤーが前列に配置する<strong>拠点</strong>。バトルゾーンにある拠点と同じファミリアのカードのみ使用できる。</li>
     <li><strong>ライフ</strong> 拠点ごとに指定されたいわば<strong>体力</strong>。</li>
     <li><strong>配置：</strong> ゲーム準備時にデッキから1枚選んで前列の好きなマスに置きます。</li> 
-
-
+      </article>  
         <article class="section" id="keywords">
-          <h2>キーワード能力 <span class="hash">#</span></h2>
+          <h2>キーワード能力 <span class="hash"></span></h2>
           <div class="kws" id="kwList"></div>
           <details style="margin-top:12px">
-            <summary>例：多点（X点）</summary>
+            <summary>多点（X点）</summary>
             <p>「多点（3点）」のエンティティが相手拠点へ攻撃を通すと、相手のライフを3減らします。</p>
           </details>
         </article>
 
         <article class="section" id="faq">
-          <h2>よくある質問 <span class="hash">#</span></h2>
+          <h2>よくある質問 <span class="hash"></span></h2>
           <details>
             <summary>拠点は複数置けますか？</summary>
-            <p>はい。ゲーム開始前に置けるのは1枚ですがゲーム開始後デッキからコストを払って設置することができます。</p>
+            <p>はい。ゲーム開始前に置けるのは1枚ですがゲーム開始後手札からコストを払って設置することができます。</p>
           </details>
           <details>
             <summary>先攻は初手ドローしますか？</summary>
@@ -214,6 +211,3 @@
   <script defer src="rules.js"></script>
 </body>
 </html>
-
-<!-- ルール見出しのすぐ下に追加 -->
-<button id="tocToggle" class="btn ghost toc-toggle">目次を開く</button>
