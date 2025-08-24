@@ -44,7 +44,7 @@
       <a href="cards.html">カード図鑑</a>
       <a href="rules.html">ルール</a>
       <a href="#">ストーリー</a>
-      <a href="#">ニュース</a>
+      <a href="news.html">ニュース</a>
     </nav>
   </div>
 </header>
@@ -55,7 +55,7 @@
     <a href="cards.html">カード図鑑</a>
     <a href="rules.html">ルール</a>
     <a href="#">ストーリー</a>
-    <a href="#">ニュース</a>
+    <a href="news.html">ニュース</a>
   </div>
   <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
 </nav>
@@ -90,38 +90,61 @@
         <article class="section" id="zones">
           <h2>フィールドと用語 <span class="hash"></span></h2>
           <div class="grid-diagram">
-            <svg width="520" height="360" viewBox="0 0 520 360" aria-label="ボード図">
-              <rect x="10" y="10" width="340" height="340" rx="10" fill="#0e1423" stroke="#2a3042"/>
-              <g stroke="#2a3042">
-                <line x1="10" y1="10" x2="10" y2="350"/>
-                <line x1="95" y1="10" x2="95" y2="350"/>
-                <line x1="180" y1="10" x2="180" y2="350"/>
-                <line x1="265" y1="10" x2="265" y2="350"/>
-                <line x1="350" y1="10" x2="350" y2="350"/>
-                <line x1="10" y1="10" x2="350" y2="10"/>
-                <line x1="10" y1="95" x2="350" y2="95"/>
-                <line x1="10" y1="180" x2="350" y2="180"/>
-                <line x1="10" y1="265" x2="350" y2="265"/>
-                <line x1="10" y1="350" x2="350" y2="350"/>
-              </g>
-              <text x="380" y="40" fill="#cfd3ff" font-size="12">バトルゾーン（4×4）</text>
-              <rect x="380" y="60" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-              <text x="388" y="76" fill="#a7a8b3" font-size="12">山札 / 墓地</text>
-              <rect x="380" y="94" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-              <text x="388" y="110" fill="#a7a8b3" font-size="12">手札</text>
-              <rect x="380" y="128" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-              <text x="388" y="144" fill="#a7a8b3" font-size="12">リソース ゾーン</text>
-              <rect x="380" y="162" width="120" height="24" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-              <text x="388" y="178" fill="#a7a8b3" font-size="12">拠点（前列）</text>
-              <rect x="10" y="10" width="85" height="85" fill="none" stroke="#7aa2ff" stroke-dasharray="4 4"/>
-              <text x="14" y="28" fill="#7aa2ff" font-size="12">拠点</text>
-            </svg>
-          </div>
-          <ul>
-            <li><strong>バトルゾーン：</strong> 4×4 のマスでエンティティを配置し移動させます。</li>
+  <svg width="900" height="560" viewBox="0 0 900 560" aria-label="ボード図">
+    <!-- 盤：縦6 × 横4（1マス=80px） -->
+    <!-- 盤の左上(290,20) / 幅=320 / 高さ=480 → 中心(450,260) -->
+    <rect x="290" y="20" width="320" height="480" rx="10" fill="#0e1423" stroke="#2a3042"/>
+    <g stroke="#2a3042">
+      <!-- 縦線（列） -->
+      <line x1="290" y1="20"  x2="290" y2="500"/>
+      <line x1="370" y1="20"  x2="370" y2="500"/>
+      <line x1="450" y1="20"  x2="450" y2="500"/>
+      <line x1="530" y1="20"  x2="530" y2="500"/>
+      <line x1="610" y1="20"  x2="610" y2="500"/>
+      <!-- 横線（行） -->
+      <line x1="290" y1="20"  x2="610" y2="20"/>
+      <line x1="290" y1="100" x2="610" y2="100"/>
+      <line x1="290" y1="180" x2="610" y2="180"/>
+      <line x1="290" y1="260" x2="610" y2="260"/>
+      <line x1="290" y1="340" x2="610" y2="340"/>
+      <line x1="290" y1="420" x2="610" y2="420"/>
+      <line x1="290" y1="500" x2="610" y2="500"/>
+    </g>
+
+    <!-- タイトル（任意） -->
+    <text x="290" y="14" fill="#cfd3ff" font-size="12">バトルゾーン（6×4）</text>
+
+    <!-- ===== 自分側：右下エリア ===== -->
+    <!-- 行の上端Y：0:20,1:100,2:180,3:260,4:340,5:420
+         「下から2列目」= 行4（上端340, 高さ80）-->
+    <!-- 山札 -->
+    <rect x="630" y="367" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+    <text x="638" y="385" fill="#a7a8b3" font-size="12">山札</text>
+    <!-- 墓地（山札のさらに右：+100+12） -->
+    <rect x="742" y="367" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+    <text x="750" y="385" fill="#a7a8b3" font-size="12">墓地</text>
+    <!-- リソース（山札の下） -->
+    <rect x="630" y="403" width="212" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+    <text x="638" y="421" fill="#a7a8b3" font-size="12">リソース ゾーン</text>
+
+    <!-- ===== 相手側：盤中心(450,260)に対して点対称 ===== -->
+    <!-- 山札（自分山札の中心: 680,380 → 対称: 220,140） -->
+    <rect x="170" y="127" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+    <text x="178" y="145" fill="#a7a8b3" font-size="12">相手 山札</text>
+    <!-- 墓地（自分墓地の中心: 792,380 → 対称: 108,140） -->
+    <rect x="58" y="127" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+    <text x="66" y="145" fill="#a7a8b3" font-size="12">相手 墓地</text>
+    <!-- リソース（自分リソースの中心: 736,416 → 対称: 164,104） -->
+    <rect x="58" y="91" width="212" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+    <text x="66" y="109" fill="#a7a8b3" font-size="12">相手 リソース ゾーン</text>
+  </svg>
+</div>
+
+
+            <li><strong>バトルゾーン：</strong> 4×6 のマスでエンティティを配置し移動させます。</li>
             <li><strong>リソースゾーン：</strong> コストを支払うためのカードを置く場所です。</li>
             <li><strong>山札・墓地・手札：</strong> 一般的なTCGと同様の扱いです。</li>
-            <li><strong>拠点：</strong> 前列に配置する拠点カード。ライフを左側のスペースに置きましょう。</li>
+            <li><strong>拠点：</strong> 前列に配置する拠点カード。ライフをカードの下に置きましょう。</li>
           </ul>
         </article>
 
@@ -163,6 +186,29 @@
         </article>
 
         <article class="section" id="types">
+
+  <section class="card-legend">
+  <h2>カード解説</h2>
+
+  <div class="legend-wrap">
+    <!-- 画像は任意。不要なら <figure> を消してOK -->
+    <figure class="legend-card">
+      <img src="images/card.png" alt="カード例">
+    </figure>
+
+    <ol class="legend-list">
+      <li><strong>コスト</strong>：カードを使用するために必要な数値です。</li>
+      <li><strong>カード名</strong>：カードの名称です。</li>
+      <li><strong>イラスト</strong>：カードのイラストです。</li>
+      <li><strong>カード種類</strong>：左から順にファミリア、カードの種類、種族の順で書かれています。</li>
+      <li><strong>効果テキスト</strong>：カードの能力が記載されています。</li>
+      <li><strong>フレーバーテキスト</strong>：ゲームに影響しない装飾的な文章です。</li>
+      <li><strong>パワー</strong>：戦闘などで参照する数値です。</li>
+      <li><strong>レアリティ</strong>：カードの希少性を示します。</li>
+    </ol>
+  </div>
+</section>
+
   <h2>カードの種類 <span class="hash"></span></h2>
 
   <p>本ゲームのカードは大きく <strong>エンティティ</strong> / <strong>呪文</strong> / <strong>拠点</strong> の3種類に分類されます。拡張では派生タイプ（装備・罠など）を追加できます。</p>
@@ -194,7 +240,7 @@
     <li><strong>配置：</strong> ゲーム準備時にデッキから1枚選んで前列の好きなマスに置きます。</li> 
       </article>  
         <article class="section" id="keywords">
-          <h2>キーワード能力 <span class="hash"></span></h2>
+          <h2>用語集 <span class="hash"></span></h2>
           <div class="kws" id="kwList"></div>
           <details style="margin-top:12px">
             <summary>多点（X点）</summary>
