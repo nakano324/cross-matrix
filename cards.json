@@ -12,24 +12,7 @@
     "keywords": [
       "飛車"
     ],
-    "image": "images/val-vorn.png"
-  },
-  {
-    "id": "NOXIDIA",
-    "name": "千骸死霊殿ノクシディア",
-    "type": "拠点",
-    "faction": "死霊",
-    "rarity": "VR",
-    "cost": 13,
-    "power": null,
-    "ability": "ライフ5。【ライフ】 5山札の上から3枚墓地に置き、1枚回収する。自分のコスト3以下のクリーチャーがバトルゾーンを離れる時、代わりに墓地のカードを3枚山札の下に置くことで、場を離れない。",
-    "flavor": "",
-    "keywords": [
-      "拠点",
-      "墓地肥し",
-      "墓地回収"
-    ],
-    "image": "images/noxidia.png"
+    "image": "images/骸閃の死獣ヴァル＝ヴォーン"
   },
   {
     "id": "VOLZARK",
@@ -44,7 +27,7 @@
     "keywords": [
       "除去"
     ],
-    "image": "images/volzark.png"
+    "image": "images/暴食のヴォルザーク"
   },
     {
     "id": "BALGALO",
@@ -59,6 +42,6 @@
     "keywords": [
       "飛車"
     ],
-    "image": "images/balgalo.png"
+    "image": "images/冥装の屍獣バルガロ"
   }
 ]
