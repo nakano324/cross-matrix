@@ -12,7 +12,7 @@
     "keywords": [
       "飛車"
     ],
-    "image": "images/骸閃の死獣ヴァル＝ヴォーン"
+    "image": "images/val-vorn.png"
   },
   {
     "id": "VOLZARK",
@@ -27,7 +27,7 @@
     "keywords": [
       "除去"
     ],
-    "image": "images/暴食のヴォルザーク"
+    "image": "images/volzark.png"
   },
     {
     "id": "BALGALO",
@@ -42,6 +42,6 @@
     "keywords": [
       "飛車"
     ],
-    "image": "images/冥装の屍獣バルガロ"
+    "image": "images/balgalo.png"
   }
 ]
