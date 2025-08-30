@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ストーリー｜公式サイト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- story専用の軽量スタイル（既存style.cssを壊さない範囲で追加） -->
+  <style>
+    :root{
+      --accent: #e4b32b;
+      --glass: rgba(255,255,255,.06);
+      --card: #0c0c0f;
+      --ink:  rgba(255,255,255,.85);
+      --muted: rgba(255,255,255,.7);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+
+    /* ===== HERO ===== */
+    .story-hero{
+      position: relative;
+      min-height: clamp(68vh, 72vh, 88vh);
+      display: grid;
+      place-items: center;
+      overflow: clip;
+      background: radial-gradient(1200px 600px at 50% -10%, #1a1a1f 0%, #000 60%);
+      isolation: isolate;
+    }
+    .story-hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(80vw 40vw at 10% 0%, rgba(228,179,43,.08), transparent 60%),
+        radial-gradient(80vw 40vw at 90% 100%, rgba(129,201,255,.08), transparent 60%);
+      z-index:-1;
+    }
+    .hero-inner{
+      text-align:center;
+      padding: min(8vw,64px) min(6vw,40px);
+      max-width: 1100px;
+    }
+    .story-eyebrow{
+      display:inline-block;
+      font-size: 12px;
+      letter-spacing:.28em;
+      opacity:.85;
+      color: var(--ink);
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.2);
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(4px);
+      background: var(--glass);
+    }
+    .story-title{
+      font-size: clamp(28px, 6.2vw, 56px);
+      line-height: 1.1;
+      margin: 0 0 12px;
+      letter-spacing: .02em;
+      background: linear-gradient(180deg,#fff, #cfd7ff 40%, #9ad6ff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 6px 32px rgba(0,0,0,.35);
+    }
+    .story-lead{
+      color: var(--muted);
+      font-size: clamp(14px, 2.8vw, 18px);
+      max-width: 70ch;
+      margin: 0 auto;
+    }
+
+    /* ===== GRID CARDS ===== */
+    .wrap-narrow{ max-width: 1100px; margin: 0 auto; padding: min(8vw,64px) min(6vw,24px); }
+    .grid{
+      display:grid; gap: clamp(14px, 2.8vw, 24px);
+      grid-template-columns: repeat(1, minmax(0,1fr));
+    }
+    @media (min-width: 680px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (min-width: 980px){ .grid{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+
+    .fam-card{
+      position:relative; overflow: clip;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #15151a, #0c0c0f);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255,255,255,.06);
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+    .fam-card:hover{ transform: translateY(-4px); border-color: rgba(255,255,255,.14); }
+    .fam-media{
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .fam-media i{
+      font-size: clamp(48px, 10vw, 72px);
+      opacity:.9;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,.45));
+    }
+    .fam-body{ padding: 18px 18px 20px; }
+    .fam-tag{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size: 11px; letter-spacing:.18em; text-transform: uppercase;
+      color: rgba(255,255,255,.9);
+      background: var(--glass); border: 1px solid rgba(255,255,255,.15);
+      padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(6px);
+      margin-bottom: 10px;
+    }
+    .fam-title{ margin: 6px 0 6px; font-size: 20px; color: var(--ink); }
+    .fam-desc{ margin: 0; color: var(--muted); line-height: 1.85; font-size: 14px; }
+
+    /* 色味（各ファミリア） */
+    .death .fam-media{ background: radial-gradient(80% 80% at 50% 40%, #3b185a33, transparent), linear-gradient(135deg,#1a0f22,#0c0c0f); }
+    .death .fam-tag::before{ content:"◆"; color:#c59dff; }
+    .mage .fam-media{ background: radial-gradient(80% 80% at 50% 40%, #175f8e33, transparent), linear-gradient(135deg,#0e1c2e,#0c0c0f); }
+    .mage .fam-tag::before{ content:"◆"; color:#8ed0ff; }
+    .mech .fam-media{ background: radial-gradient(80% 80% at 50% 40%, #7c7c7c33, transparent), linear-gradient(135deg,#1a1b1f,#0c0c0f); }
+    .mech .fam-tag::before{ content:"◆"; color:#d9d9d9; }
+    .nation .fam-media{ background: radial-gradient(80% 80% at 50% 40%, #8e173333, transparent), linear-gradient(135deg,#2a0c10,#0c0c0f); }
+    .nation .fam-tag::before{ content:"◆"; color:#ffb3b3; }
+    .wolf .fam-media{ background: radial-gradient(80% 80% at 50% 40%, #21543a33, transparent), linear-gradient(135deg,#0e1a14,#0c0c0f); }
+    .wolf .fam-tag::before{ content:"◆"; color:#cde7d6; }
+    .clown .fam-media{ background: radial-gradient(80% 80% at 50% 40%, #ffffff22, transparent), linear-gradient(135deg,#0f0f0f,#0c0c0f); }
+    .clown .fam-tag::before{ content:"◆"; color:#ffd36e; }
+
+    /* ===== CINEMATIC SPLIT ===== */
+    .split{
+      display: grid; gap: clamp(14px, 3vw, 28px);
+      grid-template-columns: 1fr;
+      align-items: center;
+      margin-top: min(8vw,64px);
+    }
+    @media (min-width: 900px){ .split{ grid-template-columns: 1.2fr 1fr; } }
+    .split-media{
+      border-radius: var(--radius);
+      overflow: clip; position: relative;
+      min-height: 260px;
+      background:
+        radial-gradient(120% 80% at 20% 10%, rgba(228,179,43,.1), transparent 60%),
+        url("images/story_visual.jpg") center/cover no-repeat,
+        linear-gradient(180deg,#121216,#0a0a0d);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .split-media::after{
+      content:""; position:absolute; inset:0;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.35) 70%);
+    }
+    .split-body{
+      padding: clamp(16px, 3.2vw, 22px);
+      background: linear-gradient(180deg,#121216, #0c0c0f);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+    .split-title{ margin: 0 0 8px; font-size: clamp(20px, 3.6vw, 28px); color: var(--ink); }
+    .split-text{ margin: 0; color: var(--muted); line-height: 1.9; }
+
+    /* ===== QUOTE ===== */
+    .story-quote{
+      margin-top: min(8vw,64px);
+      text-align:center;
+      padding: min(6vw,44px);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg,#121216, #0c0c0f);
+      box-shadow: var(--shadow-lg);
+      color: var(--ink);
+    }
+    .story-quote strong{
+      background: linear-gradient(180deg, #fff, #ffe7a8 60%, #ffc14b);
+      -webkit-background-clip:text; background-clip:text; color: transparent;
+    }
+  </style>
+
+  <!-- Font Awesome（アイコン用）-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
+    <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav">
+      <a href="index.html">ホーム</a>
+      <a href="cards.html">カード図鑑</a>
+      <a href="rules.html">ルール</a>
+      <a href="story.html" class="active">ストーリー</a>
+      <a href="news.html">ニュース</a>
+    </nav>
+  </div>
+
+  <!-- スマホメニュー -->
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="index.html">ホーム</a>
+      <a href="cards.html">カード図鑑</a>
+      <a href="rules.html">ルール</a>
+      <a href="story.html" class="active">ストーリー</a>
+      <a href="news.html">ニュース</a>
+    </div>
+    <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="story-hero">
+  <div class="hero-inner">
+    <span class="story-eyebrow">World Story</span>
+    <h1 class="story-title">人の心が生んだ幻影は、<br>やがて現実を侵食する。</h1>
+    <p class="story-lead">
+      恐怖、知識、力、支配、本能、混沌――六つの願望は「ファミリア」として姿を得た。<br>
+      どの願望に未来を託すのか。選ぶのは、召喚者であるあなた自身だ。
+    </p>
+  </div>
+</section>
+
+<main>
+  <div class="wrap-narrow">
+    <!-- ===== GRID CARDS (6ファミリア) ===== -->
+    <div class="grid">
+      <!-- 死霊 -->
+      <article class="fam-card death">
+        <div class="fam-media"><img src="images/死霊紹介.png" alt="Clown" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div class="fam-body">
+          <span class="fam-tag">Necro</span>
+          <h3 class="fam-title">死霊 — 停滞と恐怖の化身</h3>
+          <p class="fam-desc">過去を離さぬ怨念が群れとなり甦る。墓地から溢れ出し、世界を死の静寂で覆わんとする。</p>
+        </div>
+      </article>
+      <!-- 魔術師 -->
+      <article class="fam-card mage">
+        <div class="fam-media"><img src="images/魔術師紹介.png" alt="Clown" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div class="fam-body">
+          <span class="fam-tag">Mage</span>
+          <h3 class="fam-title">魔術師 — 知識と秩序の象徴</h3>
+          <p class="fam-desc">法則を書き換え、現実を再構築する。理解は救いとも破滅ともなる二律背反。</p>
+        </div>
+      </article>
+      <!-- 機械巨兵 -->
+      <article class="fam-card mech">
+        <div class="fam-media"><img src="images/天紹介.png" alt="Clown" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div class="fam-body">
+          <span class="fam-tag">Mech</span>
+          <h3 class="fam-title">機械巨兵 — 力と戦争の結晶</h3>
+          <p class="fam-desc">鉄の躯が戦場を踏み砕く。英雄譚と兵器信仰が結晶した、歩く前線基地。</p>
+        </div>
+      </article>
+      <!-- 国家 -->
+      <article class="fam-card nation">
+        <div class="fam-media"><img src="images/ドミニオン紹介.png" alt="Clown" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div class="fam-body">
+          <span class="fam-tag">Nation</span>
+          <h3 class="fam-title">国家 — 支配と共同体の具現</h3>
+          <p class="fam-desc">旗は都市を覆い、国歌は兵を奮わせる。結束は力であり、同時に鎖でもある。</p>
+        </div>
+      </article>
+      <!-- オオカミ -->
+      <article class="fam-card wolf">
+        <div class="fam-media"><img src="images/銀狼紹介.png" alt="Clown" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div class="fam-body">
+          <span class="fam-tag">Wolf</span>
+          <h3 class="fam-title">オオカミ — 本能と狩猟の象徴</h3>
+          <p class="fam-desc">孤高に吠え、群れを律し獲物を追う。掟と牙で狩場を支配する。</p>
+        </div>
+      </article>
+      <!-- 道化師 -->
+      <article class="fam-card clown">
+        <div class="fam-media"><img src="images/マジック紹介.png" alt="Clown" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div class="fam-body">
+          <span class="fam-tag">Clown</span>
+          <h3 class="fam-title">道化師 — 笑いと混沌の化身</h3>
+          <p class="fam-desc">世界を茶化し、秩序を裏返す。予測不能こそが真理であり、破壊は創造の序章。</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- ===== Cinematic Split ===== -->
+    <section class="split">
+      <div class="split-media" aria-label="世界観イメージ"></div>
+      <div class="split-body">
+        <h3 class="split-title">召喚者の使命</h3>
+        <p class="split-text">
+          プレイヤーは「召喚者」として、ひとつのファミリアに魂を同調させる。<br>
+          互いの願望は相克し、盤上でせめぎ合う。<br>
+          どの真理を選び、どの未来を斬り拓くのか――決めるのは、お前だ。
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== Quote ===== -->
+    <div class="story-quote">
+      <p><strong>「戦いは始まった。選ぶのは――お前だ。」</strong></p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap"><small>© 2025 cross matrix Project</small></div>
+</footer>
+
+<script>
+(function(){
+  const btn  = document.getElementById('navToggle');
+  const menu = document.getElementById('mobileMenu');
+  const close= document.getElementById('navClose');
+  if(!btn || !menu) return;
+
+  const open = ()=>{ menu.classList.add('is-open'); btn.classList.add('is-open'); document.body.classList.add('body-lock'); btn.setAttribute('aria-expanded','true'); menu.setAttribute('aria-hidden','false'); };
+  const hide = ()=>{ menu.classList.remove('is-open'); btn.classList.remove('is-open'); document.body.classList.remove('body-lock'); btn.setAttribute('aria-expanded','false'); menu.setAttribute('aria-hidden','true'); };
+
+  btn.addEventListener('click', ()=> menu.classList.contains('is-open') ? hide() : open());
+  close?.addEventListener('click', hide);
+  menu.addEventListener('click', e => { if(e.target === menu) hide(); });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', hide));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') hide(); });
+})();
+</script>
+</body>
+</html>

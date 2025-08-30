@@ -686,3 +686,4 @@ img, svg { max-width: 100%; height: auto; display:block; }
   .news-item a { grid-template-columns: 9ch 1fr auto; }
   .news-cat { display: none; }
 }
+
