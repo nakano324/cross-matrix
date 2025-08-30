@@ -93,19 +93,27 @@ async function main(){
   const makeLi = t=>{ const li=document.createElement('li'); li.textContent=t; return li; };
   wins.forEach(t=> document.getElementById('winList')?.appendChild(makeLi(t)));
   wins.forEach(t=> document.getElementById('winList2')?.appendChild(makeLi(t)));
-  const kwList = document.getElementById('kwList');
-if (kwList && conf.keywords) {
-  kwList.innerHTML = '';
-  const order = ['瞬撃','飛車','角','多点']; // 表示順を固定
-  const exists = order.filter(k => k in conf.keywords);
-  for (const k of exists) {
-    kwList.appendChild(el('div', { class: 'kw' }, [
-      el('h4', {}, [k]),
-      el('p',  {}, [conf.keywords[k]]),
-    ]));
-  }
-}
 
+  const kwList = document.getElementById('kwList');
+  if (kwList && conf.keywords) {
+    kwList.innerHTML = '';
+
+    // 代表語を先頭に出したい場合
+    const preferred = ['瞬撃','飛車','角','香車','多点'];
+    const allKeys = Object.keys(conf.keywords);
+    const head = preferred.filter(k => allKeys.includes(k));
+    const tail = allKeys.filter(k => !head.includes(k))
+                        .sort((a,b)=>a.localeCompare(b,'ja'));
+    const keys = [...head, ...tail];
+
+    for (const k of keys) {
+      const title = k.replace(/_x$/, '〈x〉'); // 表示名整形
+      kwList.appendChild(el('div', { class: 'kw' }, [
+        el('h4', {}, [title]),
+        el('p',  {}, [conf.keywords[k]])
+      ]));
+    }
+  }
 
   // ③ コンフィグの成否に関わらず TOC を作る
   buildTOC();
