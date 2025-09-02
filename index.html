@@ -245,26 +245,46 @@
   })();
 
   // ======= Featured Cards (3枚) =======
-  (async function(){
-    try{
-      const res = await fetch('cards.json', { cache: 'no-store' });
+    // ======= Featured Cards（固定表示） =======
+  (async function () {
+    try {
+      // ここに注目カードとして固定表示したい「カード名」を並べる（表示順＝この配列順）
+      const FEATURED_NAMES = [
+        "反影の陰陽師 燈華",
+        "骸閃の死獣ヴァル＝ヴォーン",
+        "封式調伏の印《神縛》"
+      ];
+
+      const res = await fetch("cards.json", { cache: "no-store" });
       const all = await res.json();
-      const picks = all.slice(0,3); // 先頭3枚（必要に応じてロジック変更）
-      const wrap = document.getElementById('cards');
+
+      // 指定名の順にピック（見つからない名前はスキップ）
+      const picks = FEATURED_NAMES
+        .map(name => all.find(c => c.name === name))
+        .filter(Boolean);
+
+      const wrap = document.getElementById("cards");
       const frag = document.createDocumentFragment();
-      for(const c of picks){
-        const el = document.createElement('article');
-        el.className = 'card';
+
+      for (const c of picks) {
+        const el = document.createElement("article");
+        el.className = "card";
         el.innerHTML = `
-          <img class="thumb" alt="${c.name}" src="${c.image ? encodeURI(c.image + (c.image.includes('.')? '':'.png')) : ''}" onerror="this.src='https://placehold.co/600x800/png?text=No+Image'">
+          <img class="thumb" alt="${c.name}"
+               src="${c.image ? encodeURI(c.image + (c.image.includes('.') ? '' : '.png')) : ''}"
+               onerror="this.src='https://placehold.co/600x800/png?text=No+Image'">
           <div class="meta">
             <h3 class="name">${c.name}</h3>
             <p class="sub">${c.faction || ''}｜${c.type}</p>
           </div>`;
         frag.appendChild(el);
       }
+
+      wrap.innerHTML = ""; // 念のためクリア
       wrap.appendChild(frag);
-    }catch(e){ console.warn('[cards]', e); }
+    } catch (e) {
+      console.warn("[cards]", e);
+    }
   })();
   </script>
 </body>
