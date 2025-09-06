@@ -88,66 +88,60 @@
         </article>
 
         <article class="section" id="zones">
-          <h2>フィールドと用語 <span class="hash"></span></h2>
+        <h2>フィールドと用語 <span class="hash"></span></h2>
+
+        <div class="field-rows">
           <div class="grid-diagram">
-          <svg width="900" height="560" viewBox="0 0 900 560" aria-label="ボード図">
-            <!-- 盤：縦6 × 横4（1マス=80px） -->
-            <!-- 盤の左上(290,20) / 幅=320 / 高さ=480 → 中心(450,260) -->
-            <rect x="290" y="20" width="320" height="400" rx="10" fill="#0e1423" stroke="#2a3042"/>
-            <g stroke="#2a3042">
-              <!-- 縦線（列） -->
-              <line x1="290" y1="20"  x2="290" y2="420"/>
-              <line x1="370" y1="20"  x2="370" y2="420"/>      
-              <line x1="450" y1="20"  x2="450" y2="420"/>
-              <line x1="530" y1="20"  x2="530" y2="420"/>
-              <line x1="610" y1="20"  x2="610" y2="420"/>
-              <!-- 横線（行） -->
-              <line x1="290" y1="20"  x2="610" y2="20"/>
-              <line x1="290" y1="100" x2="610" y2="100"/>
-              <line x1="290" y1="180" x2="610" y2="180"/>
-              <line x1="290" y1="260" x2="610" y2="260"/>
-              <line x1="290" y1="340" x2="610" y2="340"/>
-              <line x1="290" y1="420" x2="610" y2="420"/>
-            </g>
+            <svg viewBox="0 0 900 460" aria-label="ボード図" class="board-svg" preserveAspectRatio="xMidYMid meet">
+              <!-- 盤：縦6 × 横4（1マス=80px） -->
+              <rect x="290" y="20" width="320" height="400" rx="10" fill="#0e1423" stroke="#2a3042"/>
+              <g stroke="#2a3042">
+                <line x1="290" y1="20"  x2="290" y2="420"/>
+                <line x1="370" y1="20"  x2="370" y2="420"/>
+                <line x1="450" y1="20"  x2="450" y2="420"/>
+                <line x1="530" y1="20"  x2="530" y2="420"/>
+                <line x1="610" y1="20"  x2="610" y2="420"/>
+                <line x1="290" y1="20"  x2="610" y2="20"/>
+                <line x1="290" y1="100" x2="610" y2="100"/>
+                <line x1="290" y1="180" x2="610" y2="180"/>
+                <line x1="290" y1="260" x2="610" y2="260"/>
+                <line x1="290" y1="340" x2="610" y2="340"/>
+                <line x1="290" y1="420" x2="610" y2="420"/>
+              </g>
 
-            <!-- タイトル（任意） -->
-            <text x="290" y="14" fill="#cfd3ff" font-size="12">バトルゾーン（5×4）</text>
+              <!-- タイトル -->
+              <text x="290" y="14" fill="#cfd3ff" font-size="12">バトルゾーン（5×4）</text>
 
-            <!-- ===== 自分側：右下エリア ===== -->
-            <!-- 行の上端Y：0:20,1:100,2:180,3:260,4:340,5:420
-                「下から2列目」= 行4（上端340, 高さ80）-->
-            <!-- 山札 -->
-            <rect x="630" y="367" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-            <text x="638" y="385" fill="#a7a8b3" font-size="12">山札</text>
-            <!-- 墓地（山札のさらに右：+100+12） -->
-            <rect x="742" y="367" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-            <text x="750" y="385" fill="#a7a8b3" font-size="12">墓地</text>
-            <!-- リソース（山札の下） -->
-            <rect x="630" y="403" width="212" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-            <text x="638" y="421" fill="#a7a8b3" font-size="12">リソース ゾーン</text>
+              <!-- 自分側 -->
+              <rect x="630" y="367" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="638" y="385" fill="#a7a8b3" font-size="12">山札</text>
+              <rect x="742" y="367" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="750" y="385" fill="#a7a8b3" font-size="12">墓地</text>
+              <rect x="630" y="403" width="212" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="638" y="421" fill="#a7a8b3" font-size="12">リソース ゾーン</text>
 
-            <!-- ===== 相手側：盤中心(450,260)に対して点対称 ===== -->
-            <!-- 山札（自分山札の中心: 680,380 → 対称: 220,140） -->
-            <rect x="170" y="127" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-            <text x="178" y="145" fill="#a7a8b3" font-size="12">相手 山札</text>
-            <!-- 墓地（自分墓地の中心: 792,380 → 対称: 108,140） -->
-            <rect x="58" y="127" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-            <text x="66" y="145" fill="#a7a8b3" font-size="12">相手 墓地</text>
-            <!-- リソース（自分リソースの中心: 736,416 → 対称: 164,104） -->
-            <rect x="58" y="91" width="212" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
-            <text x="66" y="109" fill="#a7a8b3" font-size="12">相手 リソース ゾーン</text>
-          </svg>
-        </div>
+              <!-- 相手側 -->
+              <rect x="170" y="127" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="178" y="145" fill="#a7a8b3" font-size="12">相手 山札</text>
+              <rect x="58"  y="127" width="100" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="66"  y="145" fill="#a7a8b3" font-size="12">相手 墓地</text>
+              <rect x="58"  y="91"  width="212" height="26" rx="6" fill="#1b1f2f" stroke="#2a3042"/>
+              <text x="66"  y="109" fill="#a7a8b3" font-size="12">相手 リソース ゾーン</text>
+            </svg>
+          </div>
+
+          <ul class="zone-notes">
             <li><strong>バトルゾーン：</strong> 4×6 のマスでエンティティを配置し移動させます。</li>
             <li><strong>リソースゾーン：</strong> コストを支払うためのカードを置く場所です。</li>
             <li><strong>山札・墓地・手札：</strong> 一般的なTCGと同様の扱いです。</li>
           </ul>
-        </article>
-
+        </div>
+      </article>
+      
         <article class="section" id="setup">
           <h2>ゲームの準備 <span class="hash"></span></h2>
           <ol>
-            <li>各プレイヤーは <strong>40</strong> 枚のデッキを用意し、い枚拠点カードを選んでからシャッフルします。</li>
+            <li>各プレイヤーは <strong>40</strong> 枚のデッキを用意し、1枚拠点カードを選んでからシャッフルします。</li>
             <li>先攻後攻を決めます（じゃんけん等）。</li>
             <li>各自、手札を <strong>5</strong> 枚引きます。</li>
              <li>各自、先攻後攻の順番で前列の好きなマスに表向きで拠点カードを配置します。</li>
@@ -213,6 +207,9 @@
     <strong>共通事項：</strong> すべてのカードは「コスト」を持ち、リソースを支払って使用します。
   </div>
 
+  <div class="card-samples">
+  <img src="images/tohka.png" alt="反影の陰陽師 燈華">
+</div>
   <h3>1) エンティティ</h3>
   <ul>
     <li><strong>役割：</strong> 盤面に出して<strong>移動・攻撃</strong>を行う中核のカード。</li>
@@ -221,6 +218,10 @@
     <li><strong>戦闘：</strong> 隣接または効果で指定された範囲に攻撃。勝敗は<strong>パワー</strong>で決定します。</li>
   </ul>
 
+    <div class="card-samples">
+  <img src="images/shinnbaku.png" alt="破式暴影の印《明照》">
+</div>
+
   <h3>2) 呪文</h3>
   <ul>
     <li><strong>役割：</strong> 一時的な効果を発生させる使い切りカード（除去・ドローなど）。</li>
@@ -228,6 +229,10 @@
     <li><strong>タイミング：</strong> 基本は自分のカード使用フェーズ中のみ。</li>
     <li><strong>対象：</strong> 指定の「カード/ マス / プレイヤー」など。対象が不適正になった場合は不発。</li>
   </ul>
+
+      <div class="card-samples">
+  <img src="images/noxidia.png" alt="千骸死霊殿ノクシディア">
+</div>
 
   <h3>3) 拠点</h3>
   <ul>
@@ -297,6 +302,5 @@
   menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', hide));
 })();
 </script>
-
 </body>
 </html>

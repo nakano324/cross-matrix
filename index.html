@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a0b10" />
   <title>Cross Matrix｜公式サイト</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
@@ -136,15 +137,40 @@
       .brand img{height:32px}
       .nav a{padding:6px 10px}
     }
+  
+/* === Mobile polish (additions) === */
+@media (max-width: 560px){
+  .cta{ gap:10px }
+  .cta .btn{ flex:1 1 100%; justify-content:center; width:100% }
+  .lead p{ font-size:16px }
+  .hero .inner{ min-height:64vh; padding:48px 0 36px }
+}
+/* lighten heavy blur on low-end devices */
+@media (max-width: 560px){
+  .site-header{ backdrop-filter: blur(6px); }
+  .mobile-menu{ backdrop-filter: blur(8px) }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important }
+}
+  /* ロゴの基本（CSSの管理値をそのまま持ってくる） */
+  #siteLogo{
+    height: clamp(32px, 6vw, 48px) !important;
+    width: auto;
+    display: block;
+  }
+  /* スマホでは必ず 32px に（style.css の 64px !important を打ち消す） */
+  @media (max-width:560px){
+    .brand img{ height:64px !important; }
+  }
   </style>
 </head>
 
 <body>
   <header class="site-header">
   <div class="wrap">
-    <h1 class="brand">
-      <img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;">
-    </h1>
+    <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
+</h1>
     <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -195,7 +221,7 @@
             <p>【飛車】【角】などの移動タグで“駒”の通り道を制す。効果と位置が絡むから、同じカードでも戦い方が変わる。</p>
           </article>
           <article class="feature">
-            <h3>効果範囲がある</h3>
+            <h3>効果範囲</h3>
             <p>除去やバフなどに範囲があるという新しいゲーム体験。</p>
           </article>
           <article class="feature">
@@ -238,10 +264,21 @@
     const btn  = document.getElementById('navToggle');
     const menu = document.getElementById('mobileMenu');
     const close= document.getElementById('navClose');
-    const toggle=()=> menu.classList.toggle('is-open');
+    const toggle=()=>{
+      const open = !menu.classList.contains('is-open');
+      menu.classList.toggle('is-open');
+      document.body.classList.toggle('body-lock', open);
+      btn && btn.setAttribute('aria-expanded', String(open));
+      menu && menu.setAttribute('aria-hidden', String(!open));
+    };
     btn && btn.addEventListener('click', toggle);
     close && close.addEventListener('click', toggle);
-    menu && menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> menu.classList.remove('is-open')));
+    menu && menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=>{
+      menu.classList.remove('is-open');
+      document.body.classList.remove('body-lock');
+      btn && btn.setAttribute('aria-expanded', 'false');
+      menu && menu.setAttribute('aria-hidden','true');
+    }));
   })();
 
   // ======= Featured Cards (3枚) =======
@@ -251,8 +288,8 @@
       // ここに注目カードとして固定表示したい「カード名」を並べる（表示順＝この配列順）
       const FEATURED_NAMES = [
         "反影の陰陽師 燈華",
-        "骸閃の死獣ヴァル＝ヴォーン",
-        "封式調伏の印《神縛》"
+        "鉱煌戦姫ルミナス・ヴァレリア",
+        "純白の守護者ノエル"
       ];
 
       const res = await fetch("cards.json", { cache: "no-store" });
@@ -270,7 +307,7 @@
         const el = document.createElement("article");
         el.className = "card";
         el.innerHTML = `
-          <img class="thumb" alt="${c.name}"
+          <img class="thumb" alt="${c.name}" loading="lazy" decoding="async" sizes="(max-width:560px) 100vw, (max-width:960px) 50vw, 33vw"
                src="${c.image ? encodeURI(c.image + (c.image.includes('.') ? '' : '.png')) : ''}"
                onerror="this.src='https://placehold.co/600x800/png?text=No+Image'">
           <div class="meta">

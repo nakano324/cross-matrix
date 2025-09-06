@@ -687,3 +687,126 @@ img, svg { max-width: 100%; height: auto; display:block; }
   .news-cat { display: none; }
 }
 
+/* ==== スマホ専用ロゴ縮小（最優先） ==== */
+@media (max-width: 560px) {
+  .brand img {
+    height: 64px !important; /* ← !important で最後に強制 */
+  }
+}
+
+.card-samples {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap; /* スマホで折り返し */
+}
+
+.card-samples img {
+  width: 160px;  /* 好きなサイズに調整 */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* スマホ画面用：SVG内のラベル文字を大きくする */
+@media (max-width: 600px) {
+  html, body{
+    font-size: 15px !important; /* デフォルトが12px程度なので拡大 */
+  }
+}
+
+/* 盤面と説明を横並び（スマホでは縦積み） */
+.field-rows{
+  display:grid;
+  grid-template-columns:minmax(280px,1fr) 320px;
+  gap:16px;
+  align-items:start;
+}
+.grid-diagram{ margin:0; } /* 余白を消す */
+.board-svg{ width:100%; height:auto; display:block; } /* 高さ自動で“下の空間”を消す */
+.zone-notes{ margin:0; padding-left:1.1em; }
+
+/* スマホでは縦積み＋ラベル拡大 */
+@media (max-width:960px){
+  .field-rows{ grid-template-columns:1fr; }
+  .zone-notes{ margin-top:12px; }
+}
+
+/* スマホ時：盤面（SVG）のラベルだけ大きくする */
+@media (max-width: 600px){
+  svg.board-svg text{
+    font-size: 16px !important;   /* 好みで 14–20px に調整OK */
+  }
+}
+
+/* ===== 1) 全体の文字・行間・余白の最適化（<=600px） ===== */
+@media (max-width: 600px){
+  html, body { font-size: 15px; line-height: 1.7; } /* ベースを少し大きく */
+  .wrap { padding: 12px; }                          /* 端の圧迫感を軽減 */
+  .section { padding: 16px; }                       /* カード1枚分の余白感 */
+  .section h2 { font-size: clamp(18px, 5.2vw, 22px); }
+  .section p, .section li { font-size: 0.97rem; }   /* 長文を詰めすぎない */
+}
+
+/* ===== 2) 盤面(SVG)ラベルを「確実に」大きくする ===== */
+/* SVGの<text>は通常のfont-sizeとは別管理なので明示指定が必要 */
+@media (max-width: 600px){
+  svg.board-svg text{
+    font-size: 16px !important;     /* ← 好みで14–18に調整 */
+    font-weight: 600;
+    paint-order: stroke;            /* 縁取りで読みやすさUP */
+    stroke: rgba(0,0,0,.55);
+    stroke-width: 1.4px;
+    letter-spacing: .02em;
+  }
+}
+
+/* ラベル枠(長方形)が狭くなる場合の保険：高さを自動余裕に */
+@media (max-width: 600px){
+  .grid-diagram svg rect[rx="6"][height="26"]{ height: 30px; } /* 26→30 */
+  /* 文字ベースライン微調整：はみ出すなら数px下げる */
+  /* 例）.grid-diagram svg text[x="638"][y="385"]{ transform: translateY(2px); } */
+}
+
+/* ===== 3) カード解説(画像＋説明)の詰まり防止 ===== */
+/* 600px以上の“横向き/大きめスマホ”は横並び、600未満は縦で読みやすく */
+@media (min-width: 600px) and (max-width: 860px){
+  .legend-wrap{
+    grid-template-columns: minmax(160px, 260px) 1fr;
+    gap: 16px;
+  }
+  .legend-card img{ max-width: 240px; }
+  .legend-list{ font-size: .95rem; line-height: 1.65; }
+}
+@media (max-width: 599px){
+  .legend-wrap{ grid-template-columns: 1fr; gap: 12px; }
+  .legend-card img{ max-width: 72%; margin: 0 auto; }
+  .legend-list{ font-size: .95rem; }
+}
+
+/* ===== 4) タップしやすいUI（リンク/ボタン） ===== */
+@media (max-width: 600px){
+  a, button { min-height: 44px; }        /* 指の当たり判定を確保 */
+  .nav a { font-size: 14px; }            /* ナビは字詰めして折返し減らす */
+}
+
+/* ===== 5) 表の見やすさ・行間（汎用） ===== */
+@media (max-width: 600px){
+  ul, ol { padding-left: 1.2em; }
+  li + li { margin-top: .35em; }         /* 弱い段落感を足す */
+}
+
+/* === Mobile CTA full width === */
+@media (max-width: 560px){
+  .cta .btn{ width:100% }
+}
+
+/* Reduce expensive blur on small screens */
+@media (max-width: 560px){
+  .site-header{ backdrop-filter: blur(6px) }
+  .mobile-menu{ backdrop-filter: blur(8px) }
+}
+
+/* body scroll lock (already defined in some blocks; keep as fallback) */
+.body-lock{ overflow:hidden; }
+
+#siteLogo{ height: clamp(32px, 6vw, 48px) !important; width:auto; display:block; }
