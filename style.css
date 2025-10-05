@@ -294,3 +294,38 @@ img,svg{max-width:100%;height:auto;display:block}
   .card-note{ grid-template-columns:1fr; }
   .card-note__fig{ max-width:160px; }
 }
+
+/* --- 強調表示用: カード画像を大きく --- */
+.card-note {
+  grid-template-columns: 280px 1fr; /* ← 左のカラムを大きく */
+  gap: 20px;
+}
+
+.card-note__fig img {
+  max-width: 80px;   /* ← ここを好きなサイズに */
+  width: 100%;
+  aspect-ratio: 3/4;
+  height: auto;
+}
+
+/* モバイル時も見やすく拡大 */
+@media (max-width: 600px){
+  .card-note {
+    grid-template-columns: 1fr;
+  }
+  .card-note__fig {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  .card-note__fig img {
+    max-width: 80px;
+  }
+}
+
+.legend-card img,
+.card-samples img {
+  max-width: 200px; /* 好きなサイズに調整 */
+  height: auto;
+  width: 100%;
+  margin: 0 auto;   /* 中央寄せ */
+}
