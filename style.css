@@ -329,3 +329,56 @@ img,svg{max-width:100%;height:auto;display:block}
   width: 100%;
   margin: 0 auto;   /* 中央寄せ */
 }
+
+/* ===================== Header ===================== */
+.site-header{
+  position:sticky; top:0; z-index:40;
+  background:rgba(10,11,16,.55); backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.site-header .wrap{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:0 16px;
+}
+.brand{display:flex; align-items:center; margin:0;}
+.brand img{height:48px}
+.nav{display:flex; flex-wrap:wrap; gap:12px; margin-left:auto;}
+.nav a{
+  min-height:40px; padding:8px 12px;
+  display:inline-flex; align-items:center;
+  border-radius:6px; opacity:.9;font-weight:600; 
+}
+.nav a.active,.nav a:hover{background:rgba(255,255,255,.06)}
+
+.hamburger{
+  display:none; margin-left:auto; width:40px; height:40px;
+  border:1px solid var(--line); border-radius:10px;
+  background:transparent; cursor:pointer;
+}
+.hamburger span{
+  display:block; width:22px; height:2px;
+  margin:6px auto; background:#fff; transition:transform .2s ease;
+}
+
+/* Mobile Menu */
+.mobile-menu{
+  position:fixed; inset:0; background:rgba(8,9,14,.9);
+  backdrop-filter: blur(10px); display:none; z-index:9999;
+}
+.mobile-menu.is-open{display:block}
+.mobile-menu-inner{padding:80px 24px}
+.mobile-menu a{
+  display:block; padding:14px 10px; font-size:20px;
+  border-bottom:1px solid var(--line)
+}
+.menu-close{
+  position:absolute; top:18px; right:18px;
+  width:44px; height:44px; border-radius:12px;
+  border:1px solid var(--line); background:transparent;
+  color:#fff; font-size:22px
+}
+
+@media (max-width:960px){
+  .hamburger{display:block}
+  .nav{display:none !important}
+}
