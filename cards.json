@@ -42,37 +42,7 @@
     "keywords": [
       "飛車"
     ],
-    "image": "ihttps://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/mages/balgalo.png"
-  },
-  {
-    "id": "SHINBAKU",
-    "name": "封式調伏の印《神縛》",
-    "type": "呪文",
-    "faction": "魔術師",
-    "rarity": "R",
-    "cost": 4,
-    "power": null,
-    "ability": "■コスト４以下の呪文を唱えてよい。この呪文を手札から唱えたとき、唱えたマスで裏向きにして、バトルゾーンまたはカードの下に置く。このカードが表向きになった時下記の効果を使う。自分の手札からコスト5以下のクリーチャーを出してもよい。",
-    "flavor": "永劫に続く鎖の螺旋――その束縛は、神すら調伏する。",
-    "keywords": [
-      "コスト踏み倒し"
-    ],
-    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/shinnbaku.png"
-  },
-  {
-    "id": "TOHKA",
-    "name": "反影の陰陽師 燈華",
-    "type": "エンティティ",
-    "faction": "魔術師",
-    "rarity": "SR",
-    "cost": 5,
-    "power": 1000,
-    "ability": "■【ラウンド_1】このカードの周り1マスで効果を発動する。■マスを1つ選び、そのマスにあるカードをすべて表向きか裏向きにする。",
-    "flavor": "月明かりの下で笑う少女。彼女が扇をひと振りすれば、真実も虚偽もひっくり返る。",
-    "keywords": [
-      "除去"
-    ],
-    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/tohka.png"
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/balgalo.png"
   },
     {
     "id": "NOERU",
