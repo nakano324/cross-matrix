@@ -358,6 +358,24 @@
   "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/houga.png"
 },
 {
+  "id": "VARUGUREISU",
+  "name": "冥酷帝ヴァルグレイス",
+  "type": "エンティティ",
+  "faction": "死霊",
+  "rarity": "VR",
+  "cost": 8,
+  "power": null,
+  "ability": "■【角】斜めに2マスまで移動できる。■【3点】相手のライフを3削る。■自分の死霊エンティティを3体破壊して、このエンティティを召喚してもよい。■　　　　　　　　 このカードのあるマスの縦横斜め2マスまでで次の効果を発動する。■このエンティティが出たとき、マスを1つ選ぶ。そのマスにいる相手のエンティティのパワーを-5000する。 ",
+  "flavor": "",
+  "keywords": [
+    "除去(パワーマイナス)",
+    "3点",
+    "コスト踏み倒し",
+    "角"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/varugureisu.png"
+},
+{
   "id": "REGNARIUS",
   "name": "強権の覇竜レグナリウス",
   "type": "エンティティ",
@@ -374,5 +392,157 @@
     "ランデス"
   ],
   "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/regunariusu.png"
-}
+},
+[
+  {
+    "id": "NOXIDIA",
+    "name": "千骸死霊殿ノクシディア",
+    "type": "拠点",
+    "faction": "死霊",
+    "rarity": "VR",
+    "cost": 13,
+    "power": null,
+    "life": 5,
+    "ability": "■この拠点を設置したとき、山札の上から3枚墓地に置き、墓地からカードを1枚手札に加える。\n■自分のエンティティがバトルゾーンを離れる時、代わりに墓地のカードを4枚好きな順番で山札の下に置いてもよい。そうしたらそのエンティティはバトルゾーンにとどまる。",
+    "flavor": "",
+    "keywords": [
+      "墓地肥やし",
+      "回収",
+      "除去耐性"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/noxidia.png"
+  },
+  {
+    "id": "VARUGUREISU",
+    "name": "冥酷帝ヴァルグレイス",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "VR",
+    "cost": 8,
+    "power": 7000,
+    "ability": "■【角】斜めに2マスまで移動できる。\n■【2点】相手のライフを2削る。\n■自分のエンティティを3体破壊して、このエンティティを召喚してもよい。\n■【ダブルクロス_2】このエンティティのいるマスの縦横斜め2マスまでで次の効果を発動する。\n■相手のエンティティを1体選ぶ。そのエンティティのパワーを-5000する。",
+    "flavor": "",
+    "keywords": [
+      "除去(パワーマイナス)",
+      "2点",
+      "コスト踏み倒し",
+      "角",
+      "ダブルクロス"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/varugureisu.png"
+  },
+  {
+    "id": "ALEFANT",
+    "name": "後援する盟友エール・ファント",
+    "type": "エンティティ",
+    "faction": "アニマトループ",
+    "rarity": "UC",
+    "cost": 4,
+    "power": 3000,
+    "ability": "■バトルゾーンに自分の他のアニマトループのエンティティが出たとき、カードを1枚引く。",
+    "flavor": "",
+    "keywords": [
+      "ドロー"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/alefant.png"
+  },
+  {
+    "id": "PAMBOO",
+    "name": "竹槍爆投げ隊長パンブー",
+    "type": "エンティティ",
+    "faction": "アニマトループ",
+    "rarity": "C",
+    "cost": 3,
+    "power": 2000,
+    "ability": "■【ノックバック】このエンティティを相手のエンティティがいるマスにも出してもよい。出すときと移動するとき、そのマスに相手のエンティティがいれば1マス後退させてもよい。\n■【クロスランス_3】このカードの縦横3マスまでの範囲で効果を発動する。\n■このエンティティが出たとき、パワー2000以下の相手のエンティティを1体破壊する。",
+    "flavor": "",
+    "keywords": [
+      "ノックバック",
+      "除去",
+      "クロスランス"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/pamboo.png"
+  },
+  {
+    "id": "SUPEKTORAMU",
+    "name": "スペクトラム大草原",
+    "type": "拠点",
+    "faction": "アニマトループ",
+    "rarity": "VR",
+    "cost": 11,
+    "power": null,
+    "life": 5,
+    "ability": "■各ターンに1度、自分のカードによって相手のカードが墓地に置かれた時、カードを1枚引く。",
+    "flavor": "",
+    "keywords": [
+      "ドロー"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/supektoramu.png"
+  },
+  {
+    "id": "WALNUTS",
+    "name": "頑張り補給兵ウォル＆ナッツ",
+    "type": "エンティティ",
+    "faction": "アニマトループ",
+    "rarity": "C",
+    "cost": 2,
+    "power": 1000,
+    "ability": "■各ターンに1度、自分のアニマトループのエンティティを召喚するコストを1少なくしてもよい。ただし、コスト1より少なくならない。",
+    "flavor": "",
+    "keywords": [
+      "コスト軽減"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/wall.png"
+  },
+  [
+  {
+    "id": "GURADELIOSU",
+    "name": "魂詠の冥徒グラディオス",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 4,
+    "power": 1000,
+    "ability": "■このエンティティが出たとき、コスト4以下のエンティティを1体、自分の墓地から出してもよい。ターン終了時、そのエンティティを破壊する。",
+    "flavor": "停滞する冥界の環に囚われた者は、永遠に死と再生を繰り返す。",
+    "keywords": [
+      "蘇生",
+      "死霊シナジー"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/guradeliosu.png"
+  },
+  {
+    "id": "DORUMAGUSU",
+    "name": "不滅の屍霊ドルマグス",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 3,
+    "power": 1000,
+    "ability": "■ターン終了時、山札の上から1枚を墓地に置く。\n■このエンティティが破壊されるとき、代わりに自分の拠点カードの下からカードを1枚墓地に置いてもよい。",
+    "flavor": "亡者ほど、しぶとい敵はいない。",
+    "keywords": [
+      "墓地肥やし",
+      "破壊耐性"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/dorumagusu.png"
+  },
+  {
+    "id": "GAIA",
+    "name": "永劫の世界ガイア",
+    "type": "拠点",
+    "faction": "ドミニオン",
+    "rarity": "UC",
+    "cost": 10,
+    "power": null,
+    "life": 3,
+    "ability": "■自分のリソースゾーンのカードを3枚タップしてもよい。そうしたら、自分の山札の上から1枚リソースゾーンにタップして置く。",
+    "flavor": "",
+    "keywords": [
+      "リソース加速"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/gaia.png"
+  }
+]
+]
 ]
