@@ -521,5 +521,21 @@
       "リソース加速"
     ],
     "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/gaia.png"
-  }
+  },
+  {
+  "id": "KENPACHI",
+  "name": "忠君見習い剣士ケンパチ",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "R",
+  "cost": 2,
+  "power": 2000,
+  "ability": "■【pack-hunt】自分のエンティティの数が相手より多いならば下記の効果を発動する。\n■このエンティティのパワーを+2000する。",
+  "flavor": "",
+  "keywords": [
+    "pack-hunt",
+    "パワー強化"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/kenpachi.png"
+}
 ]
