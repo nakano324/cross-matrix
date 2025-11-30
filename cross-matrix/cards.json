@@ -1,0 +1,541 @@
+[
+  {
+    "id": "VAL-VORN",
+    "name": "骸閃の死獣ヴァル＝ヴォーン",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "VR",
+    "cost": 3,
+    "power": 1000,
+    "ability": "■【飛車】縦と横に2マスまで移動できる。■【瞬撃】このエンティティが出たとき移動できる、ただし、相手のカードのあるマスに移動できない。■各ターン1回、墓地からカードを4枚好きな順番で山札の下に戻してもよい。そうしたらもう1回移動できる。■墓地にあるカード1枚につき、このエンティティのパワーを+500する。",
+    "flavor": "",
+    "keywords": [
+      "飛車"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/val-vorn.png"
+  },
+  {
+    "id": "VOLZARK",
+    "name": "暴食のヴォルザーク",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 2,
+    "power": 2000,
+    "ability": "■【クロスランス_2】このカードの縦横2マスまでの範囲で効果を発動する。■自分のエンティティを1体破壊する。その後、相手のパワー4000以下のエンティティを破壊する。",
+    "flavor": "飢えは終わらない。",
+    "keywords": [
+      "除去"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/volzark.png"
+  },
+    {
+    "id": "BALGALO",
+    "name": "冥装の屍獣バルガロ",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "SR",
+    "cost": 2,
+    "power": 6000,
+    "ability": " 【飛車】【2点】このカードはバトルゾーンに横向きで出す。このカードが横向きの時移動できない。自分のクリーチャーが破壊されたとき縦向きにする。",
+    "flavor": "",
+    "keywords": [
+      "飛車"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/balgalo.png"
+  },
+    {
+    "id": "NOERU",
+    "name": "純白の守護者ノエル",
+    "type": "エンティティ",
+    "faction": "ドミニオン",
+    "rarity": "R",
+    "cost": 5,
+    "power": 4000,
+    "ability": "■【ラウンド_1】このカードの周り1マスで効果を発動する。相手のエンティティはこのエンティティを攻撃しなければいけない。各ターンに1度、自分のリソースゾーンからカードを使ってもよい。ただしコストは支払う。",
+    "flavor": "廊下に立つべき僕を、ルミナス様は笑って部屋の中に残す。それも警備だと言って。ー純白の守護者ノエルー",
+    "keywords": [
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/noeru.png"
+  },  {
+    "id": "RUMINAS",
+    "name": "鉱煌戦姫ルミナス・ヴァレリア",
+    "type": "エンティティ",
+    "faction": "ドミニオン",
+    "rarity": "VR",
+    "cost": 7,
+    "power": 5000,
+    "ability": "【飛車】縦横2マスまで移動できる。【2点】このエンティティは相手のライフを2削る。このエンティティを出したとき、自分の山札からコスト5以下のドミニオンの拠点カードをバトルゾーンに出してもよい。そうしたら山札をシャッフルする。相手のエンティティとバトルするときパワー+2000する。",
+    "flavor": "",
+    "keywords": [
+      "コスト踏み倒し",
+      "拠点踏み倒し"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/ruminasu.png"
+  },
+   {
+    "id": "NEIRA",
+    "name": "冥想の書記ネイラ",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 2,
+    "power": 1000,
+    "ability": "このエンティティが出たときカードを2枚引く。その後、手札からカードを2枚墓地に置く。【霊障_2】墓地にあるこのカードを2コスト払って自分の山札の下に置いてもよい。そうしたら下記の効果が発動する。カードを2枚引く。その後、手札からカードを2枚墓地に置く。",
+    "flavor": "綴られるのは、消えゆく命の断章。その筆跡はどこか優しかった。",
+    "keywords": [
+      "ドロー",
+      "墓地肥やし"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/neira.png"
+  },
+     {
+    "id": "RENGOKU",
+    "name": "断罪する煉獄の光",
+    "type": "呪文",
+    "faction": "ドミニオン",
+    "rarity": "VR",
+    "cost": 7,
+    "power": null,
+    "ability": "相手は手札をすべて墓地に置く。",
+    "flavor": "支配を妨げる者は、すべて無に帰す。煉獄の光は、群れの歩みを阻む者を容赦なく焼き尽くすのだ。",
+    "keywords": [
+      "ハンデス"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/renngoku.png"
+  },
+       {
+    "id": "AURERIA",
+    "name": "覇導聖煌の戦姫アウレリア",
+    "type": "エンティティ",
+    "faction": "ドミニオン",
+    "rarity": "SR",
+    "cost": 9,
+    "power": null,
+    "ability": "【飛車】縦横2マスまで移動できる。【2点】このエンティティは相手のライフを2削る。このエンティティを出したとき、自分の山札からコストの合計が10以下になるように拠点カードを2枚までバトルゾーンに出してもよい。そうしたら山札をシャッフルする。このエンティティは2回移動できる。",
+    "flavor": "",
+    "keywords": [
+      "拠点踏み倒し"      
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/aureria.png"
+  }
+  ,
+     {
+    "id": "SASAYAKI",
+    "name": "冥界からの囁き",
+    "type": "呪文",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 5,
+    "power": null,
+    "ability": "■【ALL】すべてのマスにこの効果を与える。■マスを1つ選び、そのマスにいる相手のエンティティをすべて破壊する。",
+    "flavor": "こっちへ来い",
+    "keywords": [
+      "破壊"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/sasayaki.png"
+  },
+  {
+  "id": "AKUGOKU",
+  "name": "悪極の天秤",
+  "type": "呪文",
+  "faction": "死霊",
+  "rarity": "UC",
+  "cost": 1,
+  "power": null,
+  "ability": "■自分のエンティティを1体破壊する。そうしたらカードを2枚引く。",
+  "flavor": "報酬は甘く、代償は苛烈。均衡は決して揺るがない。",
+  "keywords": [
+    "ドロー"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/akugoku.png"
+},  
+{
+  "id": "BERSASU",
+  "name": "冥環の死霊ベルサス",
+  "type": "エンティティ",
+  "faction": "死霊",
+  "rarity": "C",
+  "cost": 2,
+  "power": 2000,
+  "ability": "■このエンティティがバトルゾーンに出たとき、山札の上から3枚墓地に置く。\n■【霊障_2】墓地にあるこのカードを2コスト払って自分の山札の下に置いてもよい。そうしたら下記の効果が発動する。\n■山札の上から3枚墓地に置く。",
+  "flavor": "死者の声は消えぬ。巡り、永遠に囁き続ける。",
+  "keywords": [
+    "墓地肥やし",
+    "霊障"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/berusasu.png"
+},
+{
+  "id": "BAKUDAN",
+  "name": "「愛嬌」という名の爆弾",
+  "type": "呪文",
+  "faction": "アニマトループ",
+  "rarity": "R",
+  "cost": 2,
+  "power": null,
+  "ability": "■【3LANE】手前から3列目までの範囲で効果を発動する。\n■マスを1つ選ぶ。そのマスにいる相手のエンティティのパワーを-4000する。",
+  "flavor": "",
+  "keywords": [
+    "除去(パワーマイナス)"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/bakudan.png"
+},
+{
+  "id": "HAMU",
+  "name": "愛嬌モンスター・ハムちゃん",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "C",
+  "cost": 1,
+  "power": 1000,
+  "ability": "■このエンティティは出たターンに移動できない。",
+  "flavor": "",
+  "keywords": [
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/hamu.png"
+},
+{
+  "id": "HYAKU",
+  "name": "驚天トリックスター・ヒャク",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "UC",
+  "cost": 3,
+  "power": 1000,
+  "ability": "■このエンティティは前から4列目までのどのマスに出してもよい。",
+  "flavor": "",
+  "keywords": [
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/trickstar.png"
+},
+{
+  "id": "CHOTOKYUU",
+  "name": "猛進あるのみチョトッキュー",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "UC",
+  "cost": 3,
+  "power": 5000,
+  "ability": "■【香車】このエンティティは前に2マスまで進める。\n■【瞬撃】このエンティティが出たとき、移動できる。ただし相手のカードがあるマスに移動できない。",
+  "flavor": "",
+  "keywords": [
+    "香車",
+    "瞬撃"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/chotokyuu.png"
+},
+{
+  "id": "FOXSLOT",
+  "name": "万里透析の参謀フォクスロット",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "VR",
+  "cost": 4,
+  "power": 3000,
+  "ability": "■【クロスカット_2】斜め2マスまでの範囲で効果を発動する。\n■このエンティティが出たとき、相手のエンティティを1体手札に戻させるか、相手の手札を見ないで1枚選び、墓地に置かせる。\n■【pack-hunt】自分のエンティティの数が相手より多いとき効果を発動する。\n■ターン終了時、自分のエンティティの数以下のコストのアニマトループのエンティティを墓地から出してもよい。そうしたらこのエンティティを破壊する。",
+  "flavor": "",
+  "keywords": [
+    "バウンス",
+    "ハンデス",
+    "pack-hunt",
+    "コスト踏み倒し(墓地)"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/foxlot.png"
+},
+{
+  "id": "ALFA",
+  "name": "白銀の聡猛君主アルファ",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "SR",
+  "cost": 6,
+  "power": 6000,
+  "ability": "■【クイーン】このエンティティは縦横、斜め2マスまで移動できる。\n■【2点】このエンティティは相手のライフを2削る。\n■【pack-hunt】自分のエンティティの数が相手より多いなら、下記の効果を発動する。\n　自分のアニマトループのエンティティに【飛車】（縦横2マスまで移動できる）を与える。",
+  "flavor": "",
+  "keywords": [
+    "クイーン",
+    "2点",
+    "pack-hunt",
+    "飛車付与"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/arufa.png"
+},
+{
+  "id": "REGUNAS",
+  "name": "武闘殿レグナス",
+  "type": "拠点",
+  "faction": "ドミニオン",
+  "rarity": "R",
+  "cost": 5,
+  "power": null,
+  "life": 1,
+  "ability": "■自分のエンティティに下記の能力を与える。\n■【ラウンド_1】カードの周り1マスに効果を発動する。\n■相手のエンティティを1体選んでもよい。そのエンティティとバトルする。",
+  "flavor": "",
+  "keywords": [
+    "除去（バトル）",
+    "ラウンド"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/regunasu.png"
+},
+{
+  "id": "HOUKOU",
+  "name": "地龍の咆哮",
+  "type": "呪文",
+  "faction": "ドミニオン",
+  "rarity": "R",
+  "cost": 6,
+  "power": null,
+  "ability": "■【ALL】すべてのマスの範囲で効果を発動する。\n■バトルゾーンのマスを1つ選ぶ。そのマスにある相手のエンティティをすべて相手のリソースゾーンに置く。",
+  "flavor": "",
+  "keywords": [
+    "ALL",
+    "リソース送り"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/houkou.png"
+},
+{
+  "id": "MYAKUDOU",
+  "name": "大地の脈動",
+  "type": "呪文",
+  "faction": "ドミニオン",
+  "rarity": "R",
+  "cost": 2,
+  "power": null,
+  "ability": "■自分の拠点カードの数だけ山札の上からリソースゾーンにカードを1枚タップして置く。",
+  "flavor": "女王が朽ちれば、群れは迷わず新たな女王を生み出す。彼らにとって“死”とは終焉ではなく、王政を継ぐための循環にすぎない。人の目には苛酷に映ろうとも、群れは常に玉座を中心に動き続ける。",
+  "keywords": [
+    "リソース加速"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/myakudou.png"
+},
+{
+  "id": "DOMINATEGATE",
+  "name": "支配の門ドミネートゲート",
+  "type": "拠点",
+  "faction": "ドミニオン",
+  "rarity": "VR",
+  "cost": 5,
+  "power": null,
+  "life": 1,
+  "ability": "■各ターン1度、自分のエンティティが奥2列に移動するとき山札の上から1枚表向きにして、それがドミニオンのエンティティまたは呪文なら使ってもよい。使わない場合そのカードを山札の下に置く。",
+  "flavor": "",
+  "keywords": [
+    "踏み倒し",
+    "奥列シナジー"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/dominategate.png"
+},
+{
+  "id": "SHINPI",
+  "name": "神秘の祠",
+  "type": "拠点",
+  "faction": "ドミニオン",
+  "rarity": "UC",
+  "cost": 3,
+  "power": null,
+  "life": 1,
+  "ability": "■各ターン1回、リソースゾーンからエンティティを召喚してもよい。ただし、コストは支払う。",
+  "flavor": "",
+  "keywords": [
+    "リソース召喚"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/sinpi.png"
+},
+{
+  "id": "HOUGA",
+  "name": "支配の萌芽",
+  "type": "呪文",
+  "faction": "ドミニオン",
+  "rarity": "C",
+  "cost": 2,
+  "power": null,
+  "ability": "■自分の山札の上から1枚リソースゾーンに置く。",
+  "flavor": "集団の膨張が呼ぶのは、一柱の王ではなく幾柱もの王。彼女らは互いに玉座を求め、血を流し、涙すら支配の輝とする。敗れた王妃にも、勝者は群れを分け、次代の玉座を持つ。彼女たちの戦いに慈悲はなく、退路もない。そこにあるのはただ、支配を継がんとする必然の律のみである。",
+  "keywords": [
+    "リソース加速"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/houga.png"
+},
+{
+  "id": "VARUGUREISU",
+  "name": "冥酷帝ヴァルグレイス",
+  "type": "エンティティ",
+  "faction": "死霊",
+  "rarity": "VR",
+  "cost": 8,
+  "power": null,
+  "ability": "■【角】斜めに2マスまで移動できる。■【3点】相手のライフを3削る。■自分の死霊エンティティを3体破壊して、このエンティティを召喚してもよい。■　　　　　　　　 このカードのあるマスの縦横斜め2マスまでで次の効果を発動する。■このエンティティが出たとき、マスを1つ選ぶ。そのマスにいる相手のエンティティのパワーを-5000する。 ",
+  "flavor": "",
+  "keywords": [
+    "除去(パワーマイナス)",
+    "3点",
+    "コスト踏み倒し",
+    "角"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/varugureisu.png"
+},
+{
+  "id": "REGNARIUS",
+  "name": "強権の覇竜レグナリウス",
+  "type": "エンティティ",
+  "faction": "ドミニオン",
+  "rarity": "VR",
+  "cost": 6,
+  "power": 6000,
+  "ability": "■【飛車】縦横2マスまで移動できる。\n■【2点】このエンティティは相手のライフを2削る。\n■相手はリソースゾーンにカードをタップしておく。\n■このエンティティが出たとき、カードを2枚引く。",
+  "flavor": "",
+  "keywords": [
+    "飛車",
+    "2点",
+    "ドロー",
+    "ランデス"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/regunariusu.png"
+},
+  {
+    "id": "NOXIDIA",
+    "name": "千骸死霊殿ノクシディア",
+    "type": "拠点",
+    "faction": "死霊",
+    "rarity": "VR",
+    "cost": 13,
+    "power": null,
+    "life": 5,
+    "ability": "■この拠点を設置したとき、山札の上から3枚墓地に置き、墓地からカードを1枚手札に加える。\n■自分のエンティティがバトルゾーンを離れる時、代わりに墓地のカードを4枚好きな順番で山札の下に置いてもよい。そうしたらそのエンティティはバトルゾーンにとどまる。",
+    "flavor": "",
+    "keywords": [
+      "墓地肥やし",
+      "回収",
+      "除去耐性"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/noxidia.png"
+  },
+  {
+    "id": "ALEFANT",
+    "name": "後援する盟友エール・ファント",
+    "type": "エンティティ",
+    "faction": "アニマトループ",
+    "rarity": "UC",
+    "cost": 4,
+    "power": 3000,
+    "ability": "■バトルゾーンに自分の他のアニマトループのエンティティが出たとき、カードを1枚引く。",
+    "flavor": "",
+    "keywords": [
+      "ドロー"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/alefant.png"
+  },
+  {
+    "id": "PAMBOO",
+    "name": "竹槍爆投げ隊長パンブー",
+    "type": "エンティティ",
+    "faction": "アニマトループ",
+    "rarity": "C",
+    "cost": 3,
+    "power": 2000,
+    "ability": "■【ノックバック】このエンティティを相手のエンティティがいるマスにも出してもよい。出すときと移動するとき、そのマスに相手のエンティティがいれば1マス後退させてもよい。\n■【クロスランス_3】このカードの縦横3マスまでの範囲で効果を発動する。\n■このエンティティが出たとき、パワー2000以下の相手のエンティティを1体破壊する。",
+    "flavor": "",
+    "keywords": [
+      "ノックバック",
+      "除去",
+      "クロスランス"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/pamboo.png"
+  },
+  {
+    "id": "SUPEKTORAMU",
+    "name": "スペクトラム大草原",
+    "type": "拠点",
+    "faction": "アニマトループ",
+    "rarity": "VR",
+    "cost": 11,
+    "power": null,
+    "life": 5,
+    "ability": "■各ターンに1度、自分のカードによって相手のカードが墓地に置かれた時、カードを1枚引く。",
+    "flavor": "",
+    "keywords": [
+      "ドロー"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/supektoramu.png"
+  },
+  {
+    "id": "WALNUTS",
+    "name": "頑張り補給兵ウォル＆ナッツ",
+    "type": "エンティティ",
+    "faction": "アニマトループ",
+    "rarity": "C",
+    "cost": 2,
+    "power": 1000,
+    "ability": "■各ターンに1度、自分のアニマトループのエンティティを召喚するコストを1少なくしてもよい。ただし、コスト1より少なくならない。",
+    "flavor": "",
+    "keywords": [
+      "コスト軽減"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/wall.png"
+  },
+  {
+    "id": "GURADELIOSU",
+    "name": "魂詠の冥徒グラディオス",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 4,
+    "power": 1000,
+    "ability": "■このエンティティが出たとき、コスト4以下のエンティティを1体、自分の墓地から出してもよい。ターン終了時、そのエンティティを破壊する。",
+    "flavor": "停滞する冥界の環に囚われた者は、永遠に死と再生を繰り返す。",
+    "keywords": [
+      "蘇生",
+      "死霊シナジー"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/guradeliosu.png"
+  },
+  {
+    "id": "DORUMAGUSU",
+    "name": "不滅の屍霊ドルマグス",
+    "type": "エンティティ",
+    "faction": "死霊",
+    "rarity": "R",
+    "cost": 3,
+    "power": 1000,
+    "ability": "■ターン終了時、山札の上から1枚を墓地に置く。\n■このエンティティが破壊されるとき、代わりに自分の拠点カードの下からカードを1枚墓地に置いてもよい。",
+    "flavor": "亡者ほど、しぶとい敵はいない。",
+    "keywords": [
+      "墓地肥やし",
+      "破壊耐性"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/dorumagusu.png"
+  },
+  {
+    "id": "GAIA",
+    "name": "永劫の世界ガイア",
+    "type": "拠点",
+    "faction": "ドミニオン",
+    "rarity": "UC",
+    "cost": 10,
+    "power": null,
+    "life": 3,
+    "ability": "■自分のリソースゾーンのカードを3枚タップしてもよい。そうしたら、自分の山札の上から1枚リソースゾーンにタップして置く。",
+    "flavor": "",
+    "keywords": [
+      "リソース加速"
+    ],
+    "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/gaia.png"
+  },
+  {
+  "id": "KENPACHI",
+  "name": "忠君見習い剣士ケンパチ",
+  "type": "エンティティ",
+  "faction": "アニマトループ",
+  "rarity": "R",
+  "cost": 2,
+  "power": 2000,
+  "ability": "■【pack-hunt】自分のエンティティの数が相手より多いならば下記の効果を発動する。\n■このエンティティのパワーを+2000する。",
+  "flavor": "",
+  "keywords": [
+    "pack-hunt",
+    "パワー強化"
+  ],
+  "image": "https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/kenpachi.png"
+}
+]

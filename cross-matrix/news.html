@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ニュース｜公式サイト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
+    <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav">
+      <a href="index.html">ホーム</a>
+      <a href="cards.html">カード図鑑</a>
+      <a href="rules.html">ルール</a>
+      <a href="story.html">ストーリー</a>
+      <a href="news.html">ニュース</a>
+    </nav>
+
+      <!-- スマホメニュー -->
+   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-inner">
+    <a href="index.html">ホーム</a>
+    <a href="cards.html">カード図鑑</a>
+    <a href="rules.html">ルール</a>
+    <a href="story.html" class="active">ストーリー</a>
+    <a href="news.html">ニュース</a>
+  </div>
+  <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+</nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="news">
+    <h2>最新ニュース</h2>
+    <p class="news-lead">開発の進捗やカード追加情報をお届けします。各項目をタップすると本文が開きます。</p>
+
+    <!-- 体験レポート記事 -->
+        <details class="news-entry">
+          <summary>
+            <time datetime="2025-09-27">2025.09.27</time>
+            <span class="news-cat">イベントレポート</span>
+            <span class="news-title">先行体験会レポートを公開しました</span>
+          </summary>
+          <div class="news-body">
+            <p>
+              先行体験会の様子をまとめたレポートを公開しました。<br>
+              写真や参加者の声も掲載しています。
+            </p>
+            <p>
+              <a href="traial.html" class="btn">体験レポートを読む</a>
+            </p>
+          </div>
+        </details>
+
+          <details class="news-entry">
+        <summary>
+          <time datetime="2025-08-30">2025.08.30</time>
+          <span class="news-cat">開発ノート</span>
+          <span class="news-title">盤面UIをアップデート（4×5配置に対応）</span>
+        </summary>
+        <div class="news-body">
+          <p>ゲームルールの一部変更により、盤面UIを4×5配置に変更しました。</p>
+        </div>
+      </details>
+
+                <details class="news-entry">
+        <summary>
+          <time datetime="2025-08-30">2025.08.30</time>
+          <span class="news-cat">開発ノート</span>
+          <span class="news-title">キーワード能力の追加</span>
+        </summary>
+        <div class="news-body">
+          <p>カード効果の影響を与えられる範囲に関する用語です。</p>
+        </div>
+      </details>
+
+    <div class="news-accordion">
+      <!-- 記事1 -->
+      <details class="news-entry" open>
+        <summary>
+          <time datetime="2025-08-24">2025.08.24</time>
+          <span class="news-cat">お知らせ</span>
+          <span class="news-title">公式サイトを公開しました</span>
+        </summary>
+        <div class="news-body">
+          <p>『CROSS MATRIX』公式サイトを公開しました。カード図鑑・ルールページは順次拡充していきます。</p>
+        </div>
+      </details>
+
+      <!-- 記事3（例） -->
+      <details class="news-entry">
+        <summary>
+          <time datetime="2025-08-21">2025.08.21</time>
+          <span class="news-cat">開発ノート</span>
+          <span class="news-title">盤面UIをアップデート（4×6配置に対応）</span>
+        </summary>
+        <div class="news-body">
+          <p>点対称の相手ゾーンとリソースゾーン表示を実装。紙のプレイ時の視認性を重視してマージンを調整しました。</p>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap"><small>© 2025 cross matrix Project</small></div>
+</footer>
+
+<script>
+(function(){
+  const btn  = document.getElementById('navToggle');
+  const menu = document.getElementById('mobileMenu');
+  const close= document.getElementById('navClose');
+  if(!btn || !menu) return;
+
+  const open = ()=>{ menu.classList.add('is-open'); btn.classList.add('is-open'); document.body.classList.add('body-lock'); btn.setAttribute('aria-expanded','true'); menu.setAttribute('aria-hidden','false'); };
+  const hide = ()=>{ menu.classList.remove('is-open'); btn.classList.remove('is-open'); document.body.classList.remove('body-lock'); btn.setAttribute('aria-expanded','false'); menu.setAttribute('aria-hidden','true'); };
+
+  btn.addEventListener('click', ()=> menu.classList.contains('is-open') ? hide() : open());
+  close?.addEventListener('click', hide);
+  menu.addEventListener('click', e => { if(e.target === menu) hide(); });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', hide));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') hide(); });
+})();
+
+// ニュース：1つ開いたら他を閉じる（不要なら削除OK）
+(function(){
+  const items = document.querySelectorAll('.news-accordion details');
+  items.forEach(item => item.addEventListener('toggle', () => {
+    if (item.open) items.forEach(o => { if (o !== item) o.open = false; });
+  }));
+})();
+</script>
+</body>
+</html>

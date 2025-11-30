@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CardDex｜公式カード図鑑</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
+    <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav">
+      <a href="index.html">ホーム</a>
+      <a href="cards.html">カード図鑑</a>
+      <a href="rules.html">ルール</a>
+      <a href="story.html">ストーリー</a>
+      <a href="news.html">ニュース</a>
+    </nav>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-inner">
+    <a href="index.html">ホーム</a>
+    <a href="cards.html">カード図鑑</a>
+    <a href="rules.html">ルール</a>
+    <a href="story.html">ストーリー</a>
+    <a href="news.html">ニュース</a>
+  </div>
+  <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+</nav>
+
+
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-inner">
+    <a href="index.html">ホーム</a>
+    <a href="cards.html">カード図鑑</a>
+    <a href="rules.html">ルール</a>
+    <a href="#">ストーリー</a>
+    <a href="#">ニュース</a>
+  </div>
+  <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+</nav>
+
+
+  <main class="wrap">
+    <section class="filters">
+      <div class="row">
+        <label class="field">
+          <span>キーワード</span>
+          <input id="q" type="search" placeholder="名前・能力テキストで検索" />
+        </label>
+        <label class="field">
+          <span>コスト</span>
+          <div class="range">
+            <input id="costMin" type="number" min="0" max="20" value="0">
+            <span>〜</span>
+            <input id="costMax" type="number" min="0" max="20" value="20">
+          </div>
+        </label>
+        <label class="field">
+          <span>ファミリア</span>
+          <select id="faction">
+            <option value="">（すべて）</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>種別</span>
+          <select id="ctype">
+            <option value="">（すべて）</option>
+            <option>エンティティ</option>
+            <option>呪文</option>
+            <option>拠点</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>レアリティ</span>
+          <select id="rarity">
+            <option value="">（すべて）</option>
+            <option>C</option>
+            <option>UC</option>
+            <option>R</option>
+            <option>VR</option>
+            <option>SR</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>並び替え</span>
+          <select id="sort">
+            <option value="name_asc">名前 A→Z</option>
+            <option value="name_desc">名前 Z→A</option>
+            <option value="cost_asc">コスト 昇順</option>
+            <option value="cost_desc">コスト 降順</option>
+            <option value="power_desc">パワー 高い順</option>
+            <option value="power_asc">パワー 低い順</option>
+          </select>
+        </label>
+      </div>
+      <div class="row row-actions">
+        <button id="reset" class="btn ghost">リセット</button>
+        <div id="count" class="count">— 件</div>
+      </div>
+    </section>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+  </main>
+
+  <template id="card-tpl">
+    <article class="card">
+      <div class="thumb-wrap">
+        <img class="thumb" alt="カード画像" loading="lazy">
+        <span class="badge rarity"></span>
+      </div>
+      <div class="meta">
+        <h3 class="name"></h3>
+        <div class="tags">
+          <span class="tag cost"></span>
+          <span class="tag power"></span>
+          <span class="tag faction"></span>
+          <span class="tag type"></span>
+        </div>
+        <p class="text ability"></p>
+      </div>
+    </article>
+  </template>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <small>© cross matrix Project</small>
+    </div>
+  </footer>
+
+  <script defer src="script.js"></script>
+  <script>
+(function(){
+  const btn = document.getElementById('navToggle');
+  const close = document.getElementById('navClose');
+  const menu = document.getElementById('mobileMenu');
+  if(!btn || !menu) return;
+
+  const open = ()=>{
+    menu.classList.add('is-open');
+    btn.classList.add('is-open');
+    document.body.classList.add('body-lock');
+    btn.setAttribute('aria-expanded','true');
+    menu.setAttribute('aria-hidden','false');
+  };
+  const hide = ()=>{
+    menu.classList.remove('is-open');
+    btn.classList.remove('is-open');
+    document.body.classList.remove('body-lock');
+    btn.setAttribute('aria-expanded','false');
+    menu.setAttribute('aria-hidden','true');
+  };
+
+  btn.addEventListener('click', ()=> menu.classList.contains('is-open') ? hide() : open());
+  close?.addEventListener('click', hide);
+  menu.addEventListener('click', (e)=>{ if(e.target === menu) hide(); }); // 背景タップで閉じる
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') hide(); });
+
+  // メニューのリンクを押したら自動で閉じる
+  menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', hide));
+})();
+</script>
+
+</body>
+</html>
