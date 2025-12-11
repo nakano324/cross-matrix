@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a0b10" />
+  <title>Cross Matrix｜公式ショップ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* style.css が効かない場合のための保険＆ショップ専用スタイル */
+    :root{
+      --bg:#0a0b10; --panel:#12141b; --fg:#e7e8ee; --muted:#a3a7b5;
+      --line:rgba(255,255,255,.08); --accent:#d4af37; --radius:20px; --wrap:1180px;
+    }
+    body{ margin:0; background:var(--bg); color:var(--fg); font-family:"Noto Sans JP",sans-serif; }
+    
+    /* ショップ専用レイアウト */
+    .shop-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
+    }
+    .shop-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column; transition: transform 0.2s;
+    }
+    .shop-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    
+    .shop-thumb-wrap {
+      aspect-ratio: 16/9; background: #000; overflow: hidden; position: relative;
+    }
+    .shop-thumb {
+      width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s;
+    }
+    
+    .shop-meta { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .shop-price { color: var(--accent); font-size: 1.4rem; font-weight: 800; margin: 4px 0 12px; }
+    .shop-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+    
+    /* カートボタン */
+    .btn-cart {
+      margin-top: auto; width: 100%; padding: 12px;
+      background: var(--fg); color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-cart:hover { background: var(--accent); }
+
+    /* ローディングアニメーション */
+    #loading { text-align: center; padding: 60px 0; color: var(--muted); }
+    .spinner {
+      width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin 1s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1 class="brand"><a href="index.html"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:48px;"></a></h1>
+      <nav class="nav">
+        <a href="index.html">ホーム</a>
+        <a href="cards.html">カード図鑑</a>
+        <a href="shop.html" class="active">ショップ</a> </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" style="min-height: 40vh; display: flex; align-items: center;">
+      <div class="wrap inner" style="padding: 40px 20px;">
+        <div class="lead">
+          <h1>OFFICIAL STORE</h1>
+          <p>拡張パック、構築済みデッキ、サプライの購入はこちらから。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>商品一覧</h2>
+        
+        <div id="loading">
+          <div class="spinner"></div>
+          <p>サーバー起動中...<br><small>※最初の読み込みには30秒ほどかかる場合があります</small></p>
+        </div>
+        
+        <div id="product-list" class="shop-grid"></div>
+        
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap"><small>© 2025 Cross Matrix Project</small></div>
+  </footer>
+
+  <script>
+    // ======= ここがAPI連携の心臓部です =======
+    
+    // Renderで作ったあなたのバックエンドURL
+    const API_URL = "https://cross-matrix-shop-api.onrender.com/api/products";
+
+    async function fetchProducts() {
+      const container = document.getElementById('product-list');
+      const loading = document.getElementById('loading');
+
+      try {
+        // 1. サーバーからデータを取得
+        const res = await fetch(API_URL);
+        
+        if (!res.ok) throw new Error("データの取得に失敗しました");
+
+        const products = await res.json();
+        
+        // 2. ローディングを消す
+        loading.style.display = 'none';
+
+        // 3. データが空だった場合
+        if (products.length === 0) {
+          container.innerHTML = '<p style="color:var(--muted)">現在、販売中の商品はありません。</p>';
+          return;
+        }
+
+        // 4. 商品カードを生成して表示
+        products.forEach(product => {
+          const card = document.createElement('article');
+          card.className = 'shop-card';
+          
+          // 画像がない場合のダミー画像
+          const imgSrc = product.image || 'https://placehold.co/600x400/1a1d27/e6e6eb?text=No+Image';
+
+          card.innerHTML = `
+            <div class="shop-thumb-wrap">
+              <img class="shop-thumb" src="${imgSrc}" alt="${product.name}">
+            </div>
+            <div class="shop-meta">
+              <h3 class="name" style="margin:0">${product.name}</h3>
+              <div class="shop-price">¥${product.price.toLocaleString()}</div>
+              <p class="shop-desc">${product.description || '説明文がありません'}</p>
+              <button class="btn-cart" onclick="alert('まだ購入できません（Stripe未実装）')">カートに入れる</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(err);
+        loading.innerHTML = `<p style="color:#ff6b6b">読み込みエラー: ${err.message}<br>サーバーが停止している可能性があります。</p>`;
+      }
+    }
+
+    // ページが開いたら実行
+    fetchProducts();
+  </script>
+</body>
+</html>

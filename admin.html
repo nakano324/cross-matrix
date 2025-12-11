@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品管理システム｜Cross Matrix</title>
+    <style>
+        /* 管理画面なのでシンプルかつダークに */
+        body { background: #0a0b10; color: #e7e8ee; font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        h1 { border-bottom: 1px solid #333; padding-bottom: 10px; }
+        
+        /* 入力フォーム */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #a3a7b5; }
+        input, textarea { 
+            width: 100%; padding: 10px; background: #12141b; border: 1px solid #333; 
+            color: white; border-radius: 4px; box-sizing: border-box;
+        }
+        button {
+            background: #d4af37; color: #000; border: none; padding: 10px 20px; 
+            font-weight: bold; cursor: pointer; border-radius: 4px;
+        }
+        button:hover { opacity: 0.9; }
+
+        /* 商品リスト */
+        .item-list { margin-top: 40px; }
+        .item { 
+            background: #12141b; border: 1px solid #333; padding: 15px; 
+            margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .item img { height: 50px; width: 50px; object-fit: cover; margin-right: 15px; border-radius: 4px; }
+        .item-info { flex: 1; }
+        .delete-btn { background: #ff4757; color: white; padding: 5px 10px; font-size: 0.8rem; margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>📦 商品登録パネル</h1>
+
+    <div style="background: #1a1d27; padding: 20px; border-radius: 8px;">
+        <div class="form-group">
+            <label>商品名</label>
+            <input type="text" id="name" placeholder="例: 拡張パック「覚醒の刻」">
+        </div>
+        <div class="form-group">
+            <label>価格 (円)</label>
+            <input type="number" id="price" placeholder="例: 500">
+        </div>
+        <div class="form-group">
+            <label>画像URL</label>
+            <input type="text" id="image" placeholder="画像のリンク (https://...)">
+            <small style="color: #666;">※手持ちの画像がない場合は空欄でOK（ダミー画像が入ります）</small>
+        </div>
+        <div class="form-group">
+            <label>商品説明</label>
+            <textarea id="description" rows="3" placeholder="商品の説明文..."></textarea>
+        </div>
+        <button onclick="addProduct()">商品をデータベースに追加</button>
+    </div>
+
+    <div class="item-list">
+        <h2>登録済み商品一覧</h2>
+        <div id="list">読み込み中...</div>
+    </div>
+
+    <script>
+        // あなたのAPIサーバーのURL
+        const API_URL = "https://cross-matrix-shop-api.onrender.com/api/products";
+
+        // 1. 商品一覧を読み込む
+        async function loadProducts() {
+            const list = document.getElementById('list');
+            try {
+                const res = await fetch(API_URL);
+                const products = await res.json();
+
+                list.innerHTML = ""; // クリア
+                products.forEach(p => {
+                    const div = document.createElement('div');
+                    div.className = 'item';
+                    div.innerHTML = `
+                        <div style="display:flex; align-items:center;">
+                            <img src="${p.image || 'https://placehold.co/100'}" onerror="this.src='https://placehold.co/100'">
+                            <div class="item-info">
+                                <strong>${p.name}</strong><br>
+                                <span style="color:#d4af37">¥${p.price}</span>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteProduct('${p._id}')">削除</button>
+                    `;
+                    list.appendChild(div);
+                });
+            } catch (err) {
+                list.innerHTML = "読み込み失敗: " + err.message;
+            }
+        }
+
+        // 2. 商品を追加する
+        async function addProduct() {
+            const name = document.getElementById('name').value;
+            const price = document.getElementById('price').value;
+            const image = document.getElementById('image').value;
+            const description = document.getElementById('description').value;
+
+            if(!name || !price) return alert("商品名と価格は必須です");
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, price, image, description })
+                });
+                
+                if(res.ok) {
+                    alert("登録しました！");
+                    // フォームをクリアして再読み込み
+                    document.getElementById('name').value = "";
+                    document.getElementById('price').value = "";
+                    document.getElementById('description').value = "";
+                    loadProducts();
+                } else {
+                    alert("エラーが発生しました");
+                }
+            } catch (err) {
+                alert("送信エラー: " + err.message);
+            }
+        }
+
+        // 3. 商品を削除する（隠し機能）
+        // ※ サーバー側に削除APIを作っていない場合、これは動きませんが、
+        //    今後必要になるので枠だけ作っておきました。
+        async function deleteProduct(id) {
+            if(!confirm("本当に削除しますか？")) return;
+            alert("現在、削除機能はサーバー側でロックされています。\n（MongoDB Atlasの管理画面から直接削除してください）");
+        }
+
+        // 起動時に読み込み
+        loadProducts();
+    </script>
+</body>
+</html>
