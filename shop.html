@@ -100,62 +100,83 @@
   </footer>
 
   <script>
-    // ======= ここがAPI連携の心臓部です =======
-    
-    // Renderで作ったあなたのバックエンドURL
+    // あなたのAPIサーバーURL
     const API_URL = "https://cross-matrix-shop-api.onrender.com/api/products";
 
+    // 1. ページが開いたら実行される処理
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchProducts();
+        updateCartCount(); // カートの数字を更新
+    });
+
+    // 2. 商品を取得して表示
     async function fetchProducts() {
-      const container = document.getElementById('product-list');
-      const loading = document.getElementById('loading');
+        const container = document.getElementById('product-list');
+        const loading = document.getElementById('loading');
 
-      try {
-        // 1. サーバーからデータを取得
-        const res = await fetch(API_URL);
-        
-        if (!res.ok) throw new Error("データの取得に失敗しました");
+        try {
+            const res = await fetch(API_URL);
+            if (!res.ok) throw new Error("取得失敗");
+            const products = await res.json();
+            
+            loading.style.display = 'none';
 
-        const products = await res.json();
-        
-        // 2. ローディングを消す
-        loading.style.display = 'none';
+            if (products.length === 0) {
+                container.innerHTML = '<p style="color:var(--muted)">商品がありません。</p>';
+                return;
+            }
 
-        // 3. データが空だった場合
-        if (products.length === 0) {
-          container.innerHTML = '<p style="color:var(--muted)">現在、販売中の商品はありません。</p>';
-          return;
+            products.forEach(product => {
+                const card = document.createElement('article');
+                card.className = 'shop-card';
+                const imgSrc = product.image || 'https://placehold.co/600x400/1a1d27/e6e6eb?text=No+Image';
+
+                // 重要：ボタンに onclick="addToCart(...)" を追加しました
+                // 商品データ(product)を文字にして渡しています
+                const productJson = JSON.stringify(product).replace(/"/g, '&quot;');
+                
+                card.innerHTML = `
+                    <div class="shop-thumb-wrap">
+                        <img class="shop-thumb" src="${imgSrc}" alt="${product.name}">
+                    </div>
+                    <div class="shop-meta">
+                        <h3 class="name" style="margin:0">${product.name}</h3>
+                        <div class="shop-price">¥${product.price.toLocaleString()}</div>
+                        <p class="shop-desc">${product.description || ''}</p>
+                        <button class="btn-cart" onclick='addToCart(${productJson})'>カートに入れる 🛒</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        } catch (err) {
+            console.error(err);
+            loading.innerHTML = `<p>エラー: ${err.message}</p>`;
         }
-
-        // 4. 商品カードを生成して表示
-        products.forEach(product => {
-          const card = document.createElement('article');
-          card.className = 'shop-card';
-          
-          // 画像がない場合のダミー画像
-          const imgSrc = product.image || 'https://placehold.co/600x400/1a1d27/e6e6eb?text=No+Image';
-
-          card.innerHTML = `
-            <div class="shop-thumb-wrap">
-              <img class="shop-thumb" src="${imgSrc}" alt="${product.name}">
-            </div>
-            <div class="shop-meta">
-              <h3 class="name" style="margin:0">${product.name}</h3>
-              <div class="shop-price">¥${product.price.toLocaleString()}</div>
-              <p class="shop-desc">${product.description || '説明文がありません'}</p>
-              <button class="btn-cart" onclick="alert('まだ購入できません（Stripe未実装）')">カートに入れる</button>
-            </div>
-          `;
-          container.appendChild(card);
-        });
-
-      } catch (err) {
-        console.error(err);
-        loading.innerHTML = `<p style="color:#ff6b6b">読み込みエラー: ${err.message}<br>サーバーが停止している可能性があります。</p>`;
-      }
     }
 
-    // ページが開いたら実行
-    fetchProducts();
-  </script>
+    // 3. カートに入れる機能
+    function addToCart(product) {
+        // 今のカートの中身を取り出す（なければ空っぽの箱を用意）
+        let cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
+        
+        // 商品を箱に入れる
+        cart.push(product);
+        
+        // 箱を保存する
+        localStorage.setItem('cm_cart', JSON.stringify(cart));
+        
+        // 画面の数字を更新
+        updateCartCount();
+        alert(`${product.name} をカートに入れました！`);
+    }
+
+    // 4. ナビゲーションの「カート」の数字を更新する
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
+        // ナビゲーションに id="cart-link" をつけたタグが必要です（後述）
+        const navLink = document.getElementById('cart-link');
+        if(navLink) navLink.innerText = `カート(${cart.length})`;
+    }
+</script>
 </body>
 </html>
