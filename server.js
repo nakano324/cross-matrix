@@ -53,6 +53,16 @@ app.get('/', (req, res) => {
   res.send('ショップAPIサーバー、元気に稼働中！');
 });
 
+// 4. 商品を削除する
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id); // 指定されたIDの商品を消す
+    res.json({ message: '削除しました' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // --- サーバー開始 ---
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
