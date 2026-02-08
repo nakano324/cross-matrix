@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メール認証｜Cross Matrix</title>
+    <style>
+        body {
+            background: #0a0b10;
+            color: #e7e8ee;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            background: #1a1d27;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .success {
+            color: #2ecc71;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            color: #ff4757;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <h1>メール認証</h1>
+        <div id="message">認証中...</div>
+    </div>
+
+    <script>
+        // const API_URL = "https://cross-matrix-shop-api.onrender.com/api/auth/verify-email";
+        const API_URL = "http://localhost:3000/api/auth/verify-email";
+
+        window.onload = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const messageDiv = document.getElementById('message');
+
+            if (!token) {
+                messageDiv.textContent = "トークンが見つかりません。";
+                messageDiv.className = "error";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}?token=${token}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    messageDiv.innerHTML = `${data.message}<br><br><a href="login.html" style="color:#d4af37">ログイン画面へ</a>`;
+                    messageDiv.className = "success";
+                } else {
+                    messageDiv.textContent = data.error || "認証に失敗しました。";
+                    messageDiv.className = "error";
+                }
+            } catch (err) {
+                messageDiv.textContent = "エラーが発生しました: " + err.message;
+                messageDiv.className = "error";
+            }
+        };
+    </script>
+</body>
+
+</html>

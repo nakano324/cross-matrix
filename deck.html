@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Maker - Cross Matrix</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css"> <!-- Base styles -->
+    <link rel="stylesheet" href="deck.css"> <!-- Deck specific styles -->
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap">
+            <a href="index.html" class="brand">
+                <img src="images/logo.png" alt="Cross Matrix Logo" id="siteLogo">
+                <!-- Placeholder for logo if exists, or just text -->
+            </a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="cards.html">Card List</a>
+                <a href="deck.html" class="active">Deck Maker</a>
+                <a href="rules.html">Rules</a>
+            </nav>
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (copied from existing structure for consistency) -->
+    <div class="mobile-menu">
+        <button class="menu-close">×</button>
+        <div class="mobile-menu-inner">
+            <a href="index.html">Home</a>
+            <a href="cards.html">Card List</a>
+            <a href="deck.html">Deck Maker</a>
+            <a href="rules.html">Rules</a>
+        </div>
+    </div>
+
+    <main class="deck-maker-container">
+
+        <!-- Mobile View Toggle -->
+        <div class="mobile-view-toggle">
+            <button id="viewPoolBtn" class="active">Card Pool</button>
+            <button id="viewDeckBtn">Current Deck (<span id="mobileDeckCount">0</span>)</button>
+        </div>
+
+        <!-- Left Pane: Card Pool -->
+        <section class="pane card-pool-pane" id="cardPoolPane">
+            <div class="pane-header">
+                <h2>Card Pool</h2>
+                <div class="filter-controls">
+                    <input type="text" id="searchInput" placeholder="Search name/text...">
+                    <select id="factionFilter">
+                        <option value="">All Factions</option>
+                        <!-- Populated by JS -->
+                    </select>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <!-- Populated by JS -->
+                    </select>
+                    <select id="costFilter">
+                        <option value="">All Costs</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7+">7+</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-list-scroller">
+                <div class="card-grid" id="cardPoolGrid">
+                    <!-- Cards injected here -->
+                    <div class="loading">Loading cards...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Pane: Current Deck -->
+        <section class="pane deck-pane" id="deckPane">
+            <div class="pane-header">
+                <h2>Current Deck <span class="deck-count" id="deckCount">0/40</span></h2>
+                <div class="deck-actions">
+                    <button class="btn ghost" id="clearDeckBtn">Clear</button>
+                    <button class="btn" id="exportDeckBtn">Copy Text</button>
+                    <!-- Future: Save Image -->
+                </div>
+                <div class="deck-stats" id="deckStats">
+                    <!-- Simple stats like faction distribution could go here -->
+                </div>
+            </div>
+            <div class="deck-list-scroller">
+                <div class="deck-grid" id="deckGrid">
+                    <!-- Deck cards injected here -->
+                    <div class="empty-state">Click cards from the pool to add them to your deck.</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <script src="deck.js"></script>
+</body>
+
+</html>

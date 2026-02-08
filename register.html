@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者登録｜Cross Matrix</title>
+    <style>
+        body {
+            background: #0a0b10;
+            color: #e7e8ee;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background: #1a1d27;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #12141b;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #d4af37;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .error {
+            color: #ff4757;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .success {
+            color: #2ecc71;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <h1>アカウント登録</h1>
+        <input type="text" id="username" placeholder="ユーザー名 (ID)">
+        <input type="email" id="email" placeholder="メールアドレス">
+        <input type="password" id="password" placeholder="パスワード">
+        <input type="password" id="confirm-password" placeholder="パスワード (確認)">
+
+        <button onclick="register()">登録確認メールを送信</button>
+
+        <div style="margin-top: 15px;">
+            <a href="login.html" style="color: #a3a7b5; text-decoration: none; font-size: 0.9rem;">ログイン画面に戻る</a>
+        </div>
+        <div id="msg" class="error"></div>
+    </div>
+
+    <script>
+        // const API_URL = "https://cross-matrix-shop-api.onrender.com/api/auth/register";
+        const API_URL = "http://localhost:3000/api/auth/register";
+
+        async function register() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const msg = document.getElementById('msg');
+
+            msg.textContent = "";
+
+            // 簡易バリデーション
+            if (!username || !email || !password) {
+                msg.textContent = "全ての項目を入力してください";
+                msg.className = "error";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                msg.textContent = "パスワードが一致しません";
+                msg.className = "error";
+                return;
+            }
+
+            msg.textContent = "送信中...";
+            msg.className = "error"; // joy
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    msg.className = "success";
+                    msg.innerHTML = "仮登録が完了しました！<br>届いたメール内のリンクをクリックして登録を完了させてください。<br>（テスト環境ではサーバーのコンソールを確認してください）";
+                } else {
+                    msg.textContent = data.error || "登録に失敗しました";
+                    msg.className = "error";
+                }
+            } catch (err) {
+                msg.textContent = "エラー: " + err.message;
+                msg.className = "error";
+            }
+        }
+    </script>
+</body>
+
+</html>

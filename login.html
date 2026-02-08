@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン｜Cross Matrix</title>
+    <style>
+        body {
+            background: #0a0b10;
+            color: #e7e8ee;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background: #1a1d27;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #12141b;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #d4af37;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .error {
+            color: #ff4757;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <h1>管理者ログイン</h1>
+        <input type="text" id="username" placeholder="ユーザー名">
+        <input type="password" id="password" placeholder="パスワード">
+        <button onclick="login()">ログイン</button>
+        <div style="margin-top: 15px;">
+            <a href="register.html" style="color: #a3a7b5; text-decoration: none; font-size: 0.9rem;">アカウント作成はこちら</a>
+        </div>
+        <div style="margin-top: 10px;">
+            <a href="forgot-password.html"
+                style="color: #a3a7b5; text-decoration: none; font-size: 0.9rem;">パスワードを忘れた場合</a>
+        </div>
+        <div id="error-msg" class="error"></div>
+    </div>
+
+    <script>
+        // const API_URL = "https://cross-matrix-shop-api.onrender.com/api/auth/login";
+        // ローカルテスト用 (必要ならコメントアウトを外す)
+        const API_URL = "http://localhost:3000/api/auth/login";
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            errorMsg.textContent = "";
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    // トークンを保存
+                    localStorage.setItem('token', data.token);
+                    // 管理画面へ移動
+                    window.location.href = 'admin.html';
+                } else {
+                    errorMsg.textContent = data.error || "ログインに失敗しました";
+                }
+            } catch (err) {
+                errorMsg.textContent = "エラー: " + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>

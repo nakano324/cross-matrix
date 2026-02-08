@@ -1,0 +1,292 @@
+/* deck.css */
+
+/* === Container & Layout === */
+body {
+    overflow: hidden; /* Prevent body scroll, handle in panes */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-header {
+    flex: 0 0 auto;
+}
+
+.deck-maker-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden; /* Contain scrolling panes */
+    position: relative;
+    background: #050608;
+    height: calc(100vh - 65px); /* Adjust based on header height approx */
+}
+
+.pane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+    border-right: 1px solid var(--line);
+    transition: transform 0.3s ease;
+}
+
+.card-pool-pane {
+    flex: 1.2; /* Slightly wider */
+    background: #0b0c10;
+}
+
+.deck-pane {
+    flex: 0.8;
+    background: #11131a;
+    border-right: none;
+}
+
+/* === Pane Headers & Controls === */
+.pane-header {
+    flex: 0 0 auto;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+}
+
+.pane-header h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-controls input,
+.filter-controls select {
+    background: var(--chip2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.filter-controls input {
+    flex: 1;
+    min-width: 120px;
+}
+
+.deck-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.deck-count {
+    font-size: 0.9em;
+    color: var(--acc);
+}
+
+/* === Card Grid (Pool) === */
+.card-list-scroller {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    padding-bottom: 40px;
+}
+
+/* === Card Item Styles === */
+.dm-card {
+    position: relative;
+    aspect-ratio: 2/3; /* Standard card ratio */
+    cursor: pointer;
+    transition: transform 0.1s;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #1a1d27;
+    border: 2px solid transparent;
+}
+
+.dm-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--acc);
+    z-index: 2;
+}
+
+.dm-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Overlay for stats or count */
+.dm-card .card-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+    text-align: center;
+    pointer-events: none;
+    display: none; /* Only show on deck mainly */
+}
+
+/* Deck specific styles */
+.deck-list-scroller {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.deck-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+}
+
+/* Grouped view in deck? For now just simple grid */
+.deck-card-wrap {
+    position: relative;
+}
+
+.deck-card-wrap .count-badge {
+    position: absolute;
+    top: -5px; right: -5px;
+    background: var(--acc);
+    color: #fff;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.empty-state {
+    color: var(--muted);
+    text-align: center;
+    margin-top: 40px;
+    padding: 0 20px;
+}
+
+/* === Toast Notification === */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--acc);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* === Mobile Responsive === */
+.mobile-view-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .deck-maker-container {
+        /* On mobile, we stack panes and use toggle */
+        flex-direction: column;
+        height: calc(100vh - 50px); /* Adjust for smaller header */
+    }
+
+    .mobile-view-toggle {
+        display: flex;
+        flex: 0 0 50px;
+        background: var(--chip2);
+        border-bottom: 1px solid var(--line);
+    }
+    
+    .mobile-view-toggle button {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        font-weight: bold;
+        border-bottom: 3px solid transparent;
+        cursor: pointer;
+    }
+    
+    .mobile-view-toggle button.active {
+        color: var(--ink);
+        border-bottom-color: var(--acc);
+        background: rgba(255,255,255,0.05);
+    }
+
+    .pane {
+        width: 100%;
+        position: absolute;
+        top: 50px; /* Below toggle */
+        bottom: 0;
+        left: 0;
+        visibility: hidden;
+        opacity: 0;
+        z-index: 1;
+        border-right: none;
+        padding-bottom: 80px; /* Space for bottom interaction */
+    }
+
+    .pane.active {
+        visibility: visible;
+        opacity: 1;
+        z-index: 2;
+    }
+
+    /* Larger cards on mobile for easier tapping */
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    }
+    
+    .filter-controls {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    
+    .filter-controls select, .filter-controls input {
+        flex: 0 0 auto;
+    }
+    
+    /* Adjust header in mobile */
+    .site-header .wrap {
+        padding: 0 12px;
+    }
+}
