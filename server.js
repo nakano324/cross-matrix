@@ -12,6 +12,9 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 
+// 認証メールのリンク先に使う、あなたのGitHub PagesのURL
+const FRONTEND_URL = "https://nakano324.github.io/cross-matrix";
+
 // --- 設定 ---
 app.use(express.json()); // JSONを使えるようにする
 app.use(cors()); // どこからでもアクセス許可（開発用）
