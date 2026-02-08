@@ -119,7 +119,7 @@ app.post('/api/auth/register', async (req, res) => {
     await user.save();
 
     // 認証メール送信 (ローカルホスト前提のリンク)
-    const verifyUrl = `https://nakano324.github.io/cross-matrix/`;
+    const verifyUrl = `${FRONTEND_URL}/verify-email.html?token=${verificationToken}`;
     await sendEmail(email, '【Cross Matrix】メールアドレスの確認', `以下のリンクをクリックして登録を完了してください:\n\n${verifyUrl}`);
 
     res.status(201).json({ message: '登録を受け付けました。メールを確認して本登録を行ってください。' });
