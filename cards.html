@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,45 +9,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-<header class="site-header">
-  <div class="wrap">
-    <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
-    <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="nav">
+  <header class="site-header">
+    <div class="wrap">
+      <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
+      <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">ホーム</a>
+        <a href="cards.html">カード図鑑</a>
+        <a href="rules.html">ルール</a>
+        <a href="news.html">ニュース</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
       <a href="index.html">ホーム</a>
       <a href="cards.html">カード図鑑</a>
       <a href="rules.html">ルール</a>
-      <a href="story.html">ストーリー</a>
       <a href="news.html">ニュース</a>
-    </nav>
-  </div>
-</header>
-
-<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
-  <div class="mobile-menu-inner">
-    <a href="index.html">ホーム</a>
-    <a href="cards.html">カード図鑑</a>
-    <a href="rules.html">ルール</a>
-    <a href="story.html">ストーリー</a>
-    <a href="news.html">ニュース</a>
-  </div>
-  <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
-</nav>
-
-
-<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
-  <div class="mobile-menu-inner">
-    <a href="index.html">ホーム</a>
-    <a href="cards.html">カード図鑑</a>
-    <a href="rules.html">ルール</a>
-    <a href="#">ストーリー</a>
-    <a href="#">ニュース</a>
-  </div>
-  <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
-</nav>
+    </div>
+    <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+  </nav>
 
 
   <main class="wrap">
@@ -84,10 +72,10 @@
           <select id="rarity">
             <option value="">（すべて）</option>
             <option>C</option>
-            <option>U</option>
+            <option>UC</option>
             <option>R</option>
+            <option>VR</option>
             <option>SR</option>
-            <option>UR</option>
           </select>
         </label>
         <label class="field">
@@ -138,36 +126,37 @@
 
   <script defer src="script.js"></script>
   <script>
-(function(){
-  const btn = document.getElementById('navToggle');
-  const close = document.getElementById('navClose');
-  const menu = document.getElementById('mobileMenu');
-  if(!btn || !menu) return;
+    (function () {
+      const btn = document.getElementById('navToggle');
+      const close = document.getElementById('navClose');
+      const menu = document.getElementById('mobileMenu');
+      if (!btn || !menu) return;
 
-  const open = ()=>{
-    menu.classList.add('is-open');
-    btn.classList.add('is-open');
-    document.body.classList.add('body-lock');
-    btn.setAttribute('aria-expanded','true');
-    menu.setAttribute('aria-hidden','false');
-  };
-  const hide = ()=>{
-    menu.classList.remove('is-open');
-    btn.classList.remove('is-open');
-    document.body.classList.remove('body-lock');
-    btn.setAttribute('aria-expanded','false');
-    menu.setAttribute('aria-hidden','true');
-  };
+      const open = () => {
+        menu.classList.add('is-open');
+        btn.classList.add('is-open');
+        document.body.classList.add('body-lock');
+        btn.setAttribute('aria-expanded', 'true');
+        menu.setAttribute('aria-hidden', 'false');
+      };
+      const hide = () => {
+        menu.classList.remove('is-open');
+        btn.classList.remove('is-open');
+        document.body.classList.remove('body-lock');
+        btn.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-hidden', 'true');
+      };
 
-  btn.addEventListener('click', ()=> menu.classList.contains('is-open') ? hide() : open());
-  close?.addEventListener('click', hide);
-  menu.addEventListener('click', (e)=>{ if(e.target === menu) hide(); }); // 背景タップで閉じる
-  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') hide(); });
+      btn.addEventListener('click', () => menu.classList.contains('is-open') ? hide() : open());
+      close?.addEventListener('click', hide);
+      menu.addEventListener('click', (e) => { if (e.target === menu) hide(); }); // 背景タップで閉じる
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
 
-  // メニューのリンクを押したら自動で閉じる
-  menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', hide));
-})();
-</script>
+      // メニューのリンクを押したら自動で閉じる
+      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', hide));
+    })();
+  </script>
 
 </body>
+
 </html>

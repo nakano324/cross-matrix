@@ -130,9 +130,24 @@
         // ※ サーバー側に削除APIを作っていない場合、これは動きませんが、
         //    今後必要になるので枠だけ作っておきました。
         async function deleteProduct(id) {
-            if(!confirm("本当に削除しますか？")) return;
-            alert("現在、削除機能はサーバー側でロックされています。\n（MongoDB Atlasの管理画面から直接削除してください）");
+    if(!confirm("本当に削除しますか？\n（この操作は取り消せません）")) return;
+
+    try {
+        // サーバーに「このIDの商品を消して！」と依頼する
+        const res = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (res.ok) {
+            alert("削除しました！");
+            loadProducts(); // リストを再読み込みして画面を更新
+        } else {
+            alert("削除に失敗しました");
         }
+    } catch (err) {
+        alert("エラーが発生しました: " + err.message);
+    }
+}
 
         // 起動時に読み込み
         loadProducts();

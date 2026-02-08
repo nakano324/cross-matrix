@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,181 +9,457 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0a0b10;          /* 背景 */
-      --panel:#12141b;       /* パネル */
-      --fg:#e7e8ee;          /* 文字 */
-      --muted:#a3a7b5;       /* 補助文字 */
-      --line:rgba(255,255,255,.08);
-      --accent:#d4af37;      /* ブランド(ゴールド) */
-      --accent-2:#6ec8ff;    /* サブ(シアン) */
-      --radius:20px;
-      --wrap:1180px;
+    :root {
+      --bg: #0a0b10;
+      /* 背景 */
+      --panel: #12141b;
+      /* パネル */
+      --fg: #e7e8ee;
+      /* 文字 */
+      --muted: #a3a7b5;
+      /* 補助文字 */
+      --line: rgba(255, 255, 255, .08);
+      --accent: #d4af37;
+      /* ブランド(ゴールド) */
+      --accent-2: #6ec8ff;
+      /* サブ(シアン) */
+      --radius: 20px;
+      --wrap: 1180px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:var(--bg); color:var(--fg);
-      font-family:"Noto Sans JP",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      line-height:1.6; letter-spacing:.02em;
+
+    * {
+      box-sizing: border-box
     }
-    a{color:inherit; text-decoration:none}
-    img{max-width:100%; display:block}
-    .wrap{max-width:var(--wrap); margin:0 auto; padding:0 20px}
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Noto Sans JP", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.6;
+      letter-spacing: .02em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    img {
+      max-width: 100%;
+      display: block
+    }
+
+    .wrap {
+      max-width: var(--wrap);
+      margin: 0 auto;
+      padding: 0 20px
+    }
 
     /* ===================== Header ===================== */
-    .site-header{
-      position:sticky; top:0; z-index:40;
-      background:rgba(10,11,16,.55); backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(10, 11, 16, .55);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
     }
-    .site-header .wrap{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:0 16px;
-    }
-    .brand{display:flex; align-items:center; margin:0;}
-    .brand img{height:48px}
-    .nav{display:flex; flex-wrap:wrap; gap:12px; margin-left:auto;}
-    .nav a{
-      min-height:40px; padding:8px 12px;
-      display:inline-flex; align-items:center;
-      border-radius:6px; opacity:.9;font-weight:600; 
-    }
-    .nav a.active,.nav a:hover{background:rgba(255,255,255,.06)}
 
-    .hamburger{
-      display:none; margin-left:auto; width:40px; height:40px;
-      border:1px solid var(--line); border-radius:10px;
-      background:transparent; cursor:pointer;
+    .site-header .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px;
     }
-    .hamburger span{
-      display:block; width:22px; height:2px;
-      margin:6px auto; background:#fff; transition:transform .2s ease;
+
+    .brand {
+      display: flex;
+      align-items: center;
+      margin: 0;
+    }
+
+    .brand img {
+      height: 48px
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .nav a {
+      min-height: 40px;
+      padding: 8px 12px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 6px;
+      opacity: .9;
+      font-weight: 600;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      background: rgba(255, 255, 255, .06)
+    }
+
+    .hamburger {
+      display: none;
+      margin-left: auto;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      margin: 6px auto;
+      background: #fff;
+      transition: transform .2s ease;
     }
 
     /* Mobile Menu */
-    .mobile-menu{
-      position:fixed; inset:0; background:rgba(8,9,14,.9);
-      backdrop-filter: blur(10px); display:none; z-index:9999;
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 9, 14, .9);
+      backdrop-filter: blur(10px);
+      display: none;
+      z-index: 9999;
     }
-    .mobile-menu.is-open{display:block}
-    .mobile-menu-inner{padding:80px 24px}
-    .mobile-menu a{
-      display:block; padding:14px 10px; font-size:20px;
-      border-bottom:1px solid var(--line)
+
+    .mobile-menu.is-open {
+      display: block
     }
-    .menu-close{
-      position:absolute; top:18px; right:18px;
-      width:44px; height:44px; border-radius:12px;
-      border:1px solid var(--line); background:transparent;
-      color:#fff; font-size:22px
+
+    .mobile-menu-inner {
+      padding: 80px 24px
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 10px;
+      font-size: 20px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .menu-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: #fff;
+      font-size: 22px
     }
 
     /* ===================== Hero ===================== */
-    .hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
-    .hero::before{
-      content:""; position:absolute; inset:0; z-index:-2;
-      background:url("images/main_visual.png") center/cover no-repeat,
-                 linear-gradient(180deg,#141826, #0a0b10);
-      filter:saturate(1.05) contrast(1.05);
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line)
     }
-    .hero::after{
-      content:""; position:absolute; inset:0; z-index:-1;
-      background: radial-gradient(1200px 600px at 20% 20%, rgba(212,175,55,.25), transparent 60%),
-                  radial-gradient(900px 500px at 80% 30%, rgba(110,200,255,.18), transparent 60%),
-                  linear-gradient(180deg, rgba(0,0,0,.55), rgba(10,11,16,.85) 70%);
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: url("images/main_visual.png") center/cover no-repeat,
+        linear-gradient(180deg, #141826, #0a0b10);
+      filter: saturate(1.05) contrast(1.05);
     }
-    .hero .inner{min-height:72vh; display:grid; align-items:end; padding:80px 0 64px}
-    .lead{max-width:820px}
-    .lead h1{font-size:clamp(36px,6vw,64px); line-height:1.1; margin:0 0 16px; font-weight:800}
-    .lead p{margin:0 0 28px; color:var(--muted); font-size:18px}
-    .cta{display:flex; gap:14px; flex-wrap:wrap}
-    .btn{display:inline-flex; align-items:center; gap:10px; height:44px; padding:0 18px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,.06)}
-    .btn.primary{background:linear-gradient(135deg, rgba(212,175,55,.9), rgba(255,215,128,.85)); color:#1b1300; border-color:transparent; font-weight:700}
-    .btn.ghost:hover{background:rgba(255,255,255,.12)}
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(1200px 600px at 20% 20%, rgba(212, 175, 55, .25), transparent 60%),
+        radial-gradient(900px 500px at 80% 30%, rgba(110, 200, 255, .18), transparent 60%),
+        linear-gradient(180deg, rgba(0, 0, 0, .55), rgba(10, 11, 16, .85) 70%);
+    }
+
+    .hero .inner {
+      min-height: 72vh;
+      display: grid;
+      align-items: end;
+      padding: 80px 0 64px
+    }
+
+    .lead {
+      max-width: 820px
+    }
+
+    .lead h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.1;
+      margin: 0 0 16px;
+      font-weight: 800
+    }
+
+    .lead p {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 18px
+    }
+
+    .cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .06)
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(212, 175, 55, .9), rgba(255, 215, 128, .85));
+      color: #1b1300;
+      border-color: transparent;
+      font-weight: 700
+    }
+
+    .btn.ghost:hover {
+      background: rgba(255, 255, 255, .12)
+    }
 
     /* ===================== Sections ===================== */
-    section{padding:56px 0; border-top:1px solid var(--line)}
-    h2{font-size:24px; margin:0 0 18px}
+    section {
+      padding: 56px 0;
+      border-top: 1px solid var(--line)
+    }
 
-    .features{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-    .feature{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
-    .feature h3{margin:8px 0 6px; font-size:18px}
-    .feature p{margin:0; color:var(--muted)}
+    h2 {
+      font-size: 24px;
+      margin: 0 0 18px
+    }
 
-    .news .list{display:grid; gap:12px}
-    .news a.item{display:flex; justify-content:space-between; padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.03)}
-    .news time{color:var(--muted); font-size:14px}
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
 
-    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:16px; overflow:hidden}
-    .card .thumb{aspect-ratio:3/4; width:100%; object-fit:cover; background:#0f1119}
-    .card .meta{padding:12px}
-    .card .name{margin:0 0 4px; font-weight:700}
-    .card .sub{color:var(--muted); font-size:14px; margin:0}
+    .feature {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px
+    }
 
-    .site-footer{border-top:1px solid var(--line); padding:32px 0; color:var(--muted)}
+    .feature h3 {
+      margin: 8px 0 6px;
+      font-size: 18px
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted)
+    }
+
+    .news .list {
+      display: grid;
+      gap: 12px
+    }
+
+    .news a.item {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .03)
+    }
+
+    .news time {
+      color: var(--muted);
+      font-size: 14px
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .card .thumb {
+      aspect-ratio: 3/4;
+      width: 100%;
+      object-fit: cover;
+      background: #0f1119
+    }
+
+    .card .meta {
+      padding: 12px
+    }
+
+    .card .name {
+      margin: 0 0 4px;
+      font-weight: 700
+    }
+
+    .card .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0;
+      color: var(--muted)
+    }
 
     /* ===================== Responsive ===================== */
-    @media (max-width:960px){
-      .hamburger{display:block}
-      .nav{display:none !important}
-      .features{grid-template-columns:1fr}
-      .cards{grid-template-columns:1fr 1fr}
-      .hero .inner{min-height:70vh; padding:64px 0 48px}
-      .brand img{height:36px}
+    @media (max-width:960px) {
+      .hamburger {
+        display: block
+      }
+
+      .nav {
+        display: none !important
+      }
+
+      .features {
+        grid-template-columns: 1fr
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .hero .inner {
+        min-height: 70vh;
+        padding: 64px 0 48px
+      }
+
+      .brand img {
+        height: 36px
+      }
     }
-    @media (max-width:560px){
-      .cards{grid-template-columns:1fr}
-      .brand img{height:32px}
-      .nav a{padding:6px 10px}
+
+    @media (max-width:560px) {
+      .cards {
+        grid-template-columns: 1fr
+      }
+
+      .brand img {
+        height: 32px
+      }
+
+      .nav a {
+        padding: 6px 10px
+      }
     }
-  
-/* === Mobile polish (additions) === */
-@media (max-width: 560px){
-  .cta{ gap:10px }
-  .cta .btn{ flex:0 0 80%; justify-content:center; width:80% }
-  .lead p{ font-size:16px }
-  .hero .inner{ min-height:64vh; padding:48px 0 36px }
-}
-/* lighten heavy blur on low-end devices */
-@media (max-width: 560px){
-  .site-header{ backdrop-filter: blur(6px); }
-  .mobile-menu{ backdrop-filter: blur(8px) }
-}
-@media (prefers-reduced-motion: reduce){
-  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important }
-}
-  /* ロゴの基本（CSSの管理値をそのまま持ってくる） */
-  #siteLogo{
-    height: clamp(32px, 6vw, 48px) !important;
-    width: auto;
-    display: block;
-  }
-  /* スマホでは必ず 32px に（style.css の 64px !important を打ち消す） */
-  @media (max-width:560px){
-    .brand img{ height:64px !important; }
-  }
+
+    /* === Mobile polish (additions) === */
+    @media (max-width: 560px) {
+      .cta {
+        gap: 10px
+      }
+
+      .cta .btn {
+        flex: 0 0 80%;
+        justify-content: center;
+        width: 80%
+      }
+
+      .lead p {
+        font-size: 16px
+      }
+
+      .hero .inner {
+        min-height: 64vh;
+        padding: 48px 0 36px
+      }
+    }
+
+    /* lighten heavy blur on low-end devices */
+    @media (max-width: 560px) {
+      .site-header {
+        backdrop-filter: blur(6px);
+      }
+
+      .mobile-menu {
+        backdrop-filter: blur(8px)
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important
+      }
+    }
+
+    /* ロゴの基本（CSSの管理値をそのまま持ってくる） */
+    #siteLogo {
+      height: clamp(32px, 6vw, 48px) !important;
+      width: auto;
+      display: block;
+    }
+
+    /* スマホでは必ず 32px に（style.css の 64px !important を打ち消す） */
+    @media (max-width:560px) {
+      .brand img {
+        height: 64px !important;
+      }
+    }
   </style>
 </head>
 
 <body>
   <header class="site-header">
-  <div class="wrap">
-    <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
-</h1>
-    <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="nav">
-      <a href="index.html" class="active">ホーム</a>
-      <a href="cards.html">カード図鑑</a>
-      <a href="rules.html">ルール</a>
-      <a href="story.html">ストーリー</a>
-      <a href="news.html">ニュース</a>
-    </nav>
-  </div>
-</header>
+    <div class="wrap">
+      <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
+      </h1>
+      <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav">
+        <a href="index.html" class="active">ホーム</a>
+        <a href="cards.html">カード図鑑</a>
+        <a href="rules.html">ルール</a>
+        <a href="shop.html">ショップ</a>
+        <a href="news.html">ニュース</a>
+        <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
+      </nav>
+    </div>
+  </header>
 
   <!-- Mobile Menu -->
   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
@@ -190,7 +467,6 @@
       <a href="index.html">ホーム</a>
       <a href="cards.html">カード図鑑</a>
       <a href="rules.html">ルール</a>
-      <a href="story.html">ストーリー</a>
       <a href="news.html">ニュース</a>
     </div>
     <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
@@ -259,54 +535,54 @@
   </footer>
 
   <script>
-  // ======= Mobile Menu =======
-  (function(){
-    const btn  = document.getElementById('navToggle');
-    const menu = document.getElementById('mobileMenu');
-    const close= document.getElementById('navClose');
-    const toggle=()=>{
-      const open = !menu.classList.contains('is-open');
-      menu.classList.toggle('is-open');
-      document.body.classList.toggle('body-lock', open);
-      btn && btn.setAttribute('aria-expanded', String(open));
-      menu && menu.setAttribute('aria-hidden', String(!open));
-    };
-    btn && btn.addEventListener('click', toggle);
-    close && close.addEventListener('click', toggle);
-    menu && menu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=>{
-      menu.classList.remove('is-open');
-      document.body.classList.remove('body-lock');
-      btn && btn.setAttribute('aria-expanded', 'false');
-      menu && menu.setAttribute('aria-hidden','true');
-    }));
-  })();
+    // ======= Mobile Menu =======
+    (function () {
+      const btn = document.getElementById('navToggle');
+      const menu = document.getElementById('mobileMenu');
+      const close = document.getElementById('navClose');
+      const toggle = () => {
+        const open = !menu.classList.contains('is-open');
+        menu.classList.toggle('is-open');
+        document.body.classList.toggle('body-lock', open);
+        btn && btn.setAttribute('aria-expanded', String(open));
+        menu && menu.setAttribute('aria-hidden', String(!open));
+      };
+      btn && btn.addEventListener('click', toggle);
+      close && close.addEventListener('click', toggle);
+      menu && menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        menu.classList.remove('is-open');
+        document.body.classList.remove('body-lock');
+        btn && btn.setAttribute('aria-expanded', 'false');
+        menu && menu.setAttribute('aria-hidden', 'true');
+      }));
+    })();
 
-  // ======= Featured Cards (3枚) =======
+    // ======= Featured Cards (3枚) =======
     // ======= Featured Cards（固定表示） =======
-  (async function () {
-    try {
-      // ここに注目カードとして固定表示したい「カード名」を並べる（表示順＝この配列順）
-      const FEATURED_NAMES = [
-        "反影の陰陽師 燈華",
-        "鉱煌戦姫ルミナス・ヴァレリア",
-        "純白の守護者ノエル"
-      ];
+    (async function () {
+      try {
+        // ここに注目カードとして固定表示したい「カード名」を並べる（表示順＝この配列順）
+        const FEATURED_NAMES = [
+          "",
+          "鉱煌戦姫ルミナス・ヴァレリア",
+          "純白の守護者ノエル"
+        ];
 
-      const res = await fetch("cards.json", { cache: "no-store" });
-      const all = await res.json();
+        const res = await fetch("cards.json", { cache: "no-store" });
+        const all = await res.json();
 
-      // 指定名の順にピック（見つからない名前はスキップ）
-      const picks = FEATURED_NAMES
-        .map(name => all.find(c => c.name === name))
-        .filter(Boolean);
+        // 指定名の順にピック（見つからない名前はスキップ）
+        const picks = FEATURED_NAMES
+          .map(name => all.find(c => c.name === name))
+          .filter(Boolean);
 
-      const wrap = document.getElementById("cards");
-      const frag = document.createDocumentFragment();
+        const wrap = document.getElementById("cards");
+        const frag = document.createDocumentFragment();
 
-      for (const c of picks) {
-        const el = document.createElement("article");
-        el.className = "card";
-        el.innerHTML = `
+        for (const c of picks) {
+          const el = document.createElement("article");
+          el.className = "card";
+          el.innerHTML = `
           <img class="thumb" alt="${c.name}" loading="lazy" decoding="async" sizes="(max-width:560px) 100vw, (max-width:960px) 50vw, 33vw"
                src="${c.image ? encodeURI(c.image + (c.image.includes('.') ? '' : '.png')) : ''}"
                onerror="this.src='https://placehold.co/600x800/png?text=No+Image'">
@@ -314,15 +590,16 @@
             <h3 class="name">${c.name}</h3>
             <p class="sub">${c.faction || ''}｜${c.type}</p>
           </div>`;
-        frag.appendChild(el);
-      }
+          frag.appendChild(el);
+        }
 
-      wrap.innerHTML = ""; // 念のためクリア
-      wrap.appendChild(frag);
-    } catch (e) {
-      console.warn("[cards]", e);
-    }
-  })();
+        wrap.innerHTML = ""; // 念のためクリア
+        wrap.appendChild(frag);
+      } catch (e) {
+        console.warn("[cards]", e);
+      }
+    })();
   </script>
 </body>
+
 </html>
