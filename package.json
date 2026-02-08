@@ -7,10 +7,14 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "*",
     "dotenv": "*",
     "express": "*",
-    "mongoose": "*"
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "*",
+    "nodemailer": "^8.0.1",
+    "resend": "^6.9.1"
   },
   "engines": {
     "node": ">=18.0.0"
