@@ -70,8 +70,8 @@
 <body>
 
     <div class="login-box">
-        <h1>管理者ログイン</h1>
-        <input type="text" id="username" placeholder="ユーザー名">
+        <h1>ログイン</h1>
+        <input type="email" id="email" placeholder="メールアドレス">
         <input type="password" id="password" placeholder="パスワード">
         <button onclick="login()">ログイン</button>
         <div style="margin-top: 15px;">
@@ -88,7 +88,7 @@
         const API_URL = "https://cross-matrix-shop-api.onrender.com/api/auth/login";
 
         async function login() {
-            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('error-msg');
 
@@ -98,7 +98,7 @@
                 const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await res.json();
@@ -106,8 +106,8 @@
                 if (res.ok) {
                     // トークンを保存
                     localStorage.setItem('token', data.token);
-                    // 管理画面へ移動
-                    window.location.href = 'admin.html';
+                    // ホーム画面へ移動
+                    window.location.href = 'index.html';
                 } else {
                     errorMsg.textContent = data.error || "ログインに失敗しました";
                 }
