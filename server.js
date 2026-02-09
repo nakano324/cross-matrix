@@ -59,26 +59,41 @@ const transporter = nodemailer.createTransport({
 });
 
 // メールを送る関数
+// メールを送る関数 (APIモード: ポート制限を回避します)
 async function sendEmail(to, subject, text) {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.log("⚠️ EMAIL設定がありません。コンソールに内容を表示します。");
-    console.log(`[メール送信] To: ${to}`);
-    console.log(`[件名] ${subject}`);
-    console.log(`[本文] ${text}`);
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.log("⚠️ RESEND_API_KEYがありません。");
     return;
   }
 
   try {
-    await transporter.sendMail({
-      from: 'onboarding@resend.dev',
-      to,
-      subject,
-      text
+    // ResendのAPIを直接叩く (これでポートブロックを回避！)
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        from: 'onboarding@resend.dev', // テスト用アドレス
+        to: [to], // 配列にする必要があります
+        subject: subject,
+        text: text
+      })
     });
-    console.log(`📧 メール送信成功: ${to}`);
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log(`📧 メール送信成功: ${to}`, data);
+    } else {
+      console.error("❌ メール送信失敗 (APIエラー):", data);
+    }
+
   } catch (err) {
-    console.error("❌ メール送信エラー:", err);
-    console.log(`[本文バックアップ] ${text}`);
+    console.error("❌ メール送信エラー (通信エラー):", err);
   }
 }
 
