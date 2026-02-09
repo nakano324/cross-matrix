@@ -63,7 +63,7 @@ async function sendEmail(to, subject, text) {
   try {
     // 上で設定した transporter (Brevo) を使って送信
     await transporter.sendMail({
-      from: process.env.EMAIL_USER, // Brevoに登録したあなたのGmail
+      from: 'huangtailangzhongye@gmail.com', // Brevoに登録したあなたのGmail
       to: to,
       subject: subject,
       text: text
