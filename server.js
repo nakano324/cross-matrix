@@ -185,7 +185,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1時間有効
     await user.save();
 
-    const resetUrl = `http://localhost:3000/reset-password.html?token=${token}`;
+    const resetUrl = `${FRONTEND_URL}/reset-password.html?token=${token}`;
     await sendEmail(email, '【Cross Matrix】パスワード再設定', `以下のリンクからパスワードを再設定してください:\n\n${resetUrl}\n\n(リンクは1時間有効です)`);
 
     res.json({ message: '再設定メールを送信しました。' });
