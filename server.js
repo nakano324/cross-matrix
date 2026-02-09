@@ -49,8 +49,9 @@ const User = mongoose.model('User', UserSchema);
 // .env に EMAIL_USER, EMAIL_PASS を設定してください
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // Gmailのサーバーを直接指定
-  port: 465,              // SSL専用のポート番号
-  secure: true,           // SSLを有効にする (重要！)
+  port: 587,              // SSL専用のポート番号
+  secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
