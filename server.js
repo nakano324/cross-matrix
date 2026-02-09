@@ -48,52 +48,29 @@ const User = mongoose.model('User', UserSchema);
 // --- メール送信の設定 (Nodemailer) ---
 // .env に EMAIL_USER, EMAIL_PASS を設定してください
 const transporter = nodemailer.createTransport({
-  host: "smtp.resend.com", // Gmailのサーバーを直接指定
+  host: "smtp-relay.brevo.com", // Gmailのサーバーを直接指定
   port: 2525,              // SSL専用のポート番号
   secure: false,
   requireTLS: true,
   auth: {
-    user: "resend",
-    pass: process.env.RESEND_API_KEY
+    user: process.env.EMAIL_USER,
+    pass: process.env.BREVO_API_KEY
   }
 });
 
-// メールを送る関数
-// メールを送る関数 (APIモード: ポート制限を回避します)
+// メールを送る関数 (Brevo用)
 async function sendEmail(to, subject, text) {
-  const apiKey = process.env.RESEND_API_KEY;
-
-  if (!apiKey) {
-    console.log("⚠️ RESEND_API_KEYがありません。");
-    return;
-  }
-
   try {
-    // ResendのAPIを直接叩く (これでポートブロックを回避！)
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        from: 'onboarding@resend.dev', // テスト用アドレス
-        to: [to], // 配列にする必要があります
-        subject: subject,
-        text: text
-      })
+    // 上で設定した transporter (Brevo) を使って送信
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER, // Brevoに登録したあなたのGmail
+      to: to,
+      subject: subject,
+      text: text
     });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(`📧 メール送信成功: ${to}`, data);
-    } else {
-      console.error("❌ メール送信失敗 (APIエラー):", data);
-    }
-
+    console.log(`📧 メール送信成功: ${to}`);
   } catch (err) {
-    console.error("❌ メール送信エラー (通信エラー):", err);
+    console.error("❌ メール送信エラー:", err);
   }
 }
 
