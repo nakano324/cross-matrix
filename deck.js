@@ -8,6 +8,7 @@ const state = {
     allCards: [],
     displayCards: [],
     deck: new Map(), // Key: CardID, Value: Count
+    currentDeckId: null, // If editing an existing deck
     filters: {
         search: '',
         faction: '',
@@ -26,6 +27,9 @@ const dom = {
     deckCount: document.getElementById('deckCount'),
     mobileDeckCount: document.getElementById('mobileDeckCount'),
 
+    // Deck Meta
+    deckNameInput: document.getElementById('deckNameInput'),
+
     // Filters
     searchInput: document.getElementById('searchInput'),
     factionFilter: document.getElementById('factionFilter'),
@@ -35,6 +39,7 @@ const dom = {
     // Actions
     clearDeckBtn: document.getElementById('clearDeckBtn'),
     exportDeckBtn: document.getElementById('exportDeckBtn'),
+    saveDeckBtn: document.getElementById('saveDeckBtn'), // New
 
     // Mobile Toggles
     viewPoolBtn: document.getElementById('viewPoolBtn'),
@@ -60,12 +65,31 @@ async function init() {
         renderCardPool();
         updateDeckView();
 
+        // Check Login State
+        checkLoginState();
+
+        // Check URL Params for Deck ID
+        const urlParams = new URLSearchParams(window.location.search);
+        const deckId = urlParams.get('id');
+        if (deckId) {
+            await loadDeck(deckId);
+        }
+
         // Event Listeners
         setupEventListeners();
 
     } catch (err) {
         console.error(err);
         dom.cardPoolGrid.innerHTML = `<div class="empty-state">Error loading cards: ${err.message}</div>`;
+    }
+}
+
+function checkLoginState() {
+    const token = localStorage.getItem('token');
+    if (token) {
+        if (dom.saveDeckBtn) dom.saveDeckBtn.style.display = 'inline-block';
+    } else {
+        if (dom.saveDeckBtn) dom.saveDeckBtn.style.display = 'none';
     }
 }
 
@@ -117,6 +141,10 @@ function setupEventListeners() {
     });
 
     dom.exportDeckBtn.addEventListener('click', exportDeckToClipboard);
+
+    if (dom.saveDeckBtn) {
+        dom.saveDeckBtn.addEventListener('click', saveDeck);
+    }
 
     // Mobile Toggles
     if (dom.viewPoolBtn) {
@@ -171,12 +199,92 @@ function switchPane(active) {
     }
 }
 
+/* === API Integration === */
+
+async function saveDeck() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('ログインしてください');
+        return;
+    }
+
+    const name = dom.deckNameInput.value.trim() || 'No Name Deck';
+
+    // Prepare card list
+    const cards = [];
+    state.deck.forEach((count, id) => {
+        cards.push({ cardId: id, count });
+    });
+
+    if (cards.length === 0) {
+        alert('デッキが空です');
+        return;
+    }
+
+    const payload = {
+        name,
+        cards,
+        id: state.currentDeckId // null if new
+    };
+
+    try {
+        dom.saveDeckBtn.textContent = 'Saving...';
+        dom.saveDeckBtn.disabled = true;
+
+        const res = await fetch('http://localhost:3000/api/decks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error('Failed to save');
+
+        const savedDeck = await res.json();
+        state.currentDeckId = savedDeck._id; // Update ID for future updates
+        showToast('Deck Saved!');
+
+    } catch (err) {
+        console.error(err);
+        alert('保存に失敗しました: ' + err.message);
+    } finally {
+        dom.saveDeckBtn.textContent = 'Save';
+        dom.saveDeckBtn.disabled = false;
+    }
+}
+
+async function loadDeck(id) {
+    try {
+        const res = await fetch(`http://localhost:3000/api/decks/${id}`);
+        if (!res.ok) throw new Error('Deck not found');
+
+        const deckData = await res.json();
+
+        // Restore state
+        state.currentDeckId = deckData._id;
+        dom.deckNameInput.value = deckData.name;
+
+        state.deck.clear();
+        deckData.cards.forEach(c => {
+            state.deck.set(c.cardId, c.count);
+        });
+
+        updateDeckView();
+        // Maybe toast?
+        console.log('Deck loaded:', deckData.name);
+
+    } catch (err) {
+        console.error(err);
+        showToast('Error loading deck');
+    }
+}
+
+
 /* === Rendering === */
 function renderCardPool() {
     dom.cardPoolGrid.innerHTML = '';
-
-    // Performance optimization: limit rendering if too many? For now render all (up to ~700 is fine usually)
-    // Or simpler: just render.
 
     if (state.displayCards.length === 0) {
         dom.cardPoolGrid.innerHTML = '<div class="empty-state">No cards found matching filters.</div>';
@@ -280,8 +388,7 @@ function addToDeck(cardId) {
     let total = 0;
     for (let c of state.deck.values()) total += c;
 
-    // Optional: Warn or Block if over 40. For now just warn visually (handled in updateDeckView) but allow adding.
-
+    // Optional: Warn or Block if over 40.
     state.deck.set(cardId, currentCount + 1);
     updateDeckView();
 }
@@ -330,6 +437,7 @@ function exportDeckToClipboard() {
 
 function showToast(msg) {
     const toast = document.getElementById('toast');
+    if (!toast) return;
     toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => {

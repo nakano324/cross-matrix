@@ -216,6 +216,93 @@ app.post('/api/auth/reset-password', async (req, res) => {
   }
 });
 
+// --- デッキ系 API ---
+
+// デッキの設計図
+const DeckSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  name: { type: String, required: true },
+  cards: [{
+    cardId: { type: String, required: true },
+    count: { type: Number, required: true, default: 1 }
+  }]
+}, { timestamps: true });
+
+const Deck = mongoose.model('Deck', DeckSchema);
+
+// 1. 自分のデッキ一覧を取得
+app.get('/api/decks', authenticateToken, async (req, res) => {
+  try {
+    // req.user.username から UserID を探す必要がある (Tokenにはusernameしか入れてないので)
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const decks = await Deck.find({ userId: user._id }).sort({ updatedAt: -1 });
+    res.json(decks);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 2. デッキを保存 (新規作成 or 更新)
+app.post('/api/decks', authenticateToken, async (req, res) => {
+  try {
+    const { name, cards, id } = req.body; // idがあれば更新
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    if (id) {
+      // 更新 (自分のデッキか確認)
+      let deck = await Deck.findOne({ _id: id, userId: user._id });
+      if (!deck) return res.status(404).json({ error: 'Deck not found or access denied' });
+
+      deck.name = name;
+      deck.cards = cards;
+      await deck.save();
+      res.json(deck);
+    } else {
+      // 新規作成
+      const newDeck = new Deck({
+        userId: user._id,
+        name: name || 'No Name Deck',
+        cards: cards
+      });
+      await newDeck.save();
+      res.json(newDeck);
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. デッキ詳細を取得 (共有用などにPublicにするか迷うが、一旦PublicでOK?)
+// 今回は「自分の作ったデッキ」なので、編集画面で使うならAuth必須かもだが、閲覧は自由？
+// 一旦 authenticateToken 無しで誰でも見れるようにしておく (URL共有のため)
+app.get('/api/decks/:id', async (req, res) => {
+  try {
+    const deck = await Deck.findById(req.params.id);
+    if (!deck) return res.status(404).json({ error: 'Deck not found' });
+    res.json(deck);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. デッキ削除
+app.delete('/api/decks/:id', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const result = await Deck.deleteOne({ _id: req.params.id, userId: user._id });
+    if (result.deletedCount === 0) return res.status(404).json({ error: 'Deck not found or access denied' });
+
+    res.json({ message: 'Deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // --- 商品系 API ---
 
 // 1. 商品一覧をゲットする（誰でもOK）

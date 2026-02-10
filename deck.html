@@ -26,12 +26,13 @@
                 <a href="index.html">ホーム</a>
                 <a href="cards.html">カード図鑑</a>
                 <a href="deck.html" class="active">デッキ作成</a>
+                <a href="my-decks.html">マイデッキ</a>
                 <a href="rules.html">ルール</a>
                 <a href="shop.html">ショップ</a>
-                <a href="login.html" id="login-link">ログイン</a>
-                <a href="#" id="logout-link" style="display:none;">ログアウト</a>
+                <a href="login.html" class="auth-login-link">ログイン</a>
+                <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
             </nav>
-            <button class="hamburger" aria-label="Menu">
+            <button class="hamburger" id="navToggle" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -39,16 +40,19 @@
         </div>
     </header>
 
-    <!-- Mobile Menu (copied from existing structure for consistency) -->
-    <div class="mobile-menu">
-        <button class="menu-close">×</button>
+    <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
         <div class="mobile-menu-inner">
-            <a href="index.html">Home</a>
-            <a href="cards.html">Card List</a>
-            <a href="deck.html">Deck Maker</a>
-            <a href="rules.html">Rules</a>
+            <a href="index.html">ホーム</a>
+            <a href="cards.html">カード図鑑</a>
+            <a href="deck.html">デッキ作成</a>
+            <a href="my-decks.html">マイデッキ</a>
+            <a href="rules.html">ルール</a>
+            <a href="shop.html">ショップ</a>
+            <a href="login.html" class="auth-login-link">ログイン</a>
+            <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
         </div>
-    </div>
+        <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+    </nav>
 
     <main class="deck-maker-container">
 
@@ -96,8 +100,13 @@
         <section class="pane deck-pane" id="deckPane">
             <div class="pane-header">
                 <h2>Current Deck <span class="deck-count" id="deckCount">0/40</span></h2>
+                <div class="deck-meta-controls" style="margin-bottom: 10px;">
+                    <input type="text" id="deckNameInput" placeholder="Deck Name" value="New Deck"
+                        style="background:#222; border:1px solid #444; color:#fff; padding:5px 10px; border-radius:4px; width: 100%;">
+                </div>
                 <div class="deck-actions">
                     <button class="btn ghost" id="clearDeckBtn">Clear</button>
+                    <button class="btn" id="saveDeckBtn" style="display:none;">Save</button>
                     <button class="btn" id="exportDeckBtn">Copy Text</button>
                     <!-- Future: Save Image -->
                 </div>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Decks - Cross Matrix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .my-decks-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .deck-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .deck-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .deck-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .deck-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--fg);
+        }
+
+        .deck-meta {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .deck-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.9rem;
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: 1px solid #ff4757;
+            color: #ff4757;
+        }
+
+        .btn-delete:hover {
+            background: #ff4757;
+            color: #fff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap">
+            <h1 class="brand"><a href="index.html"><img src="images/cross_matrix.png" alt="CROSS MATRIX"
+                        style="height:48px;"></a></h1>
+            <nav class="nav">
+                <a href="index.html">ホーム</a>
+                <a href="cards.html">カード図鑑</a>
+                <a href="rules.html">ルール</a>
+                <a href="shop.html">ショップ</a>
+                <a href="news.html">ニュース</a>
+                <a href="my-decks.html" class="active">デッキ</a>
+                <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
+                <a href="login.html" class="auth-login-link">ログイン</a>
+                <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+            </nav>
+            <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu-inner">
+            <a href="index.html">ホーム</a>
+            <a href="cards.html">カード図鑑</a>
+            <a href="rules.html">ルール</a>
+            <a href="shop.html">ショップ</a>
+            <a href="news.html">ニュース</a>
+            <a href="my-decks.html">デッキ</a>
+            <a href="cart.html" style="color:var(--accent)">カート</a>
+            <a href="login.html" class="auth-login-link">ログイン</a>
+            <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+        </div>
+        <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+    </nav>
+
+    <main class="my-decks-container">
+        <div class="deck-list-header">
+            <h2>マイデッキ</h2>
+            <a href="deck.html" class="btn">新規作成</a>
+        </div>
+
+        <div id="deckList" class="deck-grid">
+            <!-- Decks injected here -->
+            <div class="empty-state">読み込み中...</div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap"><small>© 2025 cross matrix Project</small></div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        // Load Decks
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            const listEl = document.getElementById('deckList');
+
+            if (!token) {
+                listEl.innerHTML = `
+          <div class="empty-state">
+            <p>デッキを保存・閲覧するにはログインが必要です。</p>
+            <br>
+            <a href="login.html" class="btn">ログインする</a>
+            <a href="deck.html" class="btn ghost">登録せずにデッキ作成を試す</a>
+          </div>
+        `;
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:3000/api/decks', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) throw new Error('Failed to fetch decks');
+
+                const decks = await res.json();
+                renderDecks(decks);
+
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = `<div class="empty-state">エラーが発生しました: ${err.message}</div>`;
+            }
+        });
+
+        function renderDecks(decks) {
+            const listEl = document.getElementById('deckList');
+            listEl.innerHTML = '';
+
+            if (decks.length === 0) {
+                listEl.innerHTML = `<div class="empty-state">デッキはまだありません。<br>「新規作成」からデッキを作ってみましょう！</div>`;
+                return;
+            }
+
+            decks.forEach(deck => {
+                const date = new Date(deck.updatedAt).toLocaleDateString('ja-JP');
+                const count = deck.cards.reduce((sum, c) => sum + c.count, 0);
+
+                const el = document.createElement('div');
+                el.className = 'deck-card';
+                el.innerHTML = `
+          <div class="deck-name">${deck.name}</div>
+          <div class="deck-meta">
+            枚数: ${count}枚<br>
+            更新日: ${date}
+          </div>
+          <div class="deck-actions">
+            <a href="deck.html?id=${deck._id}" class="btn btn-sm">編集</a>
+            <button class="btn btn-sm btn-delete" onclick="deleteDeck('${deck._id}')">削除</button>
+          </div>
+        `;
+                listEl.appendChild(el);
+            });
+        }
+
+        async function deleteDeck(id) {
+            if (!confirm('このデッキを削除してもよろしいですか？')) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`http://localhost:3000/api/decks/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    window.location.reload();
+                } else {
+                    alert('削除に失敗しました');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('エラーが発生しました');
+            }
+        }
+    </script>
+</body>
+
+</html>

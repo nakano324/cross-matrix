@@ -23,9 +23,10 @@
         <a href="rules.html">ルール</a>
         <a href="shop.html">ショップ</a>
         <a href="news.html" class="active">ニュース</a>
+        <a href="my-decks.html">マイデッキ</a>
         <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
-        <a href="login.html" id="login-link">ログイン</a>
-        <a href="#" id="logout-link" style="display:none;">ログアウト</a>
+        <a href="login.html" class="auth-login-link">ログイン</a>
+        <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
       </nav>
 
       <!-- スマホメニュー -->
@@ -34,7 +35,12 @@
           <a href="index.html">ホーム</a>
           <a href="cards.html">カード図鑑</a>
           <a href="rules.html">ルール</a>
+          <a href="shop.html">ショップ</a>
           <a href="news.html">ニュース</a>
+          <a href="my-decks.html">マイデッキ</a>
+          <a href="cart.html" style="color:var(--accent)">カート</a>
+          <a href="login.html" class="auth-login-link">ログイン</a>
+          <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
         </div>
         <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
       </nav>
@@ -120,19 +126,7 @@
 
   <script>
     (function () {
-      const btn = document.getElementById('navToggle');
-      const menu = document.getElementById('mobileMenu');
-      const close = document.getElementById('navClose');
-      if (!btn || !menu) return;
-
-      const open = () => { menu.classList.add('is-open'); btn.classList.add('is-open'); document.body.classList.add('body-lock'); btn.setAttribute('aria-expanded', 'true'); menu.setAttribute('aria-hidden', 'false'); };
-      const hide = () => { menu.classList.remove('is-open'); btn.classList.remove('is-open'); document.body.classList.remove('body-lock'); btn.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-hidden', 'true'); };
-
-      btn.addEventListener('click', () => menu.classList.contains('is-open') ? hide() : open());
-      close?.addEventListener('click', hide);
-      menu.addEventListener('click', e => { if (e.target === menu) hide(); });
-      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', hide));
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') hide(); });
+      // Mobile menu logic moved to auth.js
     })();
 
     // ニュース：1つ開いたら他を閉じる（不要なら削除OK）

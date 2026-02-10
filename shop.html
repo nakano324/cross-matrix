@@ -142,13 +142,28 @@
         <a href="rules.html">ルール</a>
         <a href="shop.html" class="active">ショップ</a>
         <a href="news.html">ニュース</a>
+        <a href="my-decks.html">マイデッキ</a>
         <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
-        <a href="login.html" id="login-link">ログイン</a>
-        <a href="#" id="logout-link" style="display:none;">ログアウト</a>
+        <a href="login.html" class="auth-login-link">ログイン</a>
+        <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
       </nav>
     </div>
   </header>
 
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="index.html">ホーム</a>
+      <a href="cards.html">カード図鑑</a>
+      <a href="rules.html">ルール</a>
+      <a href="shop.html">ショップ</a>
+      <a href="news.html">ニュース</a>
+      <a href="my-decks.html">マイデッキ</a>
+      <a href="cart.html" style="color:var(--accent)">カート</a>
+      <a href="login.html" class="auth-login-link">ログイン</a>
+      <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+    </div>
+    <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+  </nav>
   <main>
     <section class="hero" style="min-height: 40vh; display: flex; align-items: center;">
       <div class="wrap inner" style="padding: 40px 20px;">
