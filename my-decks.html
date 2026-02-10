@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Decks - Cross Matrix</title>
+    <link rel="icon" href="https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/HPicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -103,7 +104,7 @@
                 <a href="my-decks.html" class="active">デッキ</a>
                 <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
                 <a href="login.html" class="auth-login-link">ログイン</a>
-                <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+                <a href="#" class="auth-logout-link hidden">ログアウト</a>
             </nav>
             <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
                 <span></span><span></span><span></span>
@@ -118,10 +119,10 @@
             <a href="rules.html">ルール</a>
             <a href="shop.html">ショップ</a>
             <a href="news.html">ニュース</a>
-            <a href="my-decks.html">デッキ</a>
-            <a href="cart.html" style="color:var(--accent)">カート</a>
+            <a href="my-decks.html">マイデッキ</a>
+            <a href="cart.html" id="mobile-cart-link" style="color:var(--accent)">カート(0)</a>
             <a href="login.html" class="auth-login-link">ログイン</a>
-            <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+            <a href="#" class="auth-logout-link hidden">ログアウト</a>
         </div>
         <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
     </nav>
@@ -168,23 +169,42 @@
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                if (!res.ok) throw new Error('Failed to fetch decks');
+                if (res.status === 401 || res.status === 403) {
+                    // Auth error - Token likely invalid for this server
+                    listEl.innerHTML = `
+                        <div class="empty-state">
+                            <p>認証セッションが無効です。</p>
+                            <p>サーバーが変更されたため、一度ログアウトしてください。</p>
+                            <br>
+                            <button onclick="logout()" class="btn">ログアウトして再ログイン</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (!res.ok) throw new Error(`Server Error: ${res.status}`);
 
                 const decks = await res.json();
                 renderDecks(decks);
 
             } catch (err) {
                 console.error(err);
-                if (err.message === 'Failed to fetch') {
+                if (err.message === 'Failed to fetch' || err.message.includes('NetworkError')) {
                     listEl.innerHTML = `<div class="empty-state">
                         <p>サーバーに接続できませんでした。</p>
-                        <p>サーバーが起動しているか確認してください。<br>(ターミナルで <code>node server.js</code> を実行)</p>
+                        <p>インターネット接続を確認するか、しばらく待ってから再試行してください。</p>
+                        <p style="font-size:0.8em; color:#aaa;">(URL: ${API_BASE_URL})</p>
                     </div>`;
                 } else {
                     listEl.innerHTML = `<div class="empty-state">エラーが発生しました: ${err.message}</div>`;
                 }
             }
         });
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
 
         function renderDecks(decks) {
             const listEl = document.getElementById('deckList');

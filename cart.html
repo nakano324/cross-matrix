@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>カート｜Cross Matrix Store</title>
+  <link rel="icon" href="https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/HPicon.png" type="image/png">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
@@ -110,27 +111,28 @@
         <a href="my-decks.html">マイデッキ</a>
         <a href="cart.html" class="active" id="cart-link" style="color:var(--accent)">カート(0)</a>
         <a href="login.html" class="auth-login-link">ログイン</a>
-        <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+        <a href="#" class="auth-logout-link hidden">ログアウト</a>
       </nav>
       <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
-        <div class="mobile-menu-inner">
-          <a href="index.html">ホーム</a>
-          <a href="cards.html">カード図鑑</a>
-          <a href="rules.html">ルール</a>
-          <a href="shop.html">ショップ</a>
-          <a href="news.html">ニュース</a>
-          <a href="my-decks.html">マイデッキ</a>
-          <a href="cart.html" style="color:var(--accent)">カート</a>
-          <a href="login.html" class="auth-login-link">ログイン</a>
-          <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
-        </div>
-        <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
-      </nav>
     </div>
   </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <a href="index.html">ホーム</a>
+      <a href="cards.html">カード図鑑</a>
+      <a href="rules.html">ルール</a>
+      <a href="shop.html">ショップ</a>
+      <a href="news.html">ニュース</a>
+      <a href="my-decks.html">マイデッキ</a>
+      <a href="cart.html" id="mobile-cart-link" style="color:var(--accent)">カート(0)</a>
+      <a href="login.html" class="auth-login-link">ログイン</a>
+      <a href="#" class="auth-logout-link hidden">ログアウト</a>
+    </div>
+    <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
+  </nav>
 
   <main class="cart-container">
     <h1>🛒 ショッピングカート</h1>

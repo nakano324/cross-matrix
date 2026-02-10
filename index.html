@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0a0b10" />
   <title>Cross Matrix｜公式サイト</title>
+  <link rel="icon" href="https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/HPicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
@@ -31,10 +32,7 @@
       box-sizing: border-box
     }
 
-    html,
-    body {
-      height: 100%
-    }
+    /* html, body { height: 100% } - Removed to fix scroll lock */
 
     body {
       margin: 0;
@@ -141,12 +139,25 @@
       z-index: 9999;
     }
 
+    /* Add missing utilities */
+    .body-lock {
+      overflow: hidden !important;
+      touch-action: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
     .mobile-menu.is-open {
       display: block
     }
 
     .mobile-menu-inner {
-      padding: 80px 24px
+      padding: 80px 24px;
+      height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .mobile-menu a {
@@ -445,8 +456,8 @@
 <body>
   <header class="site-header">
     <div class="wrap">
-      <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:96px;"></h1>
-      </h1>
+      <h1 class="brand"><img src="images/cross_matrix.png" alt="CROSS MATRIX" style="height:48px;"></h1>
+
       <button class="hamburger" id="navToggle" aria-label="メニュー" aria-controls="mobileMenu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -457,9 +468,9 @@
         <a href="shop.html">ショップ</a>
         <a href="news.html">ニュース</a>
         <a href="my-decks.html">マイデッキ</a>
-        <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
+        <a href="cart.html" id="cart-link">カート(0)</a>
         <a href="login.html" class="auth-login-link">ログイン</a>
-        <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
+        <a href="#" class="auth-logout-link hidden">ログアウト</a>
       </nav>
     </div>
   </header>
@@ -473,7 +484,7 @@
       <a href="shop.html">ショップ</a>
       <a href="news.html">ニュース</a>
       <a href="my-decks.html">マイデッキ</a>
-      <a href="cart.html" style="color:var(--accent)">カート</a>
+      <a href="cart.html" id="mobile-cart-link">カート(0)</a>
       <a href="login.html" class="auth-login-link">ログイン</a>
       <a href="#" class="auth-logout-link" style="display:none;">ログアウト</a>
     </div>
@@ -549,7 +560,6 @@
       try {
         // ここに注目カードとして固定表示したい「カード名」を並べる（表示順＝この配列順）
         const FEATURED_NAMES = [
-          "",
           "鉱煌戦姫ルミナス・ヴァレリア",
           "純白の守護者ノエル"
         ];

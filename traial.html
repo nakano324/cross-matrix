@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0a0b10" />
   <title>Cross Matrix｜体験会レポート</title>
+  <link rel="icon" href="https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/HPicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
 
@@ -442,7 +443,12 @@
       <a href="index.html">ホーム</a>
       <a href="cards.html">カード図鑑</a>
       <a href="rules.html">ルール</a>
+      <a href="shop.html">ショップ</a>
       <a href="news.html">ニュース</a>
+      <a href="my-decks.html">マイデッキ</a>
+      <a href="cart.html" id="mobile-cart-link" style="color:var(--accent)">カート(0)</a>
+      <a href="login.html" class="auth-login-link">ログイン</a>
+      <a href="#" class="auth-logout-link hidden">ログアウト</a>
     </div>
     <button class="menu-close" id="navClose" aria-label="閉じる">×</button>
   </nav>
@@ -612,28 +618,7 @@
   </footer>
 
   <!-- ===== Mobile Menu Script（indexと同挙動） ===== -->
-  <script>
-    (function () {
-      const btn = document.getElementById('navToggle');
-      const menu = document.getElementById('mobileMenu');
-      const close = document.getElementById('navClose');
-      const toggle = () => {
-        const open = !menu.classList.contains('is-open');
-        menu.classList.toggle('is-open');
-        document.body.classList.toggle('body-lock', open);
-        btn && btn.setAttribute('aria-expanded', String(open));
-        menu && menu.setAttribute('aria-hidden', String(!open));
-      };
-      btn && btn.addEventListener('click', toggle);
-      close && close.addEventListener('click', toggle);
-      menu && menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        menu.classList.remove('is-open');
-        document.body.classList.remove('body-lock');
-        btn && btn.setAttribute('aria-expanded', 'false');
-        menu && menu.setAttribute('aria-hidden', 'true');
-      }));
-    })();
-  </script>
+  <script src="auth.js"></script>
 
   <!-- ===== 構造化データ（任意） ===== -->
   <script type="application/ld+json">
