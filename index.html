@@ -602,31 +602,9 @@
       }
     })();
     // ======= Login State Management =======
-    (function () {
-      const token = localStorage.getItem('token');
-      const loginLink = document.getElementById('login-link');
-      const logoutLink = document.getElementById('logout-link');
-
-      if (token) {
-        // Logged in
-        if (loginLink) loginLink.style.display = 'none';
-        if (logoutLink) {
-          logoutLink.style.display = 'inline-flex';
-          logoutLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('ログアウトしますか？')) {
-              localStorage.removeItem('token');
-              window.location.reload();
-            }
-          });
-        }
-      } else {
-        // Not logged in
-        if (loginLink) loginLink.style.display = 'inline-flex';
-        if (logoutLink) logoutLink.style.display = 'none';
-      }
-    })();
+    // Moved to auth.js
   </script>
+  <script src="auth.js"></script>
 </body>
 
 </html>

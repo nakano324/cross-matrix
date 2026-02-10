@@ -1,43 +1,130 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商品管理システム｜Cross Matrix</title>
     <style>
         /* 管理画面なのでシンプルかつダークに */
-        body { background: #0a0b10; color: #e7e8ee; font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
-        h1 { border-bottom: 1px solid #333; padding-bottom: 10px; }
-        
+        body {
+            background: #0a0b10;
+            color: #e7e8ee;
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h1 {
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
         /* 入力フォーム */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #a3a7b5; }
-        input, textarea { 
-            width: 100%; padding: 10px; background: #12141b; border: 1px solid #333; 
-            color: white; border-radius: 4px; box-sizing: border-box;
+        .form-group {
+            margin-bottom: 15px;
         }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #a3a7b5;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            background: #12141b;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
         button {
-            background: #d4af37; color: #000; border: none; padding: 10px 20px; 
-            font-weight: bold; cursor: pointer; border-radius: 4px;
+            background: #d4af37;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
         }
-        button:hover { opacity: 0.9; }
+
+        button:hover {
+            opacity: 0.9;
+        }
 
         /* 商品リスト */
-        .item-list { margin-top: 40px; }
-        .item { 
-            background: #12141b; border: 1px solid #333; padding: 15px; 
-            margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+        .item-list {
+            margin-top: 40px;
         }
-        .item img { height: 50px; width: 50px; object-fit: cover; margin-right: 15px; border-radius: 4px; }
-        .item-info { flex: 1; }
-        .delete-btn { background: #ff4757; color: white; padding: 5px 10px; font-size: 0.8rem; margin-left: 10px; }
+
+        .item {
+            background: #12141b;
+            border: 1px solid #333;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item img {
+            height: 50px;
+            width: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        /* ログアウトボタン */
+        .auth-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
+
 <body>
 
-    <h1>📦 商品登録パネル</h1>
+    <div id="auth-section">
+        <!-- JSでボタンを切り替え -->
+    </div>
 
-    <div style="background: #1a1d27; padding: 20px; border-radius: 8px;">
+    <h1>📦 商品リスト</h1>
+
+    <!-- 登録フォーム（ログイン時のみ表示） -->
+    <div id="add-form" class="hidden"
+        style="background: #1a1d27; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3>新規追加</h3>
         <div class="form-group">
             <label>商品名</label>
             <input type="text" id="name" placeholder="例: 拡張パック「覚醒の刻」">
@@ -64,8 +151,26 @@
     </div>
 
     <script>
-        // あなたのAPIサーバーのURL
-        const API_URL = "https://cross-matrix-shop-api.onrender.com/api/products";
+        // 認証チェック
+        const token = localStorage.getItem('token');
+        const authSection = document.getElementById('auth-section');
+        const addForm = document.getElementById('add-form');
+
+        // ログイン状態によって表示切替
+        if (token) {
+            // ログイン中
+            authSection.innerHTML = '<button onclick="logout()" class="auth-btn">ログアウト</button>';
+        } else {
+            // 未ログイン
+            authSection.innerHTML = '<a href="login.html" class="auth-btn" style="background:#d4af37; color:#000;">管理者ログイン</a>';
+        }
+
+        // フォームは常に表示（編集削除はログイン不要）
+        addForm.classList.remove('hidden');
+
+        // API URL
+        // const API_URL = "https://cross-matrix-shop-api.onrender.com/api/products";
+        const API_URL = "http://localhost:3000/api/products";
 
         // 1. 商品一覧を読み込む
         async function loadProducts() {
@@ -76,6 +181,9 @@
 
                 list.innerHTML = ""; // クリア
                 products.forEach(p => {
+                    // 削除ボタンは常に表示
+                    const deleteBtn = `<button class="delete-btn" onclick="deleteProduct('${p._id}')">削除</button>`;
+
                     const div = document.createElement('div');
                     div.className = 'item';
                     div.innerHTML = `
@@ -86,7 +194,7 @@
                                 <span style="color:#d4af37">¥${p.price}</span>
                             </div>
                         </div>
-                        <button class="delete-btn" onclick="deleteProduct('${p._id}')">削除</button>
+                        ${deleteBtn}
                     `;
                     list.appendChild(div);
                 });
@@ -95,23 +203,25 @@
             }
         }
 
-        // 2. 商品を追加する
+        // 2. 商品を追加する (認証必須)
         async function addProduct() {
             const name = document.getElementById('name').value;
             const price = document.getElementById('price').value;
             const image = document.getElementById('image').value;
             const description = document.getElementById('description').value;
 
-            if(!name || !price) return alert("商品名と価格は必須です");
+            if (!name || !price) return alert("商品名と価格は必須です");
 
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ name, price, image, description })
                 });
-                
-                if(res.ok) {
+
+                if (res.ok) {
                     alert("登録しました！");
                     // フォームをクリアして再読み込み
                     document.getElementById('name').value = "";
@@ -119,38 +229,50 @@
                     document.getElementById('description').value = "";
                     loadProducts();
                 } else {
-                    alert("エラーが発生しました");
+                    const data = await res.json();
+                    alert("エラー: " + (data.error || "不明なエラー"));
+                    if (res.status === 401 || res.status === 403) {
+                        alert("セッションが切れました。ログインしてください。");
+                        logout();
+                    }
                 }
             } catch (err) {
                 alert("送信エラー: " + err.message);
             }
         }
 
-        // 3. 商品を削除する（隠し機能）
-        // ※ サーバー側に削除APIを作っていない場合、これは動きませんが、
-        //    今後必要になるので枠だけ作っておきました。
+        // 3. 商品を削除する (認証必須)
         async function deleteProduct(id) {
-    if(!confirm("本当に削除しますか？\n（この操作は取り消せません）")) return;
+            if (!confirm("本当に削除しますか？\n（この操作は取り消せません）")) return;
 
-    try {
-        // サーバーに「このIDの商品を消して！」と依頼する
-        const res = await fetch(`${API_URL}/${id}`, {
-            method: 'DELETE'
-        });
+            try {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
 
-        if (res.ok) {
-            alert("削除しました！");
-            loadProducts(); // リストを再読み込みして画面を更新
-        } else {
-            alert("削除に失敗しました");
+                if (res.ok) {
+                    alert("削除しました！");
+                    loadProducts();
+                } else {
+                    alert("削除に失敗しました");
+                    if (res.status === 401 || res.status === 403) {
+                        alert("セッションが切れました。ログインしてください。");
+                        logout();
+                    }
+                }
+            } catch (err) {
+                alert("エラーが発生しました: " + err.message);
+            }
         }
-    } catch (err) {
-        alert("エラーが発生しました: " + err.message);
-    }
-}
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.reload(); // リロードして表示を更新
+        }
 
         // 起動時に読み込み
         loadProducts();
     </script>
 </body>
+
 </html>
