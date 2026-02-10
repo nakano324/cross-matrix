@@ -95,13 +95,17 @@ function authenticateToken(req, res, next) {
 // A. ユーザー登録（メール認証付き）
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     // 重複チェック
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'ユーザー名またはメールアドレスが既に使用されています' });
+      return res.status(400).json({ error: 'メールアドレスが既に使用されています' });
     }
+
+    // ユーザー名自動生成 (例: emailの@前 + ランダム4文字)
+    const randomSuffix = Math.random().toString(36).slice(-4);
+    const username = email.split('@')[0] + '_' + randomSuffix;
 
     const hashedPassword = await bcrypt.hash(password, 10);
     // ランダムな認証トークン生成
@@ -147,8 +151,8 @@ app.get('/api/auth/verify-email', async (req, res) => {
 // B. ログイン (認証済みチェック追加)
 app.post('/api/auth/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ error: 'ユーザーが見つかりません' });
 
     // メール認証チェック

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,54 +9,121 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     /* カート専用デザイン */
-    :root{ --bg:#0a0b10; --fg:#e7e8ee; --accent:#d4af37; --line:rgba(255,255,255,.08); }
-    body{ background:var(--bg); color:var(--fg); font-family:"Noto Sans JP",sans-serif; }
-    
-    .cart-container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    :root {
+      --bg: #0a0b10;
+      --fg: #e7e8ee;
+      --accent: #d4af37;
+      --line: rgba(255, 255, 255, .08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Noto Sans JP", sans-serif;
+    }
+
+    .cart-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
     .cart-item {
-        display: flex; justify-content: space-between; align-items: center;
-        background: rgba(255,255,255,0.03); border: 1px solid var(--line);
-        padding: 15px; margin-bottom: 10px; border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 12px;
     }
-    .item-info { display: flex; align-items: center; gap: 15px; }
-    .item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; background: #000; }
-    
+
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .item-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #000;
+    }
+
     .total-area {
-        margin-top: 30px; padding: 20px; border-top: 2px solid var(--line);
-        text-align: right; font-size: 1.5rem; font-weight: bold;
+      margin-top: 30px;
+      padding: 20px;
+      border-top: 2px solid var(--line);
+      text-align: right;
+      font-size: 1.5rem;
+      font-weight: bold;
     }
+
     .checkout-btn {
-        background: var(--accent); color: #000; border: none; padding: 15px 40px;
-        font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer;
-        margin-top: 15px; display: inline-block; text-decoration: none;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      display: inline-block;
+      text-decoration: none;
     }
-    .checkout-btn:hover { opacity: 0.9; }
-    
-    .btn-delete { background: transparent; border: 1px solid #ff4757; color: #ff4757; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-    .btn-delete:hover { background: #ff4757; color: white; }
+
+    .checkout-btn:hover {
+      opacity: 0.9;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #ff4757;
+      color: #ff4757;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background: #ff4757;
+      color: white;
+    }
   </style>
 </head>
+
 <body>
 
   <header class="site-header">
     <div class="wrap">
       <h1 class="brand"><a href="index.html"><img src="images/cross_matrix.png" alt="CM" style="height:48px;"></a></h1>
       <nav class="nav">
-        <a href="shop.html">← ショップに戻る</a>
+        <a href="index.html">ホーム</a>
+        <a href="cards.html">カード図鑑</a>
+        <a href="rules.html">ルール</a>
+        <a href="shop.html">ショップ</a>
+        <a href="news.html">ニュース</a>
+        <a href="cart.html" class="active" style="color:var(--accent)">カート(0)</a>
+        <a href="login.html" id="login-link">ログイン</a>
+        <a href="#" id="logout-link" style="display:none;">ログアウト</a>
       </nav>
     </div>
   </header>
 
   <main class="cart-container">
     <h1>🛒 ショッピングカート</h1>
-    
+
     <div id="cart-list">
-        </div>
+    </div>
 
     <div class="total-area">
-        合計: <span id="total-price" style="color:var(--accent)">¥0</span>
-        <br>
-        <button class="checkout-btn" onclick="checkout()">レジに進む</button>
+      合計: <span id="total-price" style="color:var(--accent)">¥0</span>
+      <br>
+      <button class="checkout-btn" onclick="checkout()">レジに進む</button>
     </div>
   </main>
 
@@ -64,27 +132,27 @@
     loadCart();
 
     function loadCart() {
-        // 保存されたカートを取り出す
-        const cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
-        const list = document.getElementById('cart-list');
-        const totalEl = document.getElementById('total-price');
-        
-        list.innerHTML = "";
-        let total = 0;
+      // 保存されたカートを取り出す
+      const cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
+      const list = document.getElementById('cart-list');
+      const totalEl = document.getElementById('total-price');
 
-        if (cart.length === 0) {
-            list.innerHTML = "<p>カートは空です。</p>";
-            totalEl.innerText = "¥0";
-            return;
-        }
+      list.innerHTML = "";
+      let total = 0;
 
-        // 商品を1つずつ表示
-        cart.forEach((item, index) => {
-            total += Number(item.price);
-            
-            const div = document.createElement('div');
-            div.className = 'cart-item';
-            div.innerHTML = `
+      if (cart.length === 0) {
+        list.innerHTML = "<p>カートは空です。</p>";
+        totalEl.innerText = "¥0";
+        return;
+      }
+
+      // 商品を1つずつ表示
+      cart.forEach((item, index) => {
+        total += Number(item.price);
+
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
                 <div class="item-info">
                     <img src="${item.image || ''}" class="item-img" onerror="this.src='https://placehold.co/60'">
                     <div>
@@ -94,28 +162,29 @@
                 </div>
                 <button class="btn-delete" onclick="removeItem(${index})">削除</button>
             `;
-            list.appendChild(div);
-        });
+        list.appendChild(div);
+      });
 
-        // 合計金額を更新
-        totalEl.innerText = "¥" + total.toLocaleString();
+      // 合計金額を更新
+      totalEl.innerText = "¥" + total.toLocaleString();
     }
 
     // 削除機能
     function removeItem(index) {
-        let cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
-        cart.splice(index, 1); // 指定した場所を1つ消す
-        localStorage.setItem('cm_cart', JSON.stringify(cart)); // 保存し直す
-        loadCart(); // 画面を更新
+      let cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
+      cart.splice(index, 1); // 指定した場所を1つ消す
+      localStorage.setItem('cm_cart', JSON.stringify(cart)); // 保存し直す
+      loadCart(); // 画面を更新
     }
 
     // レジに進む（今はアラートだけ）
     function checkout() {
-        const cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
-        if(cart.length === 0) return alert("カートが空です");
-        
-        alert("まだ決済機能はありませんが、合計 " + document.getElementById('total-price').innerText + " の注文を受け付けました！");
+      const cart = JSON.parse(localStorage.getItem('cm_cart') || "[]");
+      if (cart.length === 0) return alert("カートが空です");
+
+      alert("まだ決済機能はありませんが、合計 " + document.getElementById('total-price').innerText + " の注文を受け付けました！");
     }
   </script>
 </body>
+
 </html>

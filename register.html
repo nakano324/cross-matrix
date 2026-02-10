@@ -77,7 +77,6 @@
 
     <div class="login-box">
         <h1>アカウント登録</h1>
-        <input type="text" id="username" placeholder="ユーザー名 (ID)">
         <input type="email" id="email" placeholder="メールアドレス">
         <input type="password" id="password" placeholder="パスワード">
         <input type="password" id="confirm-password" placeholder="パスワード (確認)">
@@ -95,7 +94,6 @@
         const API_URL = "https://cross-matrix-shop-api.onrender.com/api/auth/register";
 
         async function register() {
-            const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
@@ -104,7 +102,7 @@
             msg.textContent = "";
 
             // 簡易バリデーション
-            if (!username || !email || !password) {
+            if (!email || !password) {
                 msg.textContent = "全ての項目を入力してください";
                 msg.className = "error";
                 return;
@@ -123,7 +121,7 @@
                 const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await res.json();
