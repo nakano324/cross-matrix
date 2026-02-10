@@ -227,11 +227,13 @@ async function saveDeck() {
         id: state.currentDeckId // null if new
     };
 
+    const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
+
     try {
         dom.saveDeckBtn.textContent = 'Saving...';
         dom.saveDeckBtn.disabled = true;
 
-        const res = await fetch('http://localhost:3000/api/decks', {
+        const res = await fetch(`${API_BASE_URL}/api/decks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -248,7 +250,11 @@ async function saveDeck() {
 
     } catch (err) {
         console.error(err);
-        alert('保存に失敗しました: ' + err.message);
+        if (err.message === 'Failed to fetch') {
+            alert('サーバーに接続できません。\nサーバーが起動しているか確認してください。');
+        } else {
+            alert('保存に失敗しました: ' + err.message);
+        }
     } finally {
         dom.saveDeckBtn.textContent = 'Save';
         dom.saveDeckBtn.disabled = false;
@@ -256,8 +262,9 @@ async function saveDeck() {
 }
 
 async function loadDeck(id) {
+    const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
     try {
-        const res = await fetch(`http://localhost:3000/api/decks/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/decks/${id}`);
         if (!res.ok) throw new Error('Deck not found');
 
         const deckData = await res.json();

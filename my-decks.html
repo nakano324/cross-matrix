@@ -161,8 +161,10 @@
                 return;
             }
 
+            const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
+
             try {
-                const res = await fetch('http://localhost:3000/api/decks', {
+                const res = await fetch(`${API_BASE_URL}/api/decks`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -173,7 +175,14 @@
 
             } catch (err) {
                 console.error(err);
-                listEl.innerHTML = `<div class="empty-state">エラーが発生しました: ${err.message}</div>`;
+                if (err.message === 'Failed to fetch') {
+                    listEl.innerHTML = `<div class="empty-state">
+                        <p>サーバーに接続できませんでした。</p>
+                        <p>サーバーが起動しているか確認してください。<br>(ターミナルで <code>node server.js</code> を実行)</p>
+                    </div>`;
+                } else {
+                    listEl.innerHTML = `<div class="empty-state">エラーが発生しました: ${err.message}</div>`;
+                }
             }
         });
 
@@ -212,7 +221,7 @@
 
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch(`http://localhost:3000/api/decks/${id}`, {
+                const res = await fetch(`${API_BASE_URL}/api/decks/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
