@@ -146,6 +146,8 @@
     <script src="auth.js"></script>
     <script>
         // Load Decks
+        const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
+
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             const listEl = document.getElementById('deckList');
@@ -164,7 +166,7 @@
                 return;
             }
 
-            const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
+
 
             try {
                 const res = await fetch(`${API_BASE_URL}/api/decks`, {
