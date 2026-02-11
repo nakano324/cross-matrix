@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- スマホ向けビューポート設定 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TCG Prototype</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- アプリ全体のコンテナ -->
+    <div id="app">
+
+        <!-- メインコンテンツエリア -->
+        <main id="main-content">
+
+            <!-- 0. ロビービュー (部屋選択) -->
+            <div id="lobby-view" class="view active">
+                <div class="lobby-container">
+                    <h2>Online Matchmaking</h2>
+
+                    <div class="lobby-section">
+                        <button id="btn-create-room" class="btn-primary">部屋を作る (Create Room)</button>
+                    </div>
+
+                    <div class="lobby-divider">- OR -</div>
+
+                    <div class="lobby-section">
+                        <input type="text" id="input-room-id" placeholder="Room ID (e.g. 1234)" maxlength="4">
+                        <div class="button-group">
+                            <button id="btn-join-player" class="btn-secondary">対戦に参加 (Join P2)</button>
+                            <button id="btn-join-spectator" class="btn-outline">観戦する (Spectate)</button>
+                        </div>
+                    </div>
+
+                    <div id="room-status-msg"></div>
+                </div>
+            </div>
+
+            <!-- A. 盤面ビュー -->
+            <div id="board-view" class="view">
+                <div class="room-info-bar">
+                    Room: <span id="current-room-id">---</span> |
+                    <span id="role-display">---</span>
+                </div>
+                <div id="board-grid">
+                    <!-- JavaScriptで4x5のマス(div.cell)を生成してここに配置します -->
+                </div>
+                <!-- 盤面下部にデッキ表示 -->
+                <div id="board-deck" class="deck-area-small">
+                    <!-- JavaScriptでデッキを描画 -->
+                </div>
+            </div>
+
+            <!-- B. 操作ビュー (カメラ画) -->
+            <div id="control-view" class="view">
+                <!-- 相手の映像 (メイン画面) -->
+                <video id="remote-video" autoplay playsinline loop muted
+                    poster="https://placehold.jp/3d4070/ffffff/320x240.png?text=Remote%20Video"></video>
+
+                <!-- 自分の映像 (ワイプ/PinP) -->
+                <video id="local-video" autoplay playsinline muted></video>
+            </div>
+
+        </main>
+
+        <!-- 固定フッター (ナビゲーション) -->
+        <footer id="footer">
+            <button id="btn-board" class="nav-btn">盤面</button>
+            <button id="btn-control" class="nav-btn">操作 (カメラ/デッキ)</button>
+        </footer>
+
+        <!-- オーバーレイ (スタック選択用モーダル) -->
+        <div id="stack-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>重なっているカード</h3>
+                <div id="stack-list">
+                    <!-- ここに重なっているカード一覧を表示 -->
+                </div>
+                <button id="btn-close-modal">閉じる</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Socket.io Client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- ロジック読み込み -->
+    <script src="script.js"></script>
+</body>
+
+</html>

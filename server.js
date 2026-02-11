@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto'); // ランダムな文字列を作る用
 
 const nodemailer = require('nodemailer');
-
+const http = require('http'); // HTTP server for Socket.io
+const { Server } = require("socket.io"); // Socket.io
 const app = express();
 
 // 認証メールのリンク先に使う、あなたのGitHub PagesのURL
@@ -18,6 +19,11 @@ const FRONTEND_URL = "https://nakano324.github.io/cross-matrix";
 // --- 設定 ---
 app.use(express.json()); // JSONを使えるようにする
 app.use(cors()); // どこからでもアクセス許可（開発用）
+app.use((req, res, next) => {
+  console.log(`[Request] ${req.method} ${req.url}`);
+  next();
+});
+app.use(express.static('.')); // カレントディレクトリを静的ファイルとして公開
 
 // --- データベース接続 ---
 mongoose.connect(process.env.MONGO_URI)
@@ -341,8 +347,104 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 });
 
+// --- Socket.io Logic (Room & Game State) ---
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Adjust in production
+    methods: ["GET", "POST"]
+  }
+});
+
+// Store room states if needed (simple in-memory for now)
+// rooms[roomId] = { players: [socketId, ...], spectators: [socketId, ...] }
+const rooms = {};
+
+io.on('connection', (socket) => {
+  console.log('a user connected:', socket.id);
+
+  // 1. Join Room
+  socket.on('join_room', ({ roomId, role }) => {
+    console.log(`[Socket] Join request from ${socket.id} for room ${roomId} as ${role}`);
+    // Basic validation
+    if (!roomId) return;
+
+    socket.join(roomId);
+
+    // Initialize room if not exists
+    if (!rooms[roomId]) {
+      rooms[roomId] = { players: [], spectators: [] };
+    }
+
+    const room = rooms[roomId];
+
+    if (role === 'player') {
+      // Check if room is full (max 2 players)
+      if (room.players.length >= 2) {
+        // Already full, maybe force to spectator or reject?
+        // For now, let's just emit an error or handle it on client
+        socket.emit('error_message', 'Room is full for players.');
+        return;
+      }
+      room.players.push(socket.id);
+      console.log(`User ${socket.id} joined room ${roomId} as Player`);
+    } else {
+      room.spectators.push(socket.id);
+      console.log(`User ${socket.id} joined room ${roomId} as Spectator`);
+
+      // Request state from a player to sync spectator
+      if (room.players.length > 0) {
+        // Ask the first player to send their state
+        io.to(room.players[0]).emit('request_state', { requesterId: socket.id });
+      }
+    }
+
+    // Notify room
+    io.to(roomId).emit('room_update', {
+      playerCount: room.players.length,
+      spectatorCount: room.spectators.length
+    });
+  });
+
+  // 2. Game Actions (Relay to room)
+  socket.on('game_action', (data) => {
+    // data should include roomId and action details
+    const { roomId, action, payload } = data;
+    // Broadcast to others in the room
+    socket.to(roomId).emit('game_update', { action, payload, from: socket.id });
+  });
+
+  // 3. Sync State (Response to request_state)
+  socket.on('sync_state', (data) => {
+    const { targetId, state } = data;
+    io.to(targetId).emit('state_synced', state);
+  });
+
+  // WebRTC Signaling (Offer, Answer, Candidate)
+  socket.on('signal', (data) => {
+    const { roomId, type, payload } = data;
+    socket.to(roomId).emit('signal', { type, payload, from: socket.id });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected:', socket.id);
+    // Cleanup room logic (remove user from room arrays)
+    for (const roomId in rooms) {
+      const room = rooms[roomId];
+      if (room.players.includes(socket.id)) {
+        room.players = room.players.filter(id => id !== socket.id);
+        io.to(roomId).emit('player_left', socket.id);
+      }
+      if (room.spectators.includes(socket.id)) {
+        room.spectators = room.spectators.filter(id => id !== socket.id);
+      }
+      // Clean up empty rooms if needed
+    }
+  });
+});
+
 // --- サーバー開始 ---
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 サーバー起動: http://localhost:${PORT}`);
 });

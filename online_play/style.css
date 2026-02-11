@@ -1,0 +1,348 @@
+/* =========================================
+   基本リセット / ベーススタイル
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #222;
+    /* 暗めの背景色 */
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    /* スクロール防止（アプリ風） */
+}
+
+/* アプリ全体のコンテナ */
+#app {
+    width: 100%;
+    max-width: 480px;
+    /* スマホ以外の表示時の最大幅 */
+    height: 100dvh;
+    /* Mobile viewport fix */
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    position: relative;
+}
+
+/* =========================================
+   メインコンテンツエリア (ビュー切り替え領域)
+   ========================================= */
+#main-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 60px;
+    /* フッターの高さ分確保 */
+}
+
+/* ビューの表示制御 */
+.view {
+    display: none;
+    /* 初期状態は非表示 */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    /* コンテンツが多い場合はスクロール */
+    padding: 10px;
+}
+
+.view.active {
+    display: block;
+    /* アクティブなビューを表示 */
+}
+
+/* =========================================
+   A. 盤面ビュー (#board-view)
+   ========================================= */
+#board-view {
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%;
+}
+
+#board-view.active {
+    display: flex;
+}
+
+#board-grid {
+    flex: 1;
+    /* 残りの高さを全て使う */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4列 */
+    grid-template-rows: repeat(5, 1fr);
+    /* 5行 */
+    gap: 5px;
+    width: 100%;
+    align-content: start;
+    /* 中央寄せをやめて上詰め (スクロール時の見切れ防止) */
+    overflow-y: auto;
+    padding-bottom: 20px;
+    /* カードが端ギリギリにならないように余白 */
+}
+
+/* 各マス（セル） */
+.cell {
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 4px;
+    position: relative;
+    /* アスペクト比固定 63:88 */
+    aspect-ratio: 63 / 88;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ハイライト（配置可能・選択中など） */
+.cell.highlight {
+    border-color: #ffff00;
+    background-color: #555;
+}
+
+/* カード画像 */
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* 枚数バッジ (スタック表示) */
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* 盤面下部の簡易デッキエリア */
+.deck-area-small {
+    height: 100px;
+    /* 固定高さ */
+    background-color: #222;
+    margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    border-top: 1px solid #444;
+}
+
+.deck-area-small .deck-card {
+    height: 100%;
+    aspect-ratio: 63 / 88;
+    background-color: #444;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    display: inline-block;
+}
+
+.deck-area-small .deck-card.selected {
+    border-color: #00ff00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.deck-area-small .deck-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* =========================================
+   B. 操作ビュー (#control-view)
+   ========================================= */
+/* =========================================
+   B. 操作ビュー (#control-view) - Video Chat Style
+   ========================================= */
+#control-view {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    position: relative;
+    /* 子要素のabsolute配置の基準 */
+    display: none;
+    /* 初期状態は非表示 (viewクラスで制御) */
+}
+
+#control-view.active {
+    display: block;
+    /* FlexではなくBlockでOK */
+}
+
+/* 相手のカメラ (全画面) */
+#remote-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 自分のカメラ (ワイプ) */
+#local-video {
+    position: absolute;
+    bottom: 80px;
+    /* フッター(60px) + 余白20px */
+    right: 20px;
+    width: 25%;
+    max-width: 150px;
+    aspect-ratio: 9 / 16;
+    /* スマホ縦持ち想定 */
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transform: scaleX(-1);
+    /* 鏡面反転 */
+    z-index: 100;
+    background-color: #111;
+}
+
+/* =========================================
+   フッター (ナビゲーション)
+   ========================================= */
+#footer {
+    height: 60px;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-top: 1px solid #333;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 480px;
+    /* コンテナ幅に合わせる */
+    z-index: 1000;
+}
+
+.nav-btn {
+    flex: 1;
+    height: 100%;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-btn.active {
+    background-color: #333;
+    color: #fff;
+    border-bottom: 4px solid #00aaff;
+}
+
+/* =========================================
+   モーダル (スタック選択)
+   ========================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+/* 重なっているカードリスト */
+#stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    /* 折り返し許可 */
+    gap: 10px;
+    max-height: 60vh;
+    /* 縦スクロール */
+    overflow-y: auto;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.modal-card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* モーダル内のカード */
+.modal-card {
+    width: 80px;
+    aspect-ratio: 63 / 88;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+}
+
+.modal-card.selected {
+    border-color: #ff00ff;
+    /* 移動元選択カラー */
+}
+
+/* モーダル内のボタン */
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#btn-close-modal {
+    padding: 8px 20px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
