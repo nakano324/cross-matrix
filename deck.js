@@ -227,7 +227,9 @@ async function saveDeck() {
         id: state.currentDeckId // null if new
     };
 
-    const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
+
+    // API_BASE_URL is defined in config.js
+
 
     try {
         dom.saveDeckBtn.textContent = 'Saving...';
@@ -262,7 +264,7 @@ async function saveDeck() {
 }
 
 async function loadDeck(id) {
-    const API_BASE_URL = "https://cross-matrix-shop-api.onrender.com";
+    // API_BASE_URL is defined in config.js
     try {
         const res = await fetch(`${API_BASE_URL}/api/decks/${id}`);
         if (!res.ok) throw new Error('Deck not found');
