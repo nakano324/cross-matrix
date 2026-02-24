@@ -43,7 +43,13 @@ if (socket) {
 let peerConnection = null;
 let localStream = null;
 const rtcConfig = {
-    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        // 一部環境用に追加のフリーTURNサーバー (Open RelayProject等を一時的に使用, 実運用では自身で立てることを推奨)
+        { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+        { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+        { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+    ]
 };
 
 // 盤面の状態: 20マス(4列x5行)の配列。各要素はカードオブジェクトの配列(スタック)。
