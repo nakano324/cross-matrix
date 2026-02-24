@@ -12,11 +12,10 @@ if (location.protocol === 'file:') {
 
 let socket;
 try {
-    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
     const BACKEND_URL = 'https://cross-matrix-shop-api.onrender.com';
 
-    // Auto-switch: Localhost -> Relative path, Production (GitHub Pages) -> Render Backend
-    socket = isLocal ? io() : io(BACKEND_URL);
+    // 常にRenderのバックエンドURLに接続する
+    socket = io(BACKEND_URL);
 } catch (e) {
     console.error('Socket.io not loaded:', e);
     alert('Socket.io failed to load. Ensure you are accessing this page via the server (http://localhost:3000/online_play/index.html).');
