@@ -263,8 +263,8 @@ function setupSocketListeners() {
                 processIceQueue();
             } else if (type === 'candidate') {
                 console.log('Received ICE candidate');
-                if (peerConnection.remoteDescription) {
-                    await peerConnection.addIceCandidate(new RTCIceCandidate(payload));
+                if (peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+                    await peerConnection.addIceCandidate(new RTCIceCandidate(payload)).catch(e => console.error("Error adding ice candidate:", e));
                 } else {
                     console.log('Queuing ICE candidate (No remote description yet)');
                     iceCandidateQueue.push(payload);
@@ -311,6 +311,12 @@ function setupWebRTC() {
 
     peerConnection.onconnectionstatechange = () => {
         console.log("WebRTC Connection State:", peerConnection.connectionState);
+        const statusMsg = document.getElementById('room-status-msg');
+        if (statusMsg) statusMsg.textContent = 'WebRTC Connection: ' + peerConnection.connectionState;
+    };
+
+    peerConnection.oniceconnectionstatechange = () => {
+        console.log("WebRTC ICE Connection State:", peerConnection.iceConnectionState);
     };
 }
 
@@ -319,6 +325,7 @@ async function processIceQueue() {
     for (const candidate of iceCandidateQueue) {
         try {
             await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            console.log("Successfully added queued ICE candidate");
         } catch (e) {
             console.error('Error adding queued ICE candidate', e);
         }
