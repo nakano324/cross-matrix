@@ -165,7 +165,8 @@ function generateDeckFromSelection() {
             deckState.push({
                 id: cardData.id,
                 name: cardData.name,
-                imageUrl: cardData.image
+                imageUrl: cardData.image,
+                power: cardData.power || 0 // パワーを抽出 (未定義なら0)
             });
         }
     });
@@ -511,6 +512,19 @@ function renderBoard() {
                 badge.textContent = stack.length;
                 cell.appendChild(badge);
             }
+
+            // 合計パワーの計算と表示
+            let totalPower = 0;
+            stack.forEach(c => {
+                totalPower += parseInt(c.power) || 0;
+            });
+
+            if (totalPower > 0) {
+                const powerBadge = document.createElement('div');
+                powerBadge.className = 'power-badge';
+                powerBadge.textContent = `P: ${totalPower}`;
+                cell.appendChild(powerBadge);
+            }
         }
 
         // タップイベント
@@ -774,7 +788,6 @@ function startGroupMove(cellIndex) {
 }
 
 function disposeCard(cellIndex, cardIndex) {
-    if (!confirm('このカードを破棄しますか？')) return;
 
     const stack = boardState[cellIndex];
     stack.splice(cardIndex, 1);
@@ -789,7 +802,6 @@ function disposeCard(cellIndex, cardIndex) {
 }
 
 function disposeStack(cellIndex) {
-    if (!confirm('この束をすべて破棄しますか？')) return;
 
     boardState[cellIndex] = [];
 
