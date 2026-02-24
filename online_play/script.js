@@ -40,6 +40,13 @@ if (socket) {
 // 状態管理 (State Management)
 // =========================================
 
+// WebRTC
+let peerConnection = null;
+let localStream = null;
+const rtcConfig = {
+    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+};
+
 // 盤面の状態: 20マス(4列x5行)の配列。各要素はカードオブジェクトの配列(スタック)。
 let boardState = Array.from({ length: 20 }, () => []);
 
@@ -187,6 +194,102 @@ function setupSocketListeners() {
             renderBoard();
         }
     });
+
+    // WebRTC: 入室通知 (2人目が入ってきたら、1人目がOfferを作る)
+    socket.on('player_joined', async (data) => {
+        if (myRole !== 'player') return;
+        console.log('Player joined, initiating offer...', data.newPlayerId);
+
+        setupWebRTC();
+        try {
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.emit('signal', {
+                roomId: currentRoomId,
+                type: 'offer',
+                payload: offer
+            });
+        } catch (err) {
+            console.error('Error creating offer:', err);
+        }
+    });
+
+    // WebRTC: シグナリング受信
+    socket.on('signal', async (data) => {
+        if (myRole !== 'player') return; // Spectator doesn't handle WebRTC mapping for now
+        const { type, payload, from } = data;
+
+        try {
+            if (!peerConnection) setupWebRTC();
+
+            if (type === 'offer') {
+                console.log('Received offer, creating answer...');
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                socket.emit('signal', {
+                    roomId: currentRoomId,
+                    type: 'answer',
+                    payload: answer
+                });
+            } else if (type === 'answer') {
+                console.log('Received answer');
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+            } else if (type === 'candidate') {
+                console.log('Received ICE candidate');
+                await peerConnection.addIceCandidate(new RTCIceCandidate(payload));
+            }
+        } catch (err) {
+            console.error('WebRTC Signaling Error:', err);
+        }
+    });
+
+    socket.on('player_left', (playerId) => {
+        console.log('Player left:', playerId);
+        cleanupWebRTC();
+    });
+}
+
+// =========================================
+// WebRTC Logic
+// =========================================
+function setupWebRTC() {
+    if (peerConnection) return;
+    peerConnection = new RTCPeerConnection(rtcConfig);
+
+    if (localStream) {
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+    }
+
+    peerConnection.ontrack = (event) => {
+        const remoteVideo = document.getElementById('remote-video');
+        if (remoteVideo && remoteVideo.srcObject !== event.streams[0]) {
+            remoteVideo.srcObject = event.streams[0];
+        }
+    };
+
+    peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+            socket.emit('signal', {
+                roomId: currentRoomId,
+                type: 'candidate',
+                payload: event.candidate
+            });
+        }
+    };
+
+    peerConnection.onconnectionstatechange = () => {
+        console.log("WebRTC Connection State:", peerConnection.connectionState);
+    };
+}
+
+function cleanupWebRTC() {
+    if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+    }
+    const remoteVideo = document.getElementById('remote-video');
+    if (remoteVideo) remoteVideo.srcObject = null;
 }
 
 // リモートアクションの処理
@@ -579,12 +682,18 @@ async function startCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } },
-                audio: false
+                audio: true // 音声もONに変更
             });
+            localStream = stream;
             localVideo.srcObject = stream;
+
+            setupWebRTC(); // WebRTCセットアップ
         } catch (err) {
             console.error("Camera access denied or error:", err);
+            setupWebRTC(); // 失敗しても受信ができるようにセットアップ
         }
+    } else {
+        setupWebRTC();
     }
 }
 
