@@ -77,6 +77,11 @@ let boardState = Array.from({ length: 20 }, () => []);
 // デッキの状態: カードオブジェクトの配列
 let deckState = [];
 
+// APIから取得するデータ用
+let allCardsData = [];
+let userDecks = [];
+let selectedDeckId = null;
+
 // 選択中のカード (デッキから配置用)
 let selectedDeckCard = null;
 
@@ -88,27 +93,84 @@ let currentRoomId = null;
 let myRole = null; // 'player' or 'spectator'
 
 // =========================================
-// 初期化・ダミーデータ生成
+// 初期化・データ取得
 // =========================================
 
-function init() {
+async function init() {
     setupLobbyEvents();
     setupSocketListeners();
     setupEventListeners(); // 共通UIイベント
 
-    // デッキ初期化 (あとでサーバーから同期するかもだが一旦生成)
-    generateDummyDeck();
+    // 1. 全カードデータを取得
+    try {
+        // cards.jsonは一つ上の階層にあると推測（パスに注意）
+        const res = await fetch('../cards.json');
+        if (res.ok) {
+            allCardsData = await res.json();
+        }
+    } catch (e) {
+        console.error('Failed to load cards.json', e);
+    }
+
+    // 2. マイデッキ一覧を取得してドロップダウンに反映
+    await fetchUserDecks();
 }
 
-function generateDummyDeck() {
-    deckState = [];
-    for (let i = 1; i <= 10; i++) {
-        deckState.push({
-            id: `card-${i}`, // Base ID
-            name: `Card ${i}`,
-            imageUrl: `https://placehold.jp/3d4070/ffffff/63x88.png?text=Card${i}`
-        });
+async function fetchUserDecks() {
+    const token = localStorage.getItem('token');
+    const select = document.getElementById('deck-select');
+    if (!select) return;
+
+    if (!token) {
+        select.innerHTML = '<option value="">ログインしていません</option>';
+        return;
     }
+
+    try {
+        const res = await fetch('https://cross-matrix-shop-api.onrender.com/api/decks', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('fetch error');
+
+        userDecks = await res.json();
+
+        select.innerHTML = '<option value="">デッキを選択してください</option>';
+        userDecks.forEach(deck => {
+            const opt = document.createElement('option');
+            opt.value = deck._id;
+            opt.textContent = deck.name;
+            select.appendChild(opt);
+        });
+
+        // 選択変更イベント
+        select.addEventListener('change', (e) => {
+            selectedDeckId = e.target.value;
+        });
+    } catch (e) {
+        console.error('Failed to load decks', e);
+        select.innerHTML = '<option value="">デッキの取得に失敗しました</option>';
+    }
+}
+
+function generateDeckFromSelection() {
+    deckState = [];
+    if (!selectedDeckId) return;
+    const deckInfo = userDecks.find(d => d._id === selectedDeckId);
+    if (!deckInfo) return;
+
+    // 種類のみ抽出 (重複排除)
+    deckInfo.cards.forEach(c => {
+        const cardData = allCardsData.find(ac => ac.id === c.cardId);
+        if (cardData) {
+            deckState.push({
+                id: cardData.id,
+                name: cardData.name,
+                imageUrl: cardData.image
+            });
+        }
+    });
+
+    console.log('Deck generated from selection (unique types):', deckState.length);
 }
 
 // =========================================
@@ -124,6 +186,11 @@ function setupLobbyEvents() {
     if (btnCreate) {
         btnCreate.addEventListener('click', () => {
             console.log('Create Room clicked');
+            if (!selectedDeckId) {
+                alert('使用するデッキを選択してください');
+                return;
+            }
+            generateDeckFromSelection();
             const roomId = Math.floor(1000 + Math.random() * 9000).toString();
             joinRoom(roomId, 'player');
         });
@@ -135,8 +202,16 @@ function setupLobbyEvents() {
         btnJoinPlayer.addEventListener('click', () => {
             console.log('Join Player clicked');
             const roomId = inputRoom.value;
-            if (roomId.length === 4) joinRoom(roomId, 'player');
-            else alert('4桁のRoom IDを入力してください');
+            if (roomId.length !== 4) {
+                alert('4桁のRoom IDを入力してください');
+                return;
+            }
+            if (!selectedDeckId) {
+                alert('使用するデッキを選択してください');
+                return;
+            }
+            generateDeckFromSelection();
+            joinRoom(roomId, 'player');
         });
     }
 
