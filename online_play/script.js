@@ -42,13 +42,32 @@ if (socket) {
 // WebRTC
 let peerConnection = null;
 let localStream = null;
+let iceCandidateQueue = []; // Remote Descriptionがセットされるまでキューに貯める
 const rtcConfig = {
     iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        // 一部環境用に追加のフリーTURNサーバー (Open RelayProject等を一時的に使用, 実運用では自身で立てることを推奨)
-        { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-        { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
-        { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+        {
+            urls: "stun:stun.relay.metered.ca:80",
+        },
+        {
+            urls: "turn:standard.relay.metered.ca:80",
+            username: "5a84f516108465fea16fedd5",
+            credential: "scUxhiwqJj6fmArM",
+        },
+        {
+            urls: "turn:standard.relay.metered.ca:80?transport=tcp",
+            username: "5a84f516108465fea16fedd5",
+            credential: "scUxhiwqJj6fmArM",
+        },
+        {
+            urls: "turn:standard.relay.metered.ca:443",
+            username: "5a84f516108465fea16fedd5",
+            credential: "scUxhiwqJj6fmArM",
+        },
+        {
+            urls: "turns:standard.relay.metered.ca:443?transport=tcp",
+            username: "5a84f516108465fea16fedd5",
+            credential: "scUxhiwqJj6fmArM",
+        }
     ]
 };
 
@@ -237,12 +256,19 @@ function setupSocketListeners() {
                     type: 'answer',
                     payload: answer
                 });
+                processIceQueue();
             } else if (type === 'answer') {
                 console.log('Received answer');
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(payload));
+                processIceQueue();
             } else if (type === 'candidate') {
                 console.log('Received ICE candidate');
-                await peerConnection.addIceCandidate(new RTCIceCandidate(payload));
+                if (peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+                    await peerConnection.addIceCandidate(new RTCIceCandidate(payload)).catch(e => console.error("Error adding ice candidate:", e));
+                } else {
+                    console.log('Queuing ICE candidate (No remote description yet)');
+                    iceCandidateQueue.push(payload);
+                }
             }
         } catch (err) {
             console.error('WebRTC Signaling Error:', err);
@@ -285,7 +311,26 @@ function setupWebRTC() {
 
     peerConnection.onconnectionstatechange = () => {
         console.log("WebRTC Connection State:", peerConnection.connectionState);
+        const statusMsg = document.getElementById('room-status-msg');
+        if (statusMsg) statusMsg.textContent = 'WebRTC Connection: ' + peerConnection.connectionState;
     };
+
+    peerConnection.oniceconnectionstatechange = () => {
+        console.log("WebRTC ICE Connection State:", peerConnection.iceConnectionState);
+    };
+}
+
+async function processIceQueue() {
+    console.log(`Processing queued ICE candidates: ${iceCandidateQueue.length}`);
+    for (const candidate of iceCandidateQueue) {
+        try {
+            await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            console.log("Successfully added queued ICE candidate");
+        } catch (e) {
+            console.error('Error adding queued ICE candidate', e);
+        }
+    }
+    iceCandidateQueue = [];
 }
 
 function cleanupWebRTC() {
@@ -293,6 +338,7 @@ function cleanupWebRTC() {
         peerConnection.close();
         peerConnection = null;
     }
+    iceCandidateQueue = [];
     const remoteVideo = document.getElementById('remote-video');
     if (remoteVideo) remoteVideo.srcObject = null;
 }

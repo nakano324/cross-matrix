@@ -388,6 +388,11 @@ io.on('connection', (socket) => {
       }
       room.players.push(socket.id);
       console.log(`User ${socket.id} joined room ${roomId} as Player`);
+
+      // 2人目のプレイヤーが入室した際に、既存プレイヤーに知らせて通信(Offer)を開始させる
+      if (room.players.length === 2) {
+        socket.to(roomId).emit('player_joined', { newPlayerId: socket.id });
+      }
     } else {
       room.spectators.push(socket.id);
       console.log(`User ${socket.id} joined room ${roomId} as Spectator`);
