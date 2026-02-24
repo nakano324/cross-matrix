@@ -82,6 +82,78 @@ let allCardsData = [];
 let userDecks = [];
 let selectedDeckId = null;
 
+// 初期デッキデータ (ハードコード)
+const starterDecks = [
+    {
+        _id: 'starter_animatroop',
+        name: '[初期] アニマトループ',
+        cards: [
+            { cardId: '26SD2-11/11', count: 1 },
+            { cardId: '26SD2-01/11', count: 4 },
+            { cardId: '26SD2-04/11', count: 4 },
+            { cardId: '26SD2-03/11', count: 4 },
+            { cardId: '26SD2-05/11', count: 4 },
+            { cardId: '26SD2-06/11', count: 4 },
+            { cardId: '26SD2-08/11', count: 4 },
+            { cardId: '26SD2-07/11', count: 4 },
+            { cardId: '26SD2-09/11', count: 4 },
+            { cardId: '26SD2-10/11', count: 4 },
+            { cardId: '26SD2-02/11', count: 3 }
+        ]
+    },
+    {
+        _id: 'starter_dominion',
+        name: '[初期] ドミニオン',
+        cards: [
+            { cardId: '26SD1-12/12', count: 1 },
+            { cardId: '26SD1-06/12', count: 1 },
+            { cardId: '26SD1-03/12', count: 4 },
+            { cardId: '26SD1-04/12', count: 2 },
+            { cardId: '26SD1-10/12', count: 4 },
+            { cardId: '26SD1-02/12', count: 4 },
+            { cardId: '26SD1-08/12', count: 4 },
+            { cardId: '26SD1-01/12', count: 4 },
+            { cardId: '26SD1-09/12', count: 4 },
+            { cardId: '26SD1-11/12', count: 4 },
+            { cardId: '26SD1-05/12', count: 4 },
+            { cardId: '26SD1-07/12', count: 4 }
+        ]
+    },
+    {
+        _id: 'starter_undead',
+        name: '[初期] 死霊',
+        cards: [
+            { cardId: '26SD3-11/11', count: 1 },
+            { cardId: '26SD3-02/11', count: 4 },
+            { cardId: '26SD3-03/11', count: 4 },
+            { cardId: '26SD3-04/11', count: 4 },
+            { cardId: '26SD3-08/11', count: 4 },
+            { cardId: '26SD3-05/11', count: 4 },
+            { cardId: '26SD3-07/11', count: 4 },
+            { cardId: '26SD3-10/11', count: 4 },
+            { cardId: '26SD3-06/11', count: 3 },
+            { cardId: '26SD3-09/11', count: 4 },
+            { cardId: '26SD3-01/11', count: 4 }
+        ]
+    },
+    {
+        _id: 'starter_mage',
+        name: '[初期] 魔術師',
+        cards: [
+            { cardId: '26SD4-10/11', count: 1 },
+            { cardId: '26SD4-01/11', count: 4 },
+            { cardId: '26SD4-02/11', count: 4 },
+            { cardId: '26SD4-06/11', count: 4 },
+            { cardId: '26SD4-04/11', count: 4 },
+            { cardId: '26SD4-07/11', count: 4 },
+            { cardId: '26SD4-11/11', count: 4 },
+            { cardId: '26SD4-09/11', count: 4 },
+            { cardId: '26SD4-05/11', count: 4 },
+            { cardId: '26SD4-03/11', count: 3 }
+        ]
+    }
+];
+
 // 選択中のカード (デッキから配置用)
 let selectedDeckCard = null;
 
@@ -121,41 +193,68 @@ async function fetchUserDecks() {
     const select = document.getElementById('deck-select');
     if (!select) return;
 
-    if (!token) {
-        select.innerHTML = '<option value="">ログインしていません</option>';
-        return;
+    select.innerHTML = '<option value="">デッキを選択してください</option>';
+
+    // ① 初期デッキをドロップダウンに追加
+    const starterGroup = document.createElement('optgroup');
+    starterGroup.label = "初期デッキ";
+    starterDecks.forEach(deck => {
+        const opt = document.createElement('option');
+        opt.value = deck._id;
+        opt.textContent = deck.name;
+        starterGroup.appendChild(opt);
+    });
+    select.appendChild(starterGroup);
+
+    // ② マイデッキの取得と追加
+    if (token) {
+        try {
+            const res = await fetch('https://cross-matrix-shop-api.onrender.com/api/decks', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                userDecks = await res.json();
+
+                if (userDecks.length > 0) {
+                    const userGroup = document.createElement('optgroup');
+                    userGroup.label = "マイデッキ";
+                    userDecks.forEach(deck => {
+                        const opt = document.createElement('option');
+                        opt.value = deck._id;
+                        opt.textContent = deck.name;
+                        userGroup.appendChild(opt);
+                    });
+                    select.appendChild(userGroup);
+                }
+            } else {
+                console.warn('Failed to fetch user decks.');
+            }
+        } catch (e) {
+            console.error('Failed to load decks', e);
+        }
+    } else {
+        const opt = document.createElement('option');
+        opt.disabled = true;
+        opt.textContent = '※マイデッキを使うにはログインが必要です';
+        select.appendChild(opt);
     }
 
-    try {
-        const res = await fetch('https://cross-matrix-shop-api.onrender.com/api/decks', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error('fetch error');
-
-        userDecks = await res.json();
-
-        select.innerHTML = '<option value="">デッキを選択してください</option>';
-        userDecks.forEach(deck => {
-            const opt = document.createElement('option');
-            opt.value = deck._id;
-            opt.textContent = deck.name;
-            select.appendChild(opt);
-        });
-
-        // 選択変更イベント
-        select.addEventListener('change', (e) => {
-            selectedDeckId = e.target.value;
-        });
-    } catch (e) {
-        console.error('Failed to load decks', e);
-        select.innerHTML = '<option value="">デッキの取得に失敗しました</option>';
-    }
+    // 選択変更イベント
+    select.addEventListener('change', (e) => {
+        selectedDeckId = e.target.value;
+    });
 }
 
 function generateDeckFromSelection() {
     deckState = [];
     if (!selectedDeckId) return;
-    const deckInfo = userDecks.find(d => d._id === selectedDeckId);
+
+    // userDecksかstarterDecksから該当のデッキ情報を探す
+    let deckInfo = userDecks.find(d => d._id === selectedDeckId);
+    if (!deckInfo) {
+        deckInfo = starterDecks.find(d => d._id === selectedDeckId);
+    }
+
     if (!deckInfo) return;
 
     // 種類のみ抽出 (重複排除)
