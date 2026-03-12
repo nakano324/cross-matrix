@@ -206,6 +206,16 @@ async function fetchUserDecks() {
     });
     select.appendChild(starterGroup);
 
+    // もし初期状態で何か選択されていれば、それをselectedDeckIdに入れる
+    if (select.value) {
+        selectedDeckId = select.value;
+    }
+
+    // 選択変更イベント (API通信前でもユーザーの選択を反映できるようにここに移動)
+    select.addEventListener('change', (e) => {
+        selectedDeckId = e.target.value;
+    });
+
     // ② マイデッキの取得と追加
     if (token) {
         try {
@@ -238,11 +248,6 @@ async function fetchUserDecks() {
         opt.textContent = '※マイデッキを使うにはログインが必要です';
         select.appendChild(opt);
     }
-
-    // 選択変更イベント
-    select.addEventListener('change', (e) => {
-        selectedDeckId = e.target.value;
-    });
 }
 
 function generateDeckFromSelection() {
@@ -287,8 +292,20 @@ function setupLobbyEvents() {
         btnCreate.addEventListener('click', () => {
             console.log('Create Room clicked');
             if (!selectedDeckId) {
-                alert('使用するデッキを選択してください');
-                return;
+                const selectElement = document.getElementById('deck-select');
+                if (selectElement) {
+                    const selectedOpt = selectElement.options[selectElement.selectedIndex];
+                    const val = selectElement.value || (selectedOpt ? selectedOpt.value : '');
+                    if (val) {
+                        selectedDeckId = val;
+                    } else {
+                        alert('使用するデッキを選択してください');
+                        return;
+                    }
+                } else {
+                    alert('使用するデッキを選択してください');
+                    return;
+                }
             }
             generateDeckFromSelection();
             const roomId = Math.floor(1000 + Math.random() * 9000).toString();
@@ -307,8 +324,20 @@ function setupLobbyEvents() {
                 return;
             }
             if (!selectedDeckId) {
-                alert('使用するデッキを選択してください');
-                return;
+                const selectElement = document.getElementById('deck-select');
+                if (selectElement) {
+                    const selectedOpt = selectElement.options[selectElement.selectedIndex];
+                    const val = selectElement.value || (selectedOpt ? selectedOpt.value : '');
+                    if (val) {
+                        selectedDeckId = val;
+                    } else {
+                        alert('使用するデッキを選択してください');
+                        return;
+                    }
+                } else {
+                    alert('使用するデッキを選択してください');
+                    return;
+                }
             }
             generateDeckFromSelection();
             joinRoom(roomId, 'player');
