@@ -288,9 +288,16 @@ function setupLobbyEvents() {
     const btnJoinSpectator = document.getElementById('btn-join-spectator');
     const inputRoom = document.getElementById('input-room-id');
 
+    const btnRefresh = document.getElementById('btn-refresh-rooms');
+
     if (btnCreate) {
         btnCreate.addEventListener('click', () => {
             console.log('Create Room clicked');
+            const roomName = document.getElementById('room-name-input') ? document.getElementById('room-name-input').value.trim() : '';
+            const tagCheckboxes = document.querySelectorAll('.room-tag-checkbox:checked');
+            const tags = Array.from(tagCheckboxes).map(cb => cb.value);
+            const password = document.getElementById('room-password-create') ? document.getElementById('room-password-create').value : '';
+
             if (!selectedDeckId) {
                 const selectElement = document.getElementById('deck-select');
                 if (selectElement) {
@@ -309,10 +316,25 @@ function setupLobbyEvents() {
             }
             generateDeckFromSelection();
             const roomId = Math.floor(1000 + Math.random() * 9000).toString();
-            joinRoom(roomId, 'player');
+            joinRoom(roomId, 'player', roomName, tags, password, true);
         });
     } else {
         console.error('btn-create-room not found');
+    }
+
+    if (btnRefresh) {
+        btnRefresh.addEventListener('click', () => {
+            if (socket) socket.emit('get_rooms');
+        });
+    }
+
+    // 初回ロード対応
+    if (socket && socket.connected) {
+        socket.emit('get_rooms');
+    } else if (socket) {
+        socket.on('connect', () => {
+            socket.emit('get_rooms');
+        });
     }
 
     if (btnJoinPlayer) {
@@ -354,14 +376,19 @@ function setupLobbyEvents() {
     }
 }
 
-function joinRoom(roomId, role) {
+function joinRoom(roomId, role, roomName = '', tags = [], password = '', isCreate = false) {
     if (!socket) {
         alert('Cannot join room: Socket not connected.');
         return;
     }
     currentRoomId = roomId;
     myRole = role;
-    socket.emit('join_room', { roomId, role });
+    
+    if (isCreate) {
+        socket.emit('create_room', { roomId, name: roomName, tags, password, role });
+    } else {
+        socket.emit('join_room', { roomId, role, password });
+    }
 
     // UI更新
     const lobbyView = document.getElementById('lobby-view');
@@ -483,6 +510,105 @@ function setupSocketListeners() {
         console.log('Player left:', playerId);
         cleanupWebRTC();
     });
+
+    // 部屋一覧の受信
+    socket.on('room_list', (rooms) => {
+        renderRoomList(rooms);
+    });
+
+    // 部屋一覧の更新通知受信
+    socket.on('rooms_updated', () => {
+         socket.emit('get_rooms');
+    });
+}
+
+function renderRoomList(rooms) {
+    const container = document.getElementById('room-list-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    if (rooms.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">現在立っている部屋はありません。</div>';
+        return;
+    }
+    
+    rooms.forEach(room => {
+        const item = document.createElement('div');
+        item.className = 'room-item';
+        // ワンタップ入室のためのクリックイベント
+        item.addEventListener('click', () => {
+            handleRoomTap(room);
+        });
+        
+        const info = document.createElement('div');
+        info.className = 'room-info';
+        
+        const title = document.createElement('div');
+        title.className = 'room-title';
+        title.innerHTML = `${room.hasPassword ? '🔒 ' : ''}${room.name} <span style="font-size:0.7em;color:#aaa;">(ID:${room.id})</span>`;
+        info.appendChild(title);
+        
+        if (room.tags && room.tags.length > 0) {
+            const tags = document.createElement('div');
+            tags.className = 'room-tags';
+            tags.textContent = room.tags.map(t => `#${t}`).join(' ');
+            info.appendChild(tags);
+        }
+        
+        const status = document.createElement('div');
+        status.className = 'room-status ' + (room.isFull ? 'playing' : 'waiting');
+        status.textContent = `${room.status} (${room.playerCount}/2)`;
+        info.appendChild(status);
+        
+        item.appendChild(info);
+        
+        const action = document.createElement('div');
+        action.className = 'room-action';
+        const joinBtn = document.createElement('button');
+        joinBtn.textContent = room.isFull ? '観戦する' : '対戦に参加';
+        joinBtn.style.backgroundColor = room.isFull ? '#555' : '#007bff';
+        
+        // ボタン自体のクリックでも入室
+        joinBtn.addEventListener('click', (e) => {
+             e.stopPropagation(); // 親のクリックイベントを発火させない
+             handleRoomTap(room);
+        });
+        
+        action.appendChild(joinBtn);
+        item.appendChild(action);
+        
+        container.appendChild(item);
+    });
+}
+
+function handleRoomTap(room) {
+    if (!selectedDeckId) {
+        const selectElement = document.getElementById('deck-select');
+        if (selectElement) {
+            const selectedOpt = selectElement.options[selectElement.selectedIndex];
+            const val = selectElement.value || (selectedOpt ? selectedOpt.value : '');
+            if (val) {
+                selectedDeckId = val;
+            } else {
+                alert('使用するデッキを選択してください');
+                return;
+            }
+        } else {
+            alert('使用するデッキを選択してください');
+            return;
+        }
+    }
+    generateDeckFromSelection();
+
+    const role = room.isFull ? 'spectator' : 'player';
+    let password = '';
+    
+    if (room.hasPassword) {
+        password = prompt('この部屋はパスワードがかかっています:\nパスワードを入力してください');
+        if (password === null) return; // キャンセルされた場合
+    }
+    
+    joinRoom(room.id, role, '', [], password, false);
 }
 
 // =========================================

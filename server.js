@@ -363,33 +363,76 @@ const rooms = {};
 io.on('connection', (socket) => {
   console.log('a user connected:', socket.id);
 
-  // 1. Join Room
-  socket.on('join_room', ({ roomId, role }) => {
+  // 0. Get Rooms
+  socket.on('get_rooms', () => {
+    const roomList = Object.keys(rooms).map(roomId => {
+      const room = rooms[roomId];
+      return {
+        id: roomId,
+        name: room.name || roomId,
+        tags: room.tags || [],
+        hasPassword: !!room.password,
+        playerCount: room.players.length,
+        spectatorCount: room.spectators.length,
+        isFull: room.players.length >= 2,
+        status: room.players.length >= 2 ? '対戦中' : '募集中'
+      };
+    });
+    socket.emit('room_list', roomList);
+  });
+
+  // 1-A. Create Room
+  socket.on('create_room', ({ roomId, name, tags, password, role }) => {
+    console.log(`[Socket] Create request from ${socket.id} for room ${roomId}`);
+    if (rooms[roomId]) {
+       socket.emit('error_message', '既に同じIDの部屋が存在します。');
+       return;
+    }
+    rooms[roomId] = {
+        name: name || roomId,
+        tags: tags || [],
+        password: password || '',
+        players: [],
+        spectators: []
+    };
+    handleJoinRoom({ roomId, role, password });
+    
+    // 他の全クライアントに部屋一覧更新を通知
+    io.emit('rooms_updated');
+  });
+
+  // 1-B. Join Room
+  socket.on('join_room', (data) => {
+    handleJoinRoom(data);
+  });
+
+  function handleJoinRoom({ roomId, role, password }) {
     console.log(`[Socket] Join request from ${socket.id} for room ${roomId} as ${role}`);
-    // Basic validation
     if (!roomId) return;
 
-    socket.join(roomId);
-
-    // Initialize room if not exists
+    // Initialize room if not exists (legacy join support)
     if (!rooms[roomId]) {
-      rooms[roomId] = { players: [], spectators: [] };
+      rooms[roomId] = { name: roomId, tags: [], password: '', players: [], spectators: [] };
     }
 
     const room = rooms[roomId];
 
+    // Password Check
+    if (room.password && room.password !== password) {
+       socket.emit('error_message', 'パスワードが違います。');
+       return;
+    }
+
+    socket.join(roomId);
+
     if (role === 'player') {
-      // Check if room is full (max 2 players)
       if (room.players.length >= 2) {
-        // Already full, maybe force to spectator or reject?
-        // For now, let's just emit an error or handle it on client
-        socket.emit('error_message', 'Room is full for players.');
+        socket.emit('error_message', 'この部屋はすでに満員です。');
         return;
       }
       room.players.push(socket.id);
       console.log(`User ${socket.id} joined room ${roomId} as Player`);
 
-      // 2人目のプレイヤーが入室した際に、既存プレイヤーに知らせて通信(Offer)を開始させる
       if (room.players.length === 2) {
         socket.to(roomId).emit('player_joined', { newPlayerId: socket.id });
       }
@@ -397,19 +440,19 @@ io.on('connection', (socket) => {
       room.spectators.push(socket.id);
       console.log(`User ${socket.id} joined room ${roomId} as Spectator`);
 
-      // Request state from a player to sync spectator
       if (room.players.length > 0) {
-        // Ask the first player to send their state
         io.to(room.players[0]).emit('request_state', { requesterId: socket.id });
       }
     }
 
-    // Notify room
     io.to(roomId).emit('room_update', {
       playerCount: room.players.length,
       spectatorCount: room.spectators.length
     });
-  });
+    
+    // 人数が変わったので部屋一覧更新を通知
+    io.emit('rooms_updated');
+  }
 
   // 2. Game Actions (Relay to room)
   socket.on('game_action', (data) => {
@@ -443,8 +486,13 @@ io.on('connection', (socket) => {
       if (room.spectators.includes(socket.id)) {
         room.spectators = room.spectators.filter(id => id !== socket.id);
       }
-      // Clean up empty rooms if needed
+      // Clean up empty rooms
+      if (room.players.length === 0 && room.spectators.length === 0) {
+        delete rooms[roomId];
+      }
     }
+    // 人数が減った、または部屋が消えたので一覧更新を通知
+    io.emit('rooms_updated');
   });
 });
 

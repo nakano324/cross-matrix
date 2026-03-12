@@ -192,6 +192,79 @@ body {
 }
 
 /* =========================================
+   ロビー掲示板 (Room List)
+   ========================================= */
+.room-list-container {
+    max-height: 250px;
+    overflow-y: auto;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.room-item {
+    background: #333;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.2s;
+}
+
+.room-item:hover {
+    background: #444;
+}
+
+.room-info {
+    flex: 1;
+}
+
+.room-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.room-tags {
+    font-size: 0.8em;
+    color: #00aaff;
+    margin-bottom: 4px;
+}
+
+.room-status {
+    font-size: 0.8em;
+    color: #ccc;
+}
+
+.room-status.playing {
+    color: #ffaa00;
+}
+
+.room-status.waiting {
+    color: #00ff00;
+}
+
+.room-action {
+    margin-left: 10px;
+}
+
+.room-action button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+/* =========================================
    B. 操作ビュー (#control-view)
    ========================================= */
 /* =========================================
