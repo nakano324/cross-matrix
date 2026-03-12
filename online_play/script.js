@@ -677,6 +677,8 @@ function setupEventListeners() {
     document.getElementById('btn-board').addEventListener('click', () => switchView('board'));
     document.getElementById('btn-control').addEventListener('click', () => switchView('control'));
     document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+    const btnToggleVideo = document.getElementById('btn-toggle-video');
+    if (btnToggleVideo) btnToggleVideo.addEventListener('click', toggleVideo);
 }
 
 function switchView(viewName) {
@@ -912,25 +914,66 @@ function disposeStack(cellIndex) {
     renderBoard();
 }
 
-// カメラ起動処理 (変更なし、ただし部屋に入ってから呼ぶ)
+// 初期化時はカメラを起動せずWebRTCのセットアップだけ行う (通信量削減)
 async function startCamera() {
-    const localVideo = document.getElementById('local-video');
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } },
-                audio: true // 音声もONに変更
-            });
-            localStream = stream;
-            localVideo.srcObject = stream;
+    setupWebRTC();
+}
 
-            setupWebRTC(); // WebRTCセットアップ
-        } catch (err) {
-            console.error("Camera access denied or error:", err);
-            setupWebRTC(); // 失敗しても受信ができるようにセットアップ
+// カメラ・マイクのオンオフ切り替え
+async function toggleVideo() {
+    const btn = document.getElementById('btn-toggle-video');
+    const localVideo = document.getElementById('local-video');
+
+    if (!localStream) {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: true
+                });
+                localStream = stream;
+                localVideo.srcObject = stream;
+                
+                if (peerConnection) {
+                    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+                    if (myRole === 'player') {
+                        const offer = await peerConnection.createOffer();
+                        await peerConnection.setLocalDescription(offer);
+                        socket.emit('signal', {
+                            roomId: currentRoomId,
+                            type: 'offer',
+                            payload: offer
+                        });
+                    }
+                }
+                btn.textContent = '📹 カメラ・マイクをオフにする';
+                btn.classList.replace('btn-primary', 'btn-secondary');
+            } catch (err) {
+                console.error("Camera access denied or error:", err);
+                alert('カメラ/マイクへのアクセスが拒否されたか、エラーが発生しました。');
+            }
         }
     } else {
-        setupWebRTC();
+        if (peerConnection) {
+            const senders = peerConnection.getSenders();
+            senders.forEach(sender => {
+                if (sender.track) peerConnection.removeTrack(sender);
+            });
+            if (myRole === 'player') {
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                socket.emit('signal', {
+                    roomId: currentRoomId,
+                    type: 'offer',
+                    payload: offer
+                });
+            }
+        }
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+        localVideo.srcObject = null;
+        btn.textContent = '📹 カメラ・マイクをオンにする';
+        btn.classList.replace('btn-secondary', 'btn-primary');
     }
 }
 

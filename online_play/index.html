@@ -43,6 +43,11 @@
                     </div>
 
                     <div id="room-status-msg"></div>
+
+                    <div class="lobby-notice" style="margin-top: 20px; padding: 10px; background: rgba(255,100,100,0.1); border: 1px solid #ff4444; border-radius: 4px; font-size: 0.85em; color: #ddd; line-height: 1.4;">
+                        <b>【通信量についてのお願い】</b><br>
+                        リアルでのプレイ（対面）で使用する場合は、通信制限への配慮および通信コスト削減のため、映像通信は「オフ」のままでご協力をお願いします。（映像は必要に応じて対戦画面からオンにできます）
+                    </div>
                 </div>
             </div>
 
@@ -63,6 +68,9 @@
 
             <!-- B. 操作ビュー (カメラ画) -->
             <div id="control-view" class="view">
+                <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                    <button id="btn-toggle-video" class="btn-primary" style="padding: 5px 10px; font-size: 0.9em; border-radius: 4px; cursor: pointer;">📹 カメラ・マイクをオンにする</button>
+                </div>
                 <!-- 相手の映像 (メイン画面) -->
                 <video id="remote-video" autoplay playsinline
                     poster="https://placehold.jp/3d4070/ffffff/320x240.png?text=Remote%20Video"></video>

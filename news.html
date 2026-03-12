@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ニュース一覧｜Cross Matrix</title>
+  <title>ブログ一覧｜Cross Matrix</title>
   <link rel="icon" href="https://pub-c46d5e1d4d8a477081b4f23ef851c417.r2.dev/images/HPicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;800&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
         <a href="cards.html">カード図鑑</a>
         <a href="rules.html">ルール</a>
         <a href="shop.html">ショップ</a>
-        <a href="news.html" class="active">ニュース</a>
+        <a href="news.html" class="active">ブログ</a>
         <a href="my-decks.html">マイデッキ</a>
         <a href="online_play/index.html">オンライン戦</a>
         <a href="cart.html" id="cart-link" style="color:var(--accent)">カート(0)</a>
@@ -39,7 +39,7 @@
       <a href="cards.html">カード図鑑</a>
       <a href="rules.html">ルール</a>
       <a href="shop.html">ショップ</a>
-      <a href="news.html">ニュース</a>
+      <a href="news.html">ブログ</a>
       <a href="my-decks.html">マイデッキ</a>
       <a href="online_play/index.html">オンライン戦</a>
       <a href="cart.html" id="mobile-cart-link" style="color:var(--accent)">カート(0)</a>
@@ -50,74 +50,91 @@
   </nav>
 
   <main class="wrap">
-    <section class="news">
-      <h2>最新ニュース</h2>
-      <p class="news-lead">開発の進捗やカード追加情報をお届けします。各項目をタップすると本文が開きます。</p>
+    <section class="blog-section">
+      <div class="blog-header">
+        <h2>Blogs</h2>
+        <p class="blog-lead">開発の進捗やカード追加情報、イベントレポートなどをお届けします。</p>
+      </div>
 
-      <!-- 体験レポート記事 -->
-      <details class="news-entry">
-        <summary>
-          <time datetime="2025-09-27">2025.09.27</time>
-          <span class="news-cat">イベントレポート</span>
-          <span class="news-title">先行体験会レポートを公開しました</span>
-        </summary>
-        <div class="news-body">
-          <p>
-            先行体験会の様子をまとめたレポートを公開しました。<br>
-            写真や参加者の声も掲載しています。
-          </p>
-          <p>
-            <a href="traial.html" class="btn">体験レポートを読む</a>
-          </p>
-        </div>
-      </details>
-
-      <details class="news-entry">
-        <summary>
-          <time datetime="2025-08-30">2025.08.30</time>
-          <span class="news-cat">開発ノート</span>
-          <span class="news-title">盤面UIをアップデート（4×5配置に対応）</span>
-        </summary>
-        <div class="news-body">
-          <p>ゲームルールの一部変更により、盤面UIを4×5配置に変更しました。</p>
-        </div>
-      </details>
-
-      <details class="news-entry">
-        <summary>
-          <time datetime="2025-08-30">2025.08.30</time>
-          <span class="news-cat">開発ノート</span>
-          <span class="news-title">キーワード能力の追加</span>
-        </summary>
-        <div class="news-body">
-          <p>カード効果の影響を与えられる範囲に関する用語です。</p>
-        </div>
-      </details>
-
-      <div class="news-accordion">
-        <!-- 記事1 -->
-        <details class="news-entry" open>
-          <summary>
-            <time datetime="2025-08-24">2025.08.24</time>
-            <span class="news-cat">お知らせ</span>
-            <span class="news-title">公式サイトを公開しました</span>
-          </summary>
-          <div class="news-body">
-            <p>『CROSS MATRIX』公式サイトを公開しました。カード図鑑・ルールページは順次拡充していきます。</p>
+      <div class="blog-grid">
+        <!-- 記事1: 体験レポート -->
+        <a href="traial.html" class="blog-card">
+          <div class="blog-thumb">
+            <!-- プレースホルダ画像 -->
+            <img src="https://placehold.jp/3d4070/ffffff/600x400.png?text=Event+Report" alt="先行体験会レポート" loading="lazy">
+            <span class="blog-cat cat-event">イベントレポート</span>
           </div>
-        </details>
-
-        <!-- 記事3（例） -->
-        <details class="news-entry">
-          <summary>
-            <time datetime="2025-08-21">2025.08.21</time>
-            <span class="news-cat">開発ノート</span>
-            <span class="news-title">盤面UIをアップデート（4×6配置に対応）</span>
-          </summary>
-          <div class="news-body">
-            <p>点対称の相手ゾーンとリソースゾーン表示を実装。紙のプレイ時の視認性を重視してマージンを調整しました。</p>
+          <div class="blog-content">
+            <div class="blog-meta">
+              <time datetime="2025-09-27">2025.09.27</time>
+            </div>
+            <h3 class="blog-title">先行体験会レポートを公開しました</h3>
+            <p class="blog-excerpt">先行体験会の様子をまとめたレポートを公開しました。写真や参加者の声も掲載しています。</p>
           </div>
-        </details>
+        </a>
+
+        <!-- 記事2: 開発ノートUI -->
+        <a href="#" class="blog-card">
+          <div class="blog-thumb">
+            <img src="https://placehold.jp/305040/ffffff/600x400.png?text=Dev+Notes" alt="盤面UIをアップデート" loading="lazy">
+            <span class="blog-cat cat-dev">開発ノート</span>
+          </div>
+          <div class="blog-content">
+            <div class="blog-meta">
+              <time datetime="2025-08-30">2025.08.30</time>
+            </div>
+            <h3 class="blog-title">盤面UIをアップデート（4×5配置に対応）</h3>
+            <p class="blog-excerpt">ゲームルールの一部変更により、盤面UIを4×5配置に変更しました。オンライン対戦の画面がより快適になります。</p>
+          </div>
+        </a>
+
+        <!-- 記事3: 開発ノート キーワード -->
+        <a href="#" class="blog-card">
+          <div class="blog-thumb">
+            <img src="https://placehold.jp/305040/ffffff/600x400.png?text=Keywords" alt="キーワード能力の追加" loading="lazy">
+            <span class="blog-cat cat-dev">開発ノート</span>
+          </div>
+          <div class="blog-content">
+            <div class="blog-meta">
+              <time datetime="2025-08-30">2025.08.30</time>
+            </div>
+            <h3 class="blog-title">キーワード能力の追加</h3>
+            <p class="blog-excerpt">カード効果の影響を与えられる範囲に関する用語や、新たなキーワード能力についての解説を追加しました。</p>
+          </div>
+        </a>
+
+        <!-- 記事4: 公式サイト公開 -->
+        <a href="#" class="blog-card">
+          <div class="blog-thumb">
+            <img src="https://placehold.jp/602020/ffffff/600x400.png?text=Official+Site" alt="公式サイトを公開しました"
+              loading="lazy">
+            <span class="blog-cat cat-news">お知らせ</span>
+          </div>
+          <div class="blog-content">
+            <div class="blog-meta">
+              <time datetime="2025-08-24">2025.08.24</time>
+            </div>
+            <h3 class="blog-title">公式サイトを公開しました</h3>
+            <p class="blog-excerpt">『CROSS MATRIX』公式サイトを公開しました。カード図鑑・ルールページは順次拡充していきます。</p>
+          </div>
+        </a>
+
+        <!-- 記事5: 開発ノート UI -->
+        <a href="#" class="blog-card">
+          <div class="blog-thumb">
+            <img src="https://placehold.jp/305040/ffffff/600x400.png?text=Update" alt="盤面UIをアップデート（4×6配置に対応）"
+              loading="lazy">
+            <span class="blog-cat cat-dev">開発ノート</span>
+          </div>
+          <div class="blog-content">
+            <div class="blog-meta">
+              <time datetime="2025-08-21">2025.08.21</time>
+            </div>
+            <h3 class="blog-title">盤面UIをアップデート（マージン調整）</h3>
+            <p class="blog-excerpt">点対称の相手ゾーンとリソースゾーン表示を実装。紙のプレイ時の視認性を重視してマージンを調整しました。</p>
+          </div>
+        </a>
+
       </div>
     </section>
   </main>
@@ -126,19 +143,6 @@
     <div class="wrap"><small>© 2025 cross matrix Project</small></div>
   </footer>
 
-  <script>
-    (function () {
-      // Mobile menu logic moved to auth.js
-    })();
-
-    // ニュース：1つ開いたら他を閉じる（不要なら削除OK）
-    (function () {
-      const items = document.querySelectorAll('.news-accordion details');
-      items.forEach(item => item.addEventListener('toggle', () => {
-        if (item.open) items.forEach(o => { if (o !== item) o.open = false; });
-      }));
-    })();
-  </script>
   <script src="auth.js"></script>
 </body>
 
